@@ -1,0 +1,7 @@
+[core]
+	quotepath = false
+[user]
+	name = REPLACEME_GIT_NAME
+	email = REPLACEME_GIT_EMAIL
+[log]
+	date = local

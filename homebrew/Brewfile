@@ -1,0 +1,11 @@
+# cf. https://github.com/Homebrew/homebrew-bundle
+
+brew "imagemagick"
+brew "hugo"
+
+mas "Kindle", id: 405399194
+mas "LINE", id: 539883307
+mas "Microsoft To-Do", id: 1274495053
+mas "Slack", id: 803453959
+
+cask "google-japanese-ime"
