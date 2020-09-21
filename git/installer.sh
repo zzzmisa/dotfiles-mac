@@ -1,3 +1,10 @@
+# Gitがインストールされていない場合のみ
+# homebrewとgitを先にインストール
+if !(type git > /dev/null 2>&1); then
+  sh homebrew/install-brew.sh
+  brew install git
+fi
+
 # Gitの設定に必要なフォルダの作成
 mkdir ~/.config && mkdir ~/.config/git
 
