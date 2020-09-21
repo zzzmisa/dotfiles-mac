@@ -42,6 +42,27 @@
             }
           }
         }
+      },
+      "macvim": {
+        "version": "8.2-165_1",
+        "bottle": {
+          "cellar": "/usr/local/Cellar",
+          "prefix": "/usr/local",
+          "files": {
+            "catalina": {
+              "url": "https://homebrew.bintray.com/bottles/macvim-8.2-165_1.catalina.bottle.tar.gz",
+              "sha256": "4d713a53cbff8ff7ac148d46554e35a23cd524fdcc8fc90004c7ff1c6973ef1e"
+            },
+            "mojave": {
+              "url": "https://homebrew.bintray.com/bottles/macvim-8.2-165_1.mojave.bottle.tar.gz",
+              "sha256": "48122702342ce1a199c69d00c9b01059e3613fd6f788dce7a9028309c7e8de54"
+            },
+            "high_sierra": {
+              "url": "https://homebrew.bintray.com/bottles/macvim-8.2-165_1.high_sierra.bottle.tar.gz",
+              "sha256": "9ff46b5ec556f7d99aafab95239a34041cd2a36e6a97a96cb193a3bb3b1559f0"
+            }
+          }
+        }
       }
     },
     "mas": {
@@ -65,6 +86,36 @@
         "options": {
           "full_name": "google-japanese-ime"
         }
+      },
+      "clipy": {
+        "version": "1.2.1",
+        "options": {
+          "full_name": "clipy"
+        }
+      },
+      "google-chrome": {
+        "version": "85.0.4183.102",
+        "options": {
+          "full_name": "google-chrome"
+        }
+      },
+      "gas-mask": {
+        "version": "0.8.6",
+        "options": {
+          "full_name": "gas-mask"
+        }
+      },
+      "imageoptim": {
+        "version": "1.8.8",
+        "options": {
+          "full_name": "imageoptim"
+        }
+      },
+      "skype": {
+        "version": "8.64.0.80",
+        "options": {
+          "full_name": "skype"
+        }
       }
     }
   },
@@ -73,7 +124,7 @@
       "catalina": {
         "HOMEBREW_VERSION": "2.5.2",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "8771daab6cd2069533f4ec5e024d0846bb857197",
+        "Homebrew/homebrew-core": "d4ab2290262d92a57442be3af2aacc24ba52d93f",
         "CLT": "12.0.0.0.1.1599194153",
         "Xcode": "12.0",
         "macOS": "10.15.6"
