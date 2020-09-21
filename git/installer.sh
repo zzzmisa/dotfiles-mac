@@ -8,8 +8,8 @@ echo Git user email:
 read git_email
 
 cp -i $PWD/git/gitconfig $PWD/git/mygitconfig
-sed -i -e 's/REPLACEME_GIT_NAME/'${git_name}'/g' $PWD/git/mygitconfig
-sed -i -e 's/REPLACEME_GIT_EMAIL/'${git_email}'/g' $PWD/git/mygitconfig
+sed -i '' -e 's/REPLACEME_GIT_NAME/'${git_name}'/g' $PWD/git/mygitconfig
+sed -i '' -e 's/REPLACEME_GIT_EMAIL/'${git_email}'/g' $PWD/git/mygitconfig
 
 ln -sf $PWD/git/mygitconfig ~/.config/git/config
 
