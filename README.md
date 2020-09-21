@@ -1,4 +1,8 @@
 # Dotfiles For Mac
+## 最新の動作確認環境
+
+- OS...macOS Catalina 10.5.6
+- シェル.../bin/zsh
 
 ## 使い方
 
