@@ -20,7 +20,9 @@ set nobackup
 set list
 set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 " previmの設定
-let g:previm_open_cmd = 'open -a Safari'
+" Safariは動かないらしいのでChromeで開く
+" cf. https://github.com/previm/previm/issues/137
+let g:previm_open_cmd = 'open -a Google\ Chrome'
 " deinの設定ここから
 if &compatible
   set nocompatible
