@@ -1,3 +1,10 @@
+# codeコマンドがなければ
+# Homebrew経由でVSCodeをインストール
+if !(type code > /dev/null 2>&1); then
+  sh homebrew/installer.sh
+  brew cask install visual-studio-code
+fi
+
 # settings.jsonの設置
 ln -sf $PWD/vscode/settings.json ~/Library/Application\ Support/Code/User/
 
