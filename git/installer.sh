@@ -1,3 +1,8 @@
+# GitコマンドがなかったらHomebrewをインストール
+if !(type git > /dev/null 2>&1); then
+  sh homebrew/install-homebrew.sh
+fi
+
 # Gitの設定に必要なフォルダの作成
 mkdir ~/.config && mkdir ~/.config/git
 
