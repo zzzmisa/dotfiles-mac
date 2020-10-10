@@ -1,5 +1,8 @@
 [core]
+	# 日本語ファイルの表示
 	quotepath = false
+	# ファイル名の大文字と小文字を区別
+	ignorecase = false 
 [user]
 	name = REPLACEME_GIT_NAME
 	email = REPLACEME_GIT_EMAIL
