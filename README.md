@@ -1,7 +1,8 @@
 # Dotfiles For Mac
 ## 最新の動作確認環境
 
-- OS...macOS Catalina 10.5.6
+- OS...macOS Monterey 12.1 
+- チップ...Apple M1
 - シェル.../bin/zsh
 
 ## 使い方
