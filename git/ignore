@@ -47,6 +47,8 @@ Sessionx.vim
 .netrwhist
 *~
 # Auto-generated tag files
-tags
+# Hugoのブログで作成されるtagsも除外されてしまうのでコメントアウト
+# tags
+
 # Persistent undo
 [._]*.un~
