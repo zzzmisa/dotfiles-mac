@@ -10,9 +10,16 @@ ln -sf $PWD/vscode/settings.json ~/Library/Application\ Support/Code/User/
 
 # プラグインのインストール
 pkglist=(
+  # ESLint
   dbaeumer.vscode-eslint 
-  ms-ceintl.vscode-language-pack-ja # 日本語化
-  octref.vetur # Vueの単一ファイルコンポーネントのシンタックスハイライトやスニペットなど
+  # GitLens — Git supercharged
+  eamodio.gitlens
+  # Japanese Language Pack for Visual Studio Code
+  ms-ceintl.vscode-language-pack-ja 
+  # Vetur
+  octref.vetur
+  # Prettier - Code formatter
+  esbenp.prettier-vscode
 )
 
 for i in ${pkglist[@]}; do
