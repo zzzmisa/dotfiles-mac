@@ -27,5 +27,7 @@ killall SystemUIServer
 # ---　その他の設定　---
 # テキストエディットをリッチテキストから標準テキストに変更（テキストエディットの環境設定からも設定可）
 defaults write com.apple.TextEdit RichText -int 0
+# 自動で頭文字を大文字にしない
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 
 echo 👍 MacOS setting is done!
