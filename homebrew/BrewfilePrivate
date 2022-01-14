@@ -1,0 +1,16 @@
+# cf. https://github.com/Homebrew/homebrew-bundle
+
+brew "hugo" # Privateのみ
+brew "imagemagick"
+brew "macvim"
+
+mas "Kindle", id: 405399194
+mas "LINE", id: 539883307 # Privateのみ
+mas "Microsoft To-Do", id: 1274495053
+mas "Slack", id: 803453959
+
+cask "clipy"
+cask "google-chrome"
+cask "google-japanese-ime"
+cask "imageoptim"
+cask "skype" # Privateのみ
