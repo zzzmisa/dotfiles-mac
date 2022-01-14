@@ -24,10 +24,16 @@ defaults write com.apple.menuextra.battery ShowPercent YES
 defaults write com.apple.screencapture disable-shadow -boolean true
 killall SystemUIServer
 
+# ---　トラックパッドの設定　---
+# シングルタップでクリック（再起動必要）
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write -g com.apple.mouse.tapBehavior -bool true
+
 # ---　その他の設定　---
 # テキストエディットをリッチテキストから標準テキストに変更（テキストエディットの環境設定からも設定可）
 defaults write com.apple.TextEdit RichText -int 0
 # 自動で頭文字を大文字にしない
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 
-echo 👍 MacOS setting is done!
+echo 👍 MacOS setting is done, please reboot!
