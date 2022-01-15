@@ -3,6 +3,7 @@
 brew "hugo" # Privateのみ
 brew "imagemagick"
 brew "macvim"
+brew "nodenv"
 
 mas "Kindle", id: 405399194
 mas "LINE", id: 539883307 # Privateのみ
