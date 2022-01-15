@@ -4,5 +4,5 @@
 if !(type brew > /dev/null 2>&1); then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   eval "$(/opt/homebrew/bin/brew shellenv)" # .zprofileにも記載済み
-  source zsh/installer.sh
+  sh zsh/installer.sh
 fi
