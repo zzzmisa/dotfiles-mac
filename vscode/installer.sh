@@ -1,7 +1,7 @@
 # codeコマンドがなければ
 # Homebrew経由でVSCodeをインストール
 if !(type code > /dev/null 2>&1); then
-  source homebrew/installer.sh
+  source homebrew/install-homebrew.sh
   brew install --cask visual-studio-code
 fi
 
