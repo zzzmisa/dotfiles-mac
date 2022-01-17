@@ -3,8 +3,11 @@
 	quotepath = false
 	# ファイル名の大文字と小文字を区別
 	ignorecase = false 
+[log]
+	date = local
 [user]
 	name = REPLACEME_GIT_NAME
 	email = REPLACEME_GIT_EMAIL
-[log]
-	date = local
+[pull]
+	# v2.27からwarningが出るようになったため設定
+	rebase = false
