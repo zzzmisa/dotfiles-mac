@@ -4,6 +4,7 @@ brew "hugo" # Privateのみ
 brew "imagemagick"
 brew "macvim"
 brew "nodenv"
+brew "yarn"
 
 mas "Kindle", id: 405399194
 mas "LINE", id: 539883307 # Privateのみ
@@ -13,5 +14,6 @@ mas "Slack", id: 803453959
 cask "clipy"
 cask "google-chrome"
 cask "google-japanese-ime"
+cask "ibm-cloud-cli" # Privateのみ
 cask "imageoptim"
 cask "skype" # Privateのみ
