@@ -14,7 +14,4 @@ else
 fi
 cd -
 
-# nodenvの設定
-sh homebrew/set-nodenv.sh
-
 echo 👍 Homebrew setting is done!
