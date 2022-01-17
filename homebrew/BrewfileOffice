@@ -3,6 +3,7 @@
 brew "imagemagick"
 brew "macvim"
 brew "nodenv"
+brew "yarn"
 
 mas "Kindle", id: 405399194
 mas "Microsoft To-Do", id: 1274495053
