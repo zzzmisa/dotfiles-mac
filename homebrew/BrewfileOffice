@@ -2,7 +2,6 @@
 
 brew "imagemagick"
 brew "macvim"
-brew "nodenv"
 brew "yarn"
 
 mas "Kindle", id: 405399194
