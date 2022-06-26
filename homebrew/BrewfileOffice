@@ -1,6 +1,7 @@
 # cf. https://github.com/Homebrew/homebrew-bundle
 
 brew "imagemagick"
+brew "jq"
 brew "macvim"
 brew "yarn"
 
@@ -9,6 +10,7 @@ mas "Microsoft To-Do", id: 1274495053
 mas "Slack", id: 803453959
 
 cask "clipy"
+cask "firefox"
 cask "google-chrome"
 cask "google-japanese-ime"
 cask "gas-mask" # Officeのみ
