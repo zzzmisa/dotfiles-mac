@@ -283,6 +283,12 @@
         "options": {
           "full_name": "ibm-cloud-cli"
         }
+      },
+      "clip-studio-paint": {
+        "version": "1.12.1",
+        "options": {
+          "full_name": "clip-studio-paint"
+        }
       }
     }
   },
@@ -291,7 +297,7 @@
       "monterey": {
         "HOMEBREW_VERSION": "3.5.2",
         "HOMEBREW_PREFIX": "/opt/homebrew",
-        "Homebrew/homebrew-core": "8cc8a02cf7782a6d0d81d8e6dd9b898d1a97da06",
+        "Homebrew/homebrew-core": "f45800741e29bd7a6e88f720936da7acda3724f3",
         "CLT": "13.3.1.0.1.1648687083",
         "Xcode": "13.2.1",
         "macOS": "12.3"

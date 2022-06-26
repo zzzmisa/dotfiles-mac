@@ -11,6 +11,7 @@ mas "LINE", id: 539883307 # Privateのみ
 mas "Microsoft To-Do", id: 1274495053
 mas "Slack", id: 803453959
 
+cask "clip-studio-paint"
 cask "clipy"
 cask "google-chrome"
 cask "google-japanese-ime"
