@@ -2,6 +2,7 @@
 
 brew "hugo" # Privateのみ
 brew "imagemagick"
+brew "jq"
 brew "macvim"
 brew "yarn"
 
