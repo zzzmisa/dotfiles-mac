@@ -1,9 +1,12 @@
 # cf. https://github.com/Homebrew/homebrew-bundle
 
+tap "snyk/tap"
+
 brew "hugo" # Privateのみ
 brew "imagemagick"
 brew "jq"
 brew "macvim"
+brew "snyk"
 brew "yarn"
 
 mas "Kindle", id: 405399194
