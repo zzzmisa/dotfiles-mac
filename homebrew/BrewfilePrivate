@@ -21,3 +21,4 @@ cask "google-japanese-ime"
 cask "ibm-cloud-cli" # Privateのみ
 cask "imageoptim"
 cask "skype" # Privateのみ
+cask "logitech-presentation"

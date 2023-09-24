@@ -18,3 +18,4 @@ cask "google-chrome"
 cask "google-japanese-ime"
 cask "gas-mask" # Officeのみ
 cask "imageoptim"
+cask "logitech-presentation"
