@@ -5,6 +5,9 @@ defaults write com.apple.finder AppleShowAllFiles -boolean true
 # すべてのファイル名拡張子を表示（Finder > 環境設定 > 詳細 からも設定可）
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
+# デスクトップのアイコンを消す
+defaults write com.apple.finder CreateDesktop false && killall Finder
+
 killall Finder
 
 # --- Dockの設定 ---
