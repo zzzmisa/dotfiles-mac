@@ -2,6 +2,7 @@
 
 tap "snyk/tap"
 
+brew "git-lfs"
 brew "imagemagick"
 brew "jq"
 brew "macvim"
