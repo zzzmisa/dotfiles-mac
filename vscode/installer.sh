@@ -14,6 +14,9 @@ pkglist=(
   dbaeumer.vscode-eslint 
   # GitLens — Git supercharged
   eamodio.gitlens
+  # GitHub Copilot
+  github.copilot-chat
+  github.copilot
   # Japanese Language Pack for Visual Studio Code
   ms-ceintl.vscode-language-pack-ja 
   # Vetur
