@@ -1,4 +1,19 @@
 {
+  // codeActionsOnSaveのexplicitはこれまでのtrueと同じ
+  // 参考: https://code.visualstudio.com/updates/v1_83#_editor
+  "editor.codeActionsOnSave": {
+    // ESLintを含む全てのフォーマッターを実行
+    // 参考: https://github.com/microsoft/vscode-eslint?tab=readme-ov-file#version-204
+    "source.fixAll": "explicit"
+  },
+  // PrettierはcodeActionsOnSaveで実行されないので個別に設定
+  // ignore設定は.prettierignoreファイルを作成する
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // 純粋なHTML（Vueディレクティブなどが含まれるhtmlなど）以外はPrettierで整形できないため
+  // vscode.html-language-featuresを使う
+  // 使わない時はコメントアウト
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  }
 }
