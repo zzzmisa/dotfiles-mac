@@ -1,3 +1,3 @@
-nodenv install 16.13.2
+nodenv install 20.10.0
 nodenv rehash
-nodenv global 16.13.2
+nodenv global 20.10.0
