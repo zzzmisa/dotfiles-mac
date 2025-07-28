@@ -10,19 +10,19 @@ ln -sf $PWD/vscode/settings.json ~/Library/Application\ Support/Code/User/
 
 # プラグインのインストール
 pkglist=(
-  # ESLint
-  dbaeumer.vscode-eslint 
-  # GitLens — Git supercharged
-  eamodio.gitlens
-  # GitHub Copilot
-  github.copilot-chat
+  dbaeumer.vscode-eslint # ESLint
+  eamodio.gitlens # GitLens — Git supercharged
+  esbenp.prettier-vscode # Prettier - Code formatter
+  github.copilot-chat # GitHub Copilot
   github.copilot
-  # Japanese Language Pack for Visual Studio Code
-  ms-ceintl.vscode-language-pack-ja 
-  # Vetur
-  octref.vetur
-  # Prettier - Code formatter
-  esbenp.prettier-vscode
+  ms-ceintl.vscode-language-pack-ja # Japanese Language Pack for Visual Studio Code
+  stylelint.vscode-stylelint # Stylelint
+  yzane.markdown-pdf # Markdown to PDF
+  # 3w36zj6.textlint # textlintコミュニティ版
+  # github.vscode-github-actions
+  # htmlhint.vscode-htmlhint
+  # octref.vetur # Vetur（しばらく使わない）
+  # ritwickdey.liveserver
 )
 
 for i in ${pkglist[@]}; do
