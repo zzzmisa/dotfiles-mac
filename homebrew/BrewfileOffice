@@ -7,6 +7,7 @@ brew "imagemagick"
 brew "jq"
 brew "macvim"
 brew "snyk"
+brew "webp" # Officeのみ
 brew "yarn"
 
 mas "Kindle", id: 405399194
