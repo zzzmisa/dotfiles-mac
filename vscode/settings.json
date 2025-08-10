@@ -15,5 +15,6 @@
   // 使わない時はコメントアウト
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
-  }
+  },
+  "github.copilot.nextEditSuggestions.enabled": true
 }
