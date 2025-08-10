@@ -21,18 +21,20 @@ defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebK
 # --- SystemUIServer（メニューバー）の設定 ---
 defaults write com.apple.menuextra.clock DateFormat -string 'EEE MMM d HH:mm' # 時計で日付を表示（例：9月20日(木) 23:00、メニューバー右上の時計からも設定可）
 
-# ---　トラックパッドの設定　---
+# --- SystemUIServer（スクリーンショット）の設定 ---
+defaults write com.apple.screencapture disable-shadow -bool true # スクリーンショットのドロップシャドウを付けない
+mkdir -p ~/Desktop/Screenshots && 
+defaults write com.apple.screencapture location ~/Desktop/Screenshots # スクリーンショットの保存先をデスクトップのScreenshotsフォルダに変更
+
+# ---　SystemUIServer（トラックパッド）の設定　---
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true # シングルタップでクリック（再起動必要）
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults write -g com.apple.mouse.tapBehavior -int 1
 defaults -currentHost write -g com.apple.mouse.tapBehavior -int 1
 
-# ---　テキスト関係の設定　---
+# ---　TextEdit・テキスト関係の設定　---
 defaults write com.apple.TextEdit RichText -bool false # テキストエディットをリッチテキストから標準テキストに変更（テキストエディットの環境設定からも設定可）
 defaults write -g NSAutomaticCapitalizationEnabled -bool false # 自動で頭文字を大文字にしない
-
-# ---　その他の設定　---
-defaults write com.apple.screencapture disable-shadow -bool true # スクリーンショットのドロップシャドウを付けない
 
 # --- 反映のための再起動 ---
 killall ControlCenter
