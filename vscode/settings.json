@@ -16,5 +16,29 @@
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
   },
-  "github.copilot.nextEditSuggestions.enabled": true
+  // GitHub Copilot設定
+  // 全ての言語でCopilotを有効化
+  "github.copilot.enable": {
+    "*": true
+  },
+  // インライン候補の表示を有効化
+  "editor.inlineSuggest.enabled": true,
+  // 次の編集候補を自動表示（複数の変更を一度に提案）
+  "github.copilot.nextEditSuggestions.enabled": true,
+  // チャットでのコード自動修正を有効化
+  "github.copilot.chat.agent.autoFix": true,
+  // Copilot Chatの言語を日本語に設定
+  "github.copilot.chat.localeOverride": "ja",
+  // コミットメッセージは英語で生成
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Generate commit messages in English using conventional commits format"
+    }
+  ],
+  // プロジェクト固有のテンプレートを使用
+  "github.copilot.chat.useProjectTemplates": true,
+  // エディタ内でのクイックフィックス提案を有効化
+  "github.copilot.editor.enableCodeActions": true,
+  // 変数やメソッドのリネーム時に自動的に提案
+  "github.copilot.renameSuggestions.triggerAutomatically": true
 }
