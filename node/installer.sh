@@ -3,8 +3,10 @@
 if !(type node > /dev/null 2>&1); then
   source homebrew/install-homebrew.sh
   brew install nodenv
-  sh node/set-nodenv.sh
 fi
+
+# Nodeのバージョンチェックとインストール/アップデート
+sh node/set-nodenv.sh
 
 # グローバルにインストールするパッケージ
 npm install --global textlint
