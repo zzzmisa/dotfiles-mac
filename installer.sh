@@ -1,3 +1,6 @@
+#!/usr/bin/env zsh
+set -e
+
 dirs=`find $PWD -depth 1 -type d -not -name '.git'`
 
 for dir in $dirs;

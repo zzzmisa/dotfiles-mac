@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+set -e
 # GitコマンドがなかったらHomebrewをインストール
 if !(type git > /dev/null 2>&1); then
   source homebrew/install-homebrew.sh

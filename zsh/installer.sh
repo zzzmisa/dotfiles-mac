@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+set -e
 # .zprofileと.zshrcの設置
 ln -sf $PWD/zsh/.zprofile ~/.zprofile
 ln -sf $PWD/zsh/.zshrc ~/.zshrc
