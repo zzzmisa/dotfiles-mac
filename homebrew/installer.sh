@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+set -e
 # Homebrewインストール
 source homebrew/install-homebrew.sh
 

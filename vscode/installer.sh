@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+set -e
 # codeコマンドがなければ
 # Homebrew経由でVSCodeをインストール
 if !(type code > /dev/null 2>&1); then

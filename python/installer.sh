@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+set -e
 # pythonコマンドがなければ
 # Homebrew経由でpyenvをインストール
 if !(type python > /dev/null 2>&1); then
