@@ -1,5 +1,4 @@
 #!/usr/bin/env zsh
-set -e
 # --- ControlCenterの設定 ---
 defaults -currentHost write com.apple.controlcenter Bluetooth -int 18 # Bluetoothを常に表示 
 defaults -currentHost write com.apple.controlcenter Sound -int 18 # サウンドを常に表示
