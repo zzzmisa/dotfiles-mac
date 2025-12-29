@@ -7,7 +7,7 @@ defaults -currentHost write com.apple.controlcenter BatteryShowPercentage -bool 
 defaults write AppleShowAllExtensions -bool true # すべてのファイル名拡張子を表示（Finder > 環境設定 > 詳細 からも設定可）
 defaults write com.apple.finder AppleShowAllFiles -bool true # 隠しファイルを表示
 defaults write com.apple.finder CreateDesktop -bool false # デスクトップのアイコンを消す
-defaults write conm.apple.finder showPathbar -bool true # パスバーを表示
+defaults write com.apple.finder ShowPathbar -bool true # パスバーを表示
 
 # --- Dockの設定 ---
 defaults write com.apple.dock autohide -bool true # “自動的に非表示”をオン（Dockを右クリックでも設定可）
