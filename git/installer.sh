@@ -6,7 +6,7 @@ if !(type git > /dev/null 2>&1); then
 fi
 
 # Gitの設定に必要なフォルダの作成
-mkdir ~/.config && mkdir ~/.config/git
+mkdir -p ~/.config/git
 
 # gitconfigの設置
 echo Git user name : 
