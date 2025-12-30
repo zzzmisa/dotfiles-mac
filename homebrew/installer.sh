@@ -7,7 +7,8 @@ source homebrew/install-homebrew.sh
 softwareupdate --install-rosetta
 
 # Brewfile実行
-read -p "Press O for office use, press any key for private use :  " install_env
+printf "Press O for office use, press any key for private use :  "
+read install_env
 cd $PWD/homebrew
 if [ "$install_env" = "O" ]; then
   brew bundle --file BrewfileOffice
