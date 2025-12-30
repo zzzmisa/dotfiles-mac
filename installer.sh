@@ -1,16 +1,22 @@
 #!/usr/bin/env zsh
 set -e
 
-dirs=`find $PWD -depth 1 -type d -not -name '.git'`
+# 各フォルダ配下の installer.sh を順番に実行し、出力をそのままTerminalに流す
+for dir in "$PWD"/*; do
+  # ディレクトリでない、または .git なら skip
+  [[ ! -d "$dir" ]] && continue
+  [[ "$(basename "$dir")" = ".git" ]] && continue
 
-for dir in $dirs;
-do
-  echo 📁 $dir
-  zsh $dir/installer.sh
+  installer="$dir/installer.sh"
+  if [[ -f "$installer" ]]; then
+    echo 📁 "$dir"
+    zsh "$installer"
+  fi
 done
 
 # Macの再起動
-read -p "Reboot system? (y/n) :  " restart_env
-if [ "$restart_env" = "y" ]; then
+printf "Reboot system? (y/n) :  "
+IFS= read -r restart_env
+if [[ "$restart_env" = "y" ]]; then
   sudo shutdown -r now
 fi
