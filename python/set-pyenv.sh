@@ -2,6 +2,8 @@ DESIRED_VERSION="3.14.2"
 
 # pythonコマンドが存在する場合、バージョンをチェック
 if type python > /dev/null 2>&1; then
+  # "python --version" は "Python 3.14.2" のようけ形式で出力されるので、
+  # awkで2番目フィールド（バージョン番号）を抽出
   CURRENT_VERSION=$(python --version 2>&1 | awk '{print $2}')
   
   # バージョン比較（現在のバージョンが希望と同じか新しい場合）

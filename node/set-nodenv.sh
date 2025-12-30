@@ -2,6 +2,8 @@ DESIRED_VERSION="21.6.0"
 
 # nodeコマンドが存在する場合、バージョンをチェック
 if type node > /dev/null 2>&1; then
+  # "node -v" は "v21.6.0" のような形式で出力されるので、
+  # sedでvプレフィックスを削除してバージョン番号を抽出
   CURRENT_VERSION=$(node -v | sed 's/v//')
   
   # バージョン比較（現在のバージョンが希望と同じか新しい場合）
