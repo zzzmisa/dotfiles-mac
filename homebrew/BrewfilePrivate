@@ -2,6 +2,8 @@
 
 tap "snyk/tap"
 
+brew "mas"
+
 brew "hugo" # Privateのみ
 brew "imagemagick"
 brew "jq"
@@ -17,6 +19,5 @@ mas "ToyViewer", id: 414298354
 
 cask "clipy"
 cask "google-chrome"
-cask "google-japanese-ime"
 cask "imageoptim"
 cask "logitech-presentation"
