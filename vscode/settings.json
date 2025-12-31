@@ -32,7 +32,7 @@
   // コミットメッセージは英語で生成
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
-      "text": "Generate commit messages in English using conventional commits format"
+      "text": "Generate commit messages in English using conventional commits format. Keep the subject line as short as possible, ideally under 50 characters."
     }
   ],
   // プロジェクト固有のテンプレートを使用
