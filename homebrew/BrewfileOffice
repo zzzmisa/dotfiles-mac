@@ -10,7 +10,7 @@ brew "macvim"
 brew "webp" # Officeのみ
 brew "yarn"
 
-mas "Kindle", id: 405399194
+mas "Kindle", id: 302584613
 mas "ToyViewer", id: 414298354
 
 cask "clipy"

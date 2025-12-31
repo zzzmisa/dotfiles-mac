@@ -9,7 +9,7 @@ brew "jq"
 brew "macvim"
 brew "yarn"
 
-mas "Kindle", id: 405399194
+mas "Kindle", id: 302584613
 mas "LINE", id: 539883307 # Privateのみ
 mas "Microsoft To-Do", id: 1274495053 # Privateのみ
 mas "Slack", id: 803453959 # Privateのみ
