@@ -11,4 +11,4 @@ fi
 sh node/set-nodenv.sh
 
 # グローバルにインストールするパッケージ
-npm install --global textlint
+npm install --global textlint snyk
