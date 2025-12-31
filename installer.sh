@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
-set -e
 
 # 各フォルダ配下の installer.sh を順番に実行し、出力をそのままTerminalに流す
+
 for dir in "$PWD"/*; do
   # ディレクトリでない、または .git なら skip
   [[ ! -d "$dir" ]] && continue
@@ -10,7 +10,7 @@ for dir in "$PWD"/*; do
   installer="$dir/installer.sh"
   if [[ -f "$installer" ]]; then
     echo 📁 "$dir"
-    zsh "$installer"
+    (set +e; zsh "$installer")
   fi
 done
 
