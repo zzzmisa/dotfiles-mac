@@ -21,3 +21,4 @@ cask "flutter" # Privateのみ
 cask "google-chrome"
 cask "imageoptim"
 cask "logitech-presentation"
+cask "scratch" # Privateのみ
