@@ -17,6 +17,7 @@ mas "Slack", id: 803453959 # Privateのみ
 mas "ToyViewer", id: 414298354
 
 cask "clipy"
+cask "flutter" # Privateのみ
 cask "google-chrome"
 cask "imageoptim"
 cask "logitech-presentation"
