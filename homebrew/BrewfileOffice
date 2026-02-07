@@ -3,10 +3,14 @@
 
 brew "mas"
 
+brew "cocoapods"
 brew "git-lfs"
 brew "imagemagick"
 brew "jq"
 brew "macvim"
+brew "nodenv"
+brew "pyenv"
+brew "rbenv"
 brew "webp" # Officeのみ
 brew "yarn"
 
