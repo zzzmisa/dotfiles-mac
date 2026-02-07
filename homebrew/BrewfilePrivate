@@ -3,6 +3,7 @@
 
 brew "mas"
 
+brew "cocoapods"
 brew "hugo" # Privateのみ
 brew "imagemagick"
 brew "jq"
