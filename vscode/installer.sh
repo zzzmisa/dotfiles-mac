@@ -13,6 +13,7 @@ ln -sf $PWD/vscode/settings.json ~/Library/Application\ Support/Code/User/
 # プラグインのインストール
 pkglist=(
   dbaeumer.vscode-eslint # ESLint
+  dart-code.flutter # Flutter
   eamodio.gitlens # GitLens — Git supercharged
   esbenp.prettier-vscode # Prettier - Code formatter
   github.copilot-chat # GitHub Copilot
