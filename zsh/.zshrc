@@ -9,3 +9,5 @@ eval "$(pyenv init -)"
 
 # rbenv setting
 eval "$(rbenv init -)"
+# Added by Antigravity
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
