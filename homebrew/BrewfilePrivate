@@ -3,7 +3,7 @@
 
 brew "mas"
 
-brew "cocoapods"
+brew "cocoapods" # Privateのみ
 brew "gh"
 brew "hugo" # Privateのみ
 brew "imagemagick"
@@ -23,8 +23,9 @@ mas "Slack", id: 803453959 # Privateのみ
 mas "ToyViewer", id: 414298354
 mas "Xcode", id: 497799835 # Privateのみ
 
-cask "antigravity"
+cask "antigravity" # Privateのみ
 cask "clipy"
+cask "codex-app"
 cask "flutter" # Privateのみ
 cask "google-chrome"
 cask "imageoptim"

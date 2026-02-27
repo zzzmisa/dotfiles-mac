@@ -19,6 +19,7 @@ mas "Kindle", id: 302584613
 mas "ToyViewer", id: 414298354
 
 cask "clipy"
+cask "codex-app"
 cask "firefox"
 cask "google-chrome"
 cask "gas-mask" # Officeのみ
