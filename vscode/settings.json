@@ -34,6 +34,9 @@
     {
       "text": "Generate commit messages in English using conventional commits format. Keep the subject line as short as possible, ideally under 50 characters."
     }
+    // {
+    //   "text": "コミットメッセージは日本語で、Conventional Commits 形式に沿って作成してください。件名はできるだけ短く、理想的には50文字以内に収めてください。"
+    // }
   ],
   // プロジェクト固有のテンプレートを使用
   "github.copilot.chat.useProjectTemplates": true,
