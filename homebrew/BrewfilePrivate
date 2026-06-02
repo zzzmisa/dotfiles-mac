@@ -24,6 +24,7 @@ mas "Xcode", id: 497799835 # Privateのみ
 cask "antigravity" # Privateのみ
 cask "clipy"
 cask "codex-app"
+cask "cursor"
 cask "flutter" # Privateのみ
 cask "google-chrome"
 cask "imageoptim"
