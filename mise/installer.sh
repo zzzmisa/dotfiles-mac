@@ -23,7 +23,4 @@ mise trust "$MISE_TOML_FILE"
 echo "Installing mise tools"
 mise install -C "$SCRIPT_DIR" -y
 
-echo "Installing node global packages"
-mise exec -C "$SCRIPT_DIR" -- npm install --global textlint snyk
-
 echo "👍 mise setting is done!"
