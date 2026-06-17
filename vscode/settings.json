@@ -4,7 +4,7 @@
   "editor.codeActionsOnSave": {
     // ESLintを含む全てのフォーマッターを実行
     // 参考: https://github.com/microsoft/vscode-eslint?tab=readme-ov-file#version-204
-    "source.fixAll": "explicit"
+    "source.fixAll": "explicit",
   },
   // PrettierはcodeActionsOnSaveで実行されないので個別に設定
   // ignore設定は.prettierignoreファイルを作成する
@@ -14,12 +14,12 @@
   // vscode.html-language-featuresを使う
   // 使わない時はコメントアウト
   "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
+    "editor.defaultFormatter": "vscode.html-language-features",
   },
   // GitHub Copilot設定
   // 全ての言語でCopilotを有効化
   "github.copilot.enable": {
-    "*": true
+    "*": true,
   },
   // インライン候補の表示を有効化
   "editor.inlineSuggest.enabled": true,
@@ -32,8 +32,8 @@
   // コミットメッセージは英語で生成
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
-      "text": "Generate commit messages in English using conventional commits format. Keep the subject line as short as possible, ideally under 50 characters."
-    }
+      "text": "Generate commit messages in English using conventional commits format. Keep the subject line as short as possible, ideally under 50 characters.",
+    },
     // {
     //   "text": "コミットメッセージは日本語で、Conventional Commits 形式に沿って作成してください。件名はできるだけ短く、理想的には50文字以内に収めてください。"
     // }
@@ -115,6 +115,9 @@
     "/^sort\\b.*\\s-(o|S)\\b/": false,
     "tree": true,
     "/^tree\\b.*\\s-o\\b/": false,
-    "/^xxd\\b(\\s+-\\S+)*\\s+[^-\\s]\\S*$/": true
-  }
+    "/^xxd\\b(\\s+-\\S+)*\\s+[^-\\s]\\S*$/": true,
+  },
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilotcli:claude-haiku-4.5",
+  "claudeCode.preferredLocation": "panel",
 }
