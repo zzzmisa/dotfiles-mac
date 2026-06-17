@@ -52,3 +52,7 @@ Sessionx.vim
 
 # Persistent undo
 [._]*.un~
+
+# Claude Code
+# 個人環境用のローカル設定。個人環境依存の設定や権限設定などが含まれる想定
+**/.claude/settings.local.json
