@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: GitHub PR"
+  short_description: "Create pull requests with Misa PR template"
+  default_prompt: "Use $zzzmisa-gh-pr to draft or create a GitHub pull request."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: GitHub Issue"
+  short_description: "Create GitHub issues with Misa AI task issue template"
+  default_prompt: "Use $zzzmisa-gh-issue to draft or create a GitHub issue."
