@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-flutter-device
-description: Use when Codex modifies a Flutter mobile app and the change needs real-device verification on MisaのiPhone. Run the iOS Release build, then install it with flutter install targeting MisaのiPhone by device name before reporting completion.
+description: Use when the coding agent modifies a Flutter mobile app and the change needs real-device verification on MisaのiPhone. Run the iOS Release build, then install it with flutter install targeting MisaのiPhone by device name before reporting completion.
 ---
 
 # Flutter Device Release Install

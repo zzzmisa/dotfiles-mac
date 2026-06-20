@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-gh-issue
-description: Create, draft, or update GitHub Issues using Misa's AI task issue template. Use when the user asks Codex to create, open, register, draft, 起票, update, rewrite, or reformat a GitHub Issue body/description, especially for AI implementation task Issues; read references/ai-task-issue.md and preserve its section structure.
+description: Create, draft, or update GitHub Issues using Misa's AI task issue template. Use when the user asks the coding agent to create, open, register, draft, 起票, update, rewrite, or reformat a GitHub Issue body/description, especially for AI implementation task Issues; read references/ai-task-issue.md and preserve its section structure.
 ---
 
 # GitHub Issue
