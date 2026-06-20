@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: Flutter SE2 Simulator"
+  short_description: "Run Flutter apps on iPhone SE2 simulator"
+  default_prompt: "Use $zzzmisa-flutter-se2-simulator after Flutter app changes that need iPhone SE2 simulator verification."
