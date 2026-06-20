@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: Refactor Issue"
+  short_description: "Plan refactoring investigations as GitHub issues"
+  default_prompt: "Use $zzzmisa-refactor-issue to investigate refactoring opportunities and draft a GitHub issue."
