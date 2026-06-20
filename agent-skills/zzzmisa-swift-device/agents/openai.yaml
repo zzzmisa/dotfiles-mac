@@ -1,4 +1,0 @@
-interface:
-  display_name: "Misa: Swift Device"
-  short_description: "Release build and install on Misa's iPhone"
-  default_prompt: "Use $zzzmisa-swift-device after Swift app changes that need real-device verification."

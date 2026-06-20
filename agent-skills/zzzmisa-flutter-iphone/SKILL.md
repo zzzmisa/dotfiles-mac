@@ -1,9 +1,9 @@
 ---
-name: zzzmisa-flutter-device
+name: zzzmisa-flutter-iphone
 description: Use when the coding agent modifies a Flutter mobile app and the change needs real-device verification on MisaのiPhone. Run the iOS Release build, then install it with flutter install targeting MisaのiPhone by device name before reporting completion.
 ---
 
-# Flutter Device Release Install
+# Flutter iPhone Release Install
 
 ## Workflow
 

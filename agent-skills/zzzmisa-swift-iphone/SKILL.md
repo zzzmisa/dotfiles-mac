@@ -1,9 +1,9 @@
 ---
-name: zzzmisa-swift-device
+name: zzzmisa-swift-iphone
 description: Use when the coding agent modifies AnimalVisionExplorer or another Swift/Xcode iOS app and the change needs real-device verification on MisaのiPhone. Run the Release build targeting MisaのiPhone by device name, then install it with devicectl targeting the same device name before reporting completion.
 ---
 
-# Swift Device Release Install
+# Swift iPhone Release Install
 
 ## Workflow
 
