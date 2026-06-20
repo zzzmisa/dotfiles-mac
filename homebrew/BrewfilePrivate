@@ -21,12 +21,10 @@ mas "Slack", id: 803453959 # Privateのみ
 mas "ToyViewer", id: 414298354
 mas "Xcode", id: 497799835 # Privateのみ
 
+cask "chatgpt"
 cask "antigravity" # Privateのみ
-cask "clipy"
 cask "codex-app"
-cask "cursor"
 cask "flutter" # Privateのみ
 cask "google-chrome"
-cask "imageoptim"
-cask "logitech-presentation"
+cask "logi-options+"
 cask "scratch" # Privateのみ

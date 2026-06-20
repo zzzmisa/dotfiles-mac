@@ -4,7 +4,7 @@
 brew "mas"
 
 brew "gh"
-brew "git-lfs"
+brew "git-lfs" # Officeのみ
 brew "imagemagick"
 brew "jq"
 brew "macvim"
@@ -16,11 +16,11 @@ brew "yarn"
 mas "Kindle", id: 302584613
 mas "ToyViewer", id: 414298354
 
-cask "clipy"
+cask "chatgpt"
 cask "codex-app"
 cask "firefox"
 cask "google-chrome"
 cask "gas-mask" # Officeのみ
-cask "imageoptim"
-cask "logitech-presentation"
+cask "imageoptim" # Officeのみ
+cask "logi-options+"
 cask "microsoft-office" # Officeのみ
