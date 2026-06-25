@@ -1,4 +1,0 @@
-interface:
-  display_name: "Misa: Flutter iPad"
-  short_description: "Flutter release build and install on Misa's iPad"
-  default_prompt: "Use $zzzmisa-flutter-ipad after Flutter app changes that need iPad verification."

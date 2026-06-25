@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: Install to iPad"
+  short_description: "Release build and install on Misa iPad"
+  default_prompt: "Use $zzzmisa-install-ipad after app changes that need release verification on ミサのiPad."

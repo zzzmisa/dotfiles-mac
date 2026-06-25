@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: Install to iPhone"
+  short_description: "Release build and install on Misa iPhone"
+  default_prompt: "Use $zzzmisa-install-iphone after app changes that need release verification on MisaのiPhone."
