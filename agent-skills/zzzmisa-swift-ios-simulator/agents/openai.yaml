@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: Swift iOS Simulator"
+  short_description: "Run Swift apps on named iOS simulators"
+  default_prompt: "Use $zzzmisa-swift-ios-simulator after Swift/Xcode app changes that need SE2, iPhone 14 Plus, or iPad Pro 13-inch simulator verification."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: Flutter iOS Simulator"
+  short_description: "Run Flutter apps on named iOS simulators"
+  default_prompt: "Use $zzzmisa-flutter-ios-simulator after Flutter app changes that need SE2, iPhone 14 Plus, or iPad Pro 13-inch simulator verification."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Misa: Swift SE2 Simulator"
-  short_description: "Run Swift apps on iPhone SE2 simulator"
-  default_prompt: "Use $zzzmisa-swift-se2-simulator after Swift app changes that need iPhone SE2 simulator verification."
