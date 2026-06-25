@@ -20,3 +20,12 @@
    ```
    zsh vim/installer.sh
    ```
+
+## オリジナルシェル関数
+
+App Store提出用の動画サイズに変換する。
+
+```
+app-preview-iphone "ScreenRecording_06-25-2026 08-43-06_1.MP4"
+app-preview-ipad "ScreenRecording_06-25-2026 08-43-06_1.MP4"
+```
