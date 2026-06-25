@@ -12,20 +12,21 @@ ln -sf $PWD/vscode/settings.json ~/Library/Application\ Support/Code/User/
 
 # プラグインのインストール
 pkglist=(
+  anthropic.claude-code # Claude Code for VS Code
   dbaeumer.vscode-eslint # ESLint
   dart-code.flutter # Flutter
   eamodio.gitlens # GitLens — Git supercharged
   esbenp.prettier-vscode # Prettier - Code formatter
-  github.copilot-chat # GitHub Copilot
-  github.copilot
+  github.copilot # GitHub Copilot
   ms-ceintl.vscode-language-pack-ja # Japanese Language Pack for Visual Studio Code
+  openai.chatgpt # Codex – OpenAI’s coding agent pre-release
   stylelint.vscode-stylelint # Stylelint
   yzane.markdown-pdf # Markdown to PDF
   # 3w36zj6.textlint # textlintコミュニティ版
   # github.vscode-github-actions
   # htmlhint.vscode-htmlhint
-  # octref.vetur # Vetur（しばらく使わない）
-  # ritwickdey.liveserver
+  # Vue.volar # Vue - Official（Veturの後継）
+  # ritwickdey.liveserver # 最終更新が古いため必要になったら再検討
 )
 
 for i in ${pkglist[@]}; do
