@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: Install to iOS Simulator"
+  short_description: "Run apps on named iOS simulators"
+  default_prompt: "Use $zzzmisa-install-ios-simulator to install and run the current iOS app on iPhone SE2, Screenshot iPhone 14 Plus, or Screenshot iPad Pro 13-inch."

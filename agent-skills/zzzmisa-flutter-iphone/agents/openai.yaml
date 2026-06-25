@@ -1,4 +1,0 @@
-interface:
-  display_name: "Misa: Flutter iPhone"
-  short_description: "Flutter release build and install on Misa's iPhone"
-  default_prompt: "Use $zzzmisa-flutter-iphone after Flutter app changes that need iPhone verification."
