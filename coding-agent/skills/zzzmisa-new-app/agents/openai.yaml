@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: New App Scaffold"
+  short_description: "Scaffold a new app with Misa standard skeleton"
+  default_prompt: "Use $zzzmisa-new-app to scaffold a new mobile app project with the standard docs, localization, settings screen, and fastlane setup."
