@@ -1,14 +1,17 @@
 #!/usr/bin/env zsh
 set -e
+
+script_dir="${0:A:h}"
+
 # codeコマンドがなければ
 # Homebrew経由でVSCodeをインストール
 if ! type code > /dev/null 2>&1; then
-  source homebrew/install-homebrew.sh
+  source "$script_dir/../homebrew/install-homebrew.sh"
   brew install --cask visual-studio-code
 fi
 
 # settings.jsonの設置
-ln -sf $PWD/vscode/settings.json ~/Library/Application\ Support/Code/User/
+ln -sf "$script_dir/settings.json" ~/Library/Application\ Support/Code/User/
 
 # プラグインのインストール
 pkglist=(
@@ -29,8 +32,8 @@ pkglist=(
   # ritwickdey.liveserver # 最終更新が古いため必要になったら再検討
 )
 
-for i in ${pkglist[@]}; do
-  code --install-extension $i
+for i in "${pkglist[@]}"; do
+  code --install-extension "$i"
 done
 
 echo 👍 VSCode setting is done!
