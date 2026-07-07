@@ -23,9 +23,28 @@
 
 ## オリジナルシェル関数
 
+### App Preview動画の変換
+
 App Store提出用の動画サイズに変換する。
 
 ```
 app-preview-iphone "ScreenRecording_06-25-2026 08-43-06_1.MP4"
 app-preview-ipad "ScreenRecording_06-25-2026 08-43-06_1.MP4"
+```
+
+### mainにマージ済みのローカルブランチとworktreeの削除
+
+`git fetch --prune` を実行したあと、`main` にマージ済みのローカルブランチと、そのブランチに対応するworktreeを削除する。
+`main`、`master`、`develop`、`dev`、現在のブランチは削除対象外。
+リモートブランチは削除しない。
+
+```
+gcleanmerged
+```
+
+基準ブランチを指定する場合:
+
+```
+gcleanmerged develop
+gcleanmerged origin/main
 ```
