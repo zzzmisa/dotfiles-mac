@@ -5,6 +5,8 @@ description: Use when the coding agent needs to verify the current Flutter or Sw
 
 # iOS Simulator
 
+When testing permission-related behavior, read [references/debugging-tips.md](references/debugging-tips.md) for scripting simulator permission (TCC) state.
+
 ## Project Detection
 
 - Treat the project as Flutter when `pubspec.yaml` and `ios/` exist.

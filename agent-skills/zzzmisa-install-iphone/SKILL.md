@@ -5,6 +5,8 @@ description: Use when the coding agent modifies a Flutter or Swift/Xcode iOS app
 
 # iPhone Release Install
 
+Read [references/device-info.md](references/device-info.md) for `MisaのiPhone` device details and on-device debugging tips (console log capture, permission gotchas).
+
 ## Project Detection
 
 - Treat the project as Flutter when `pubspec.yaml` and `ios/` exist.
