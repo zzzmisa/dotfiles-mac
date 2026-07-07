@@ -29,3 +29,59 @@ app-preview-iphone() {
 app-preview-ipad() {
   _app-preview app-preview-ipad 1200 1600 "$1"
 }
+
+gcleanmerged() {
+  local base="${1:-main}"
+
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "Error: not inside a git repository"
+    return 1
+  fi
+
+  if ! git rev-parse --verify --quiet "$base" >/dev/null; then
+    echo "Error: base branch not found: $base"
+    return 1
+  fi
+
+  git fetch --prune || return 1
+
+  local current_branch
+  current_branch="$(git branch --show-current)"
+
+  local branch
+  local found=0
+
+  for branch in "${(@f)$(git branch --format='%(refname:short)' --merged "$base")}"; do
+    [ -z "$branch" ] && continue
+
+    case "$branch" in
+      "$base"|"$current_branch"|main|master|develop|dev)
+        continue
+        ;;
+    esac
+
+    found=1
+    echo "=== $branch ==="
+
+    local wt_path
+    wt_path="$(git worktree list --porcelain | awk -v b="$branch" '
+      /^worktree / { path = substr($0, 10) }
+      /^branch / && $2 == "refs/heads/" b { print path }
+    ')"
+
+    if [ -n "$wt_path" ]; then
+      echo "Removing worktree: $wt_path"
+      git worktree remove "$wt_path" || {
+        echo "Skipped branch because worktree could not be removed: $branch"
+        continue
+      }
+    fi
+
+    echo "Deleting local branch: $branch"
+    git branch -d "$branch"
+  done
+
+  if [ "$found" -eq 0 ]; then
+    echo "No merged local branches to delete."
+  fi
+}
