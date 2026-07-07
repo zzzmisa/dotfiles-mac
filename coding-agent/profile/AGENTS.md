@@ -1,6 +1,6 @@
 # エージェント向けプロファイル（Misaの個人開発の進め方）
 
-このファイルの実体は `dotfiles-mac/agent-profile/AGENTS.md`。インストーラで
+このファイルの実体は `dotfiles-mac/coding-agent/profile/AGENTS.md`。インストーラで
 `~/.claude/CLAUDE.md`（Claude Code）と `~/.codex/AGENTS.md`（Codex）に
 シンボリックリンクされ、全プロジェクトで常時読み込まれる。
 プロジェクト固有の知識はここに書かず、各リポジトリの CLAUDE.md / AGENTS.md / docs に書くこと。
