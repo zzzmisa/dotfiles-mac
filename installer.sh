@@ -2,7 +2,9 @@
 
 # 各フォルダ配下の installer.sh を順番に実行し、出力をそのままTerminalに流す
 
-for dir in "$PWD"/*; do
+script_dir="${0:A:h}"
+
+for dir in "$script_dir"/*; do
   # ディレクトリでない、または .git なら skip
   [[ ! -d "$dir" ]] && continue
   [[ "$(basename "$dir")" = ".git" ]] && continue
