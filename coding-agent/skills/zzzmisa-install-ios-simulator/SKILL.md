@@ -87,17 +87,22 @@ If no target is specified and no prior context selects one, ask which simulator 
 
 ## Swift/Xcode Workflow
 
-1. Identify the project or workspace and scheme. For `AnimalVisionExplorer`, expect `AnimalVisionExplorer.xcodeproj` and scheme `AnimalVisionExplorer`.
-2. Build the app for the simulator. For `AnimalVisionExplorer`:
+1. Identify the project or workspace and scheme. When unknown, list them with:
 
    ```bash
-   xcodebuild build -project AnimalVisionExplorer.xcodeproj -scheme AnimalVisionExplorer -configuration Debug -destination "platform=iOS Simulator,id=<UDID>" -derivedDataPath build/DerivedData
+   xcodebuild -list
+   ```
+
+2. Build the app for the simulator (use `-workspace <Name>.xcworkspace` instead of `-project` when the project uses a workspace):
+
+   ```bash
+   xcodebuild build -project <Name>.xcodeproj -scheme <Scheme> -configuration Debug -destination "platform=iOS Simulator,id=<UDID>" -derivedDataPath build/DerivedData
    ```
 
 3. Install the built simulator app:
 
    ```bash
-   xcrun simctl install <UDID> build/DerivedData/Build/Products/Debug-iphonesimulator/AnimalVisionExplorer.app
+   xcrun simctl install <UDID> build/DerivedData/Build/Products/Debug-iphonesimulator/<AppName>.app
    ```
 
 4. Launch the installed app by bundle identifier:
@@ -109,7 +114,7 @@ If no target is specified and no prior context selects one, ask which simulator 
    If the bundle ID is unknown, read it from Xcode build settings:
 
    ```bash
-   xcodebuild -project AnimalVisionExplorer.xcodeproj -scheme AnimalVisionExplorer -showBuildSettings
+   xcodebuild -project <Name>.xcodeproj -scheme <Scheme> -showBuildSettings
    ```
 
    Use the `PRODUCT_BUNDLE_IDENTIFIER` value for the app target.

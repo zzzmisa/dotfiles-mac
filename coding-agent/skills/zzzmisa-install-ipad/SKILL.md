@@ -23,22 +23,27 @@ description: Use when the coding agent modifies a Flutter or Swift/Xcode iOS app
 2. If the build succeeds, install the Release build on `ミサのiPad` by device name:
 
    ```bash
-   xcrun devicectl device install app --device "ミサのiPad" build/ios/iphoneos/Runner.app
+   flutter install -d "ミサのiPad" --release
    ```
 
 ## Swift/Xcode Workflow
 
-1. Identify the project or workspace and scheme. For `AnimalVisionExplorer`, expect `AnimalVisionExplorer.xcodeproj` and scheme `AnimalVisionExplorer`.
-2. Run the Release build for `ミサのiPad` by device name:
+1. Identify the project or workspace and scheme. When unknown, list them with:
 
    ```bash
-   xcodebuild build -project AnimalVisionExplorer.xcodeproj -scheme AnimalVisionExplorer -configuration Release -destination "platform=iOS,name=ミサのiPad" -derivedDataPath build/DerivedData
+   xcodebuild -list
+   ```
+
+2. Run the Release build for `ミサのiPad` by device name (use `-workspace <Name>.xcworkspace` instead of `-project` when the project uses a workspace):
+
+   ```bash
+   xcodebuild build -project <Name>.xcodeproj -scheme <Scheme> -configuration Release -destination "platform=iOS,name=ミサのiPad" -derivedDataPath build/DerivedData
    ```
 
 3. If the build succeeds, reinstall the app on `ミサのiPad` by device name:
 
    ```bash
-   xcrun devicectl device install app --device "ミサのiPad" build/DerivedData/Build/Products/Release-iphoneos/AnimalVisionExplorer.app
+   xcrun devicectl device install app --device "ミサのiPad" build/DerivedData/Build/Products/Release-iphoneos/<AppName>.app
    ```
 
 ## Guardrails
