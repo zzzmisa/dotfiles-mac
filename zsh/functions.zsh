@@ -22,15 +22,15 @@ _app-preview() {
     "$output"
 }
 
-app-preview-iphone() {
-  _app-preview app-preview-iphone 886 1920 "$1"
+zzzmisa-resize-video-for-appstore-iphone() {
+  _app-preview zzzmisa-resize-video-for-appstore-iphone 886 1920 "$1"
 }
 
-app-preview-ipad() {
-  _app-preview app-preview-ipad 1200 1600 "$1"
+zzzmisa-resize-video-for-appstore-ipad() {
+  _app-preview zzzmisa-resize-video-for-appstore-ipad 1200 1600 "$1"
 }
 
-gcleanmerged() {
+zzzmisa-delete-merged-local-branches() {
   local base="${1:-main}"
 
   if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
@@ -84,4 +84,30 @@ gcleanmerged() {
   if [ "$found" -eq 0 ]; then
     echo "No merged local branches to delete."
   fi
+}
+
+# Backward-compatible wrappers (old command names)
+app-preview-iphone() {
+  zzzmisa-resize-video-for-appstore-iphone "$@"
+}
+
+app-preview-ipad() {
+  zzzmisa-resize-video-for-appstore-ipad "$@"
+}
+
+gcleanmerged() {
+  zzzmisa-delete-merged-local-branches "$@"
+}
+
+# Compatibility wrappers for previous zzzmisa command names
+zzzmisa-app-preview-iphone() {
+  zzzmisa-resize-video-for-appstore-iphone "$@"
+}
+
+zzzmisa-app-preview-ipad() {
+  zzzmisa-resize-video-for-appstore-ipad "$@"
+}
+
+zzzmisa-gcleanmerged() {
+  zzzmisa-delete-merged-local-branches "$@"
 }

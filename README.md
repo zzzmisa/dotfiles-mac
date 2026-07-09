@@ -29,8 +29,8 @@
 App Store提出用の動画サイズに変換する。
 
 ```
-app-preview-iphone "ScreenRecording_06-25-2026 08-43-06_1.MP4"
-app-preview-ipad "ScreenRecording_06-25-2026 08-43-06_1.MP4"
+zzzmisa-resize-video-for-appstore-iphone "ScreenRecording_06-25-2026 08-43-06_1.MP4"
+zzzmisa-resize-video-for-appstore-ipad "ScreenRecording_06-25-2026 08-43-06_1.MP4"
 ```
 
 ### mainにマージ済みのローカルブランチとworktreeの削除
@@ -40,12 +40,12 @@ app-preview-ipad "ScreenRecording_06-25-2026 08-43-06_1.MP4"
 リモートブランチは削除しない。
 
 ```
-gcleanmerged
+zzzmisa-delete-merged-local-branches
 ```
 
 基準ブランチを指定する場合:
 
 ```
-gcleanmerged develop
-gcleanmerged origin/main
+zzzmisa-delete-merged-local-branches develop
+zzzmisa-delete-merged-local-branches origin/main
 ```
