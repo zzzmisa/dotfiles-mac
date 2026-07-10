@@ -1,6 +1,14 @@
 #!/usr/bin/env zsh
 
-# 配下の各フォルダ(profile, skills)の installer.sh を順に実行する
+# 配下の各フォルダ(memory, profile, skills)の installer.sh を順に実行する
+
+# インストールするかどうかを先に確認
+printf "Install coding-agent (memory, profile, skills)? (y/n) :  "
+IFS= read -r install_coding_agent
+if [[ "$install_coding_agent" != "y" ]]; then
+  echo "Skipped coding-agent installation."
+  exit 0
+fi
 
 script_dir="${0:A:h}"
 
