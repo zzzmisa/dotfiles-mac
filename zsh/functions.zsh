@@ -85,29 +85,3 @@ zzzmisa-delete-merged-local-branches() {
     echo "No merged local branches to delete."
   fi
 }
-
-# Backward-compatible wrappers (old command names)
-app-preview-iphone() {
-  zzzmisa-resize-video-for-appstore-iphone "$@"
-}
-
-app-preview-ipad() {
-  zzzmisa-resize-video-for-appstore-ipad "$@"
-}
-
-gcleanmerged() {
-  zzzmisa-delete-merged-local-branches "$@"
-}
-
-# Compatibility wrappers for previous zzzmisa command names
-zzzmisa-app-preview-iphone() {
-  zzzmisa-resize-video-for-appstore-iphone "$@"
-}
-
-zzzmisa-app-preview-ipad() {
-  zzzmisa-resize-video-for-appstore-ipad "$@"
-}
-
-zzzmisa-gcleanmerged() {
-  zzzmisa-delete-merged-local-branches "$@"
-}
