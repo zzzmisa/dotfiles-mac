@@ -69,7 +69,9 @@ radii, or text styles inside widgets/views.
 
 Order and grouping (omit sections that do not apply, keep the rest in this order):
 
-1. **Language** — in-app language picker (ja/en/zh-Hans as supported).
+1. **Language** — in-app language picker (ja/en/zh-Hans as supported). Implement
+   it as an inline single-select dropdown/list that opens the available language
+   choices, rather than as separate menu items or a separate screen.
 2. **App-specific preferences** — e.g. BGM/sound toggles; app-dependent.
 3. **Purchase** — buy-once unlock CTA, purchased state, and "Restore purchases".
    Hidden while the purchase flag is off.
@@ -80,8 +82,15 @@ Order and grouping (omit sections that do not apply, keep the rest in this order
    - 著作権・ライセンス (in-app page; follow the specification below)
    - 開発者ホームページ: `https://zzzmisa.com`
    - External links open in the external browser (`LaunchMode.externalApplication` / `openURL`).
-5. **Version** — display app version from package info (`package_info_plus` / Bundle).
-6. **Reset** — restore settings to defaults (optional; include when settings are non-trivial).
+5. **Reset** — restore settings to defaults (optional; include when settings are non-trivial).
+
+- Do not render headings for the menu groups. Separate the logical groups with
+  horizontal dividers instead.
+- Place one final divider below the last menu item, then show the version as small
+  footer text at the bottom of the screen; do not render it as a menu item. Use
+  `<localized version label>: <version>+<build number>` (for example,
+  `バージョン: 1.0.0+6`) and read both values from package information
+  (`package_info_plus` / Bundle).
 
 ### Copyright & Licenses Page
 
