@@ -77,11 +77,53 @@ Order and grouping (omit sections that do not apply, keep the rest in this order
    - プライバシーポリシー: `https://policies.zzzmisa.com/privacy-kids` (kids/family apps)
      or the appropriate page under `https://policies.zzzmisa.com/`
    - 利用規約: `https://policies.zzzmisa.com/terms`
-   - クレジット・権利表記 (in-app page listing assets/licenses)
+   - 著作権・ライセンス (in-app page; follow the specification below)
    - 開発者ホームページ: `https://zzzmisa.com`
    - External links open in the external browser (`LaunchMode.externalApplication` / `openURL`).
 5. **Version** — display app version from package info (`package_info_plus` / Bundle).
 6. **Reset** — restore settings to defaults (optional; include when settings are non-trivial).
+
+### Copyright & Licenses Page
+
+- Use `著作権・ライセンス` for both the Settings menu item and the page title.
+  Localize the label for supported languages when appropriate (for example,
+  `Copyright & Licenses` in English), and use a hiragana rendering such as
+  `ちょさくけん・ライセンス` when the target audience requires it.
+- Show the content in two cards: **About This App** and **Licenses**.
+- Keep all content inside the cards in English in every app locale; do not add
+  localization keys for the card headings or license entries.
+- The **About This App** card shows the app icon, app name, and
+  `© <initial release year> Misa Inome (zzzmisa)`.
+- The **Licenses** card uses only the applicable sections from this format:
+
+  ```text
+  Framework:
+  - <framework name> (<license name>)
+    <copyright notice>
+
+  Libraries:
+  - <library name> (<license name>)
+    <copyright notice>
+
+  Photos:
+  - <work title> (<usage terms, such as CC0 1.0 Universal>)
+    by <creator name>
+
+  Music:
+  - <track title> (<usage terms>)
+    by <creator name>
+  ```
+
+- For Flutter apps, include Flutter under `Framework:`. For native Swift/Xcode
+  apps, omit the `Framework:` section entirely.
+- Omit empty media sections. Use `Images:` instead of `Photos:` when the app
+  credits both photographs and illustrations.
+- Do not link work titles, creators, sources, or license names from this page.
+- List libraries used by the shipped app at runtime. Omit development-only tools
+  and dependencies used solely for builds, code generation, linting, or tests
+  (for example, `build_runner`, generators, and test packages).
+- Display the license name and copyright notice only; a full license-text view is
+  not part of the standard page.
 
 ## Store Assets & Screenshots
 
