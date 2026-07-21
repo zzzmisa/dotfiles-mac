@@ -30,4 +30,5 @@ cask "antigravity" # Privateのみ
 cask "flutter" # Privateのみ
 cask "google-chrome"
 cask "logi-options+"
+cask "okta-verify"
 cask "scratch" # Privateのみ
