@@ -25,3 +25,4 @@ cask "gas-mask" # Officeのみ
 cask "imageoptim" # Officeのみ
 cask "logi-options+"
 cask "microsoft-office" # Officeのみ
+cask "okta-verify"
