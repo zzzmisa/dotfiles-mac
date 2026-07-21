@@ -26,7 +26,6 @@ cask "capcut" # Privateのみ
 cask "chatgpt"
 cask "claude-code"
 cask "antigravity" # Privateのみ
-cask "codex-app"
 cask "flutter" # Privateのみ
 cask "google-chrome"
 cask "logi-options+"
