@@ -24,7 +24,8 @@ mas "Xcode", id: 497799835 # Privateのみ
 
 cask "capcut" # Privateのみ
 cask "chatgpt"
-cask "claude-code"
+cask "claude" # デスクトップアプリ
+cask "claude-code" # ターミナル用CLI
 cask "antigravity" # Privateのみ
 cask "flutter" # Privateのみ
 cask "google-chrome"
