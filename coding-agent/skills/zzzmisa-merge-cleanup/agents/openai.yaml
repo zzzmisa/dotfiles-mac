@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: Merge Cleanup"
+  short_description: "Clean up merged branches and stale worktrees"
+  default_prompt: "Use $zzzmisa-merge-cleanup to remove merged branches and stale git worktrees."
