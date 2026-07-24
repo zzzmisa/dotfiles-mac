@@ -21,9 +21,6 @@ accept_xcode_license() {
 # Homebrewインストール
 source "$script_dir/install-homebrew.sh"
 
-# Rosettaインストール
-softwareupdate --install-rosetta
-
 # Brewfile実行前: 既存Xcodeのライセンス未同意でbrew bundleが途中で止まるのを防ぐ
 accept_xcode_license
 
