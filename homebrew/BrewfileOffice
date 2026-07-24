@@ -3,6 +3,7 @@
 
 brew "mas"
 
+brew "exiftool"
 brew "gh"
 brew "git-lfs" # Officeのみ
 brew "imagemagick"

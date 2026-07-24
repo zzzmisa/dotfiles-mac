@@ -4,6 +4,7 @@
 brew "mas"
 
 brew "cocoapods" # Privateのみ
+brew "exiftool"
 brew "ffmpeg" # Privateのみ
 brew "gh"
 brew "hugo" # Privateのみ
