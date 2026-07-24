@@ -13,7 +13,9 @@ brew "tree"
 brew "webp" # Officeのみ
 brew "yarn"
 
+mas "Keynote", id: 409183694
 mas "Kindle", id: 302584613
+mas "Numbers", id: 409203825
 mas "ToyViewer", id: 414298354
 
 cask "chatgpt"
