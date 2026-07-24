@@ -34,6 +34,10 @@ Gather from the user (ask only for what is missing):
    - Flutter: `flutter create --platforms=ios --org com.zzzmisa --project-name <projectname> <app_dir>`
    - Swift: create the Xcode project with Bundle ID `com.zzzmisa.<projectname>`,
      add `PrivacyInfo.xcprivacy`, and group code by feature (`Features/<Name>/`, `Core/`, `Resources/`).
+   - Both platforms: declare encryption compliance in Info.plist so App Store Connect
+     skips the export-compliance question — set `ITSAppUsesNonExemptEncryption` to `false`
+     (Flutter: `ios/Runner/Info.plist`; Xcode with a generated Info.plist: build setting
+     `INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO`).
 2. **Add the standard documents** (AGENT.md 企画書, docs/design.md 設計書, README.md)
    as skeletons per the reference file. Store submission info is NOT a separate
    document; it lives in fastlane (step 7).
