@@ -14,10 +14,12 @@ brew "mise"
 brew "tree"
 brew "yarn"
 
+mas "Keynote", id: 409183694
 mas "Kindle", id: 302584613
 mas "LINE", id: 539883307 # Privateのみ
 mas "Microsoft Copilot", id: 6738511300 # Privateのみ
 mas "Microsoft To-Do", id: 1274495053 # Privateのみ
+mas "Numbers", id: 409203825
 mas "Slack", id: 803453959 # Privateのみ
 mas "ToyViewer", id: 414298354
 mas "Xcode", id: 497799835 # Privateのみ
