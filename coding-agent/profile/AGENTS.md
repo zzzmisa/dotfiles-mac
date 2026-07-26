@@ -21,16 +21,15 @@
 
 - 途中確認を挟まず自律的に進めてよい（破壊的操作と外部への公開操作は除く）
 - 動作検証はシミュレータより実機インストールを優先する
-- PRのマージと、App Storeの審査提出・リリース公開はMisa自身が行う。エージェントは実施しない
-  - ただしその前段階（`flutter build ipa` などのビルド、`xcrun altool --upload-app` などによるASCへのipaアップロード、fastlaneでの下書きバージョンへのメタデータ流し込み）はエージェントが実施してよい。「世に出す」操作（審査提出・リリース）だけをMisaが行う
+- PRのマージと、App Storeのリリース公開はMisa自身が行う。エージェントは実施しない
+- App Storeの審査提出は、Misaの明示的な指示があったときだけ実施する（自律判断では実施しない）
+  - その前段階（ビルド、ASCへのipaアップロード、下書きバージョンへのメタデータ流し込み）は指示がなくても実施してよい
 - 公開リポジトリへの `git push` は、Misaが内容を確認してから自身で行う
-- 画像ファイル（jpg / jpeg / png / heic / webp / tiff）をコミットする前に、位置情報（GPS EXIF）が残っていないか `exiftool` で確認する。残っていたら `exiftool -gps:all= -location:all=` で除去してからコミットする（スクリーンショットは通常GPSを含まないが、判定に迷わないよう一律チェックする。主な想定リスクはカメラで撮影した実機写真）
+- 画像ファイル（jpg / jpeg / png / heic / webp / tiff）をコミットする前に `exiftool` で位置情報（GPS EXIF）を確認し、残っていたら `exiftool -gps:all= -location:all=` で除去する（スクリーンショットも一律チェック）
 - Misa自身もコードを直接編集する。コミット前に `git status` で未コミットの変更を確認し、Misaの変更をエージェントの変更と同じコミットに混ぜないこと
 
 ## 検証デバイス
 
 - iOS実機: `MisaのiPhone`（iPhone 17）、`ミサのiPad`
-- Android実機: HUAWEI nova lite 3（Android 9 / API 28）
-  - adb接続には開発者向けオプションの「"充電のみ"モードでADBデバッグを許可」をONにし、ファイル転送モードにする必要がある
-  - 検証中のスリープ抑止は `adb shell svc power stayon usb`
+- Android実機: HUAWEI nova lite 3（Android 9 / API 28）。adb接続は開発者向けオプションの「"充電のみ"モードでADBデバッグを許可」ON＋ファイル転送モード、スリープ抑止は `adb shell svc power stayon usb`
 - iOS実機・シミュレータの詳細な手順やデバッグのコツは、install系スキル（`zzzmisa-install-iphone` 等）の references を参照

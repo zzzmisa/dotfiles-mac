@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-install-ipad
-description: Use when the coding agent modifies a Flutter or Swift/Xcode iOS app and the change needs real-device verification on `ミサのiPad`. Detect Flutter vs Swift from the project, run the iOS Release build, then install the Release app on `ミサのiPad` before reporting completion.
+description: Build the iOS Release and install it on the real device `ミサのiPad`. Use when a Flutter or Swift/Xcode iOS app change needs real-device verification on the iPad.
 ---
 
 # iPad Release Install

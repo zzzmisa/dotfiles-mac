@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-gh-pr
-description: Create or draft GitHub pull requests using Misa's PR template. Use when the user asks the coding agent to create, open, draft, publish, or 作成 a PR or pull request; read references/pull_request_template.md and preserve its section structure.
+description: Create or draft GitHub pull requests using Misa's PR template. Use when asked to create, draft, or 作成 a PR / pull request.
 ---
 
 # GitHub Pull Request

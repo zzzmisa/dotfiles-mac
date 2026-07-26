@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-sns-post
-description: Write or edit SNS posts (X/Twitter, Facebook, YouTube Shorts), mainly for app release announcements and promotion. Use when the user asks the coding agent to write, draft, edit, 添削, or review an SNS/social media post, tweet, X投稿, Facebook投稿, リリース報告, or YouTube Shorts title/description; read references/platform-rules.md first.
+description: Write or edit SNS posts (X/Twitter, Facebook, YouTube Shorts), mainly app release announcements and promotion. Use when asked to write, draft, 添削, or review an SNS post, tweet, X投稿, リリース報告, or Shorts title/description.
 ---
 
 # SNS投稿文の作成・添削

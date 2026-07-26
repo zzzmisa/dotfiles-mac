@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-install-ios-simulator
-description: Use when the coding agent needs to verify the current Flutter or Swift/Xcode iOS app on one of Misa's named iOS simulators: `iPhone SE2`, `Screenshot iPhone 14 Plus`, or `Screenshot iPad Pro 13-inch`. Detect Flutter vs Swift from the project, create or reuse the requested simulator, boot it, install/run the app, and leave the simulator ready for visual checking or screenshots.
+description: Install and run the current Flutter or Swift/Xcode iOS app on one of Misa's named iOS simulators: `iPhone SE2`, `Screenshot iPhone 14 Plus`, or `Screenshot iPad Pro 13-inch`. Use when a change needs simulator verification or screenshots.
 ---
 
 # iOS Simulator

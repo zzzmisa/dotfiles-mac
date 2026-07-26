@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-refactor-issue
-description: Investigate refactoring and cleanup opportunities, then draft or create a GitHub Issue before implementation. Use for リファクタリング調査, 改善Issue作成, 技術的負債の洗い出し, 未使用コード削除案, performance, or app size reduction proposals; use zzzmisa-gh-issue for the Issue template.
+description: Investigate refactoring and cleanup opportunities, then draft or create a GitHub Issue before implementation. Use for リファクタリング調査, 改善Issue作成, 技術的負債の洗い出し, 未使用コード削除, performance, or app size reduction proposals.
 ---
 
 # Refactor Issue

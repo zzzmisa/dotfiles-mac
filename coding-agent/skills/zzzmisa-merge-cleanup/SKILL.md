@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-merge-cleanup
-description: Clean up merged branches and stale git worktrees safely. Use when Misa says a PR was merged (マージしました, マージ済み, merged), when asked to clean up or 掃除 branches/worktrees, or right before creating a new working branch for a new task (sweep leftovers from previous merged work first).
+description: Clean up merged branches and stale git worktrees safely. Use when Misa says a PR was merged (マージしました, マージ済み), asks to clean up / 掃除 branches or worktrees, or before creating a new working branch for a new task.
 ---
 
 # Merge Cleanup

@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-new-app
-description: Scaffold a new mobile app project with Misa's standard skeleton (docs, localization, settings screen, fastlane, offline + buy-once IAP policy). Use when the user asks to start, create, or 新規作成 a new smartphone/iOS/Flutter app project, or to set up the standard project frame/枠/雛形 for one.
+description: Scaffold a new mobile app project with Misa's standard skeleton (docs, localization, settings screen, fastlane, offline + buy-once IAP). Use when asked to start or 新規作成 a new smartphone/iOS/Flutter app project, or set up its standard 雛形.
 ---
 
 # New App Scaffold
