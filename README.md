@@ -22,6 +22,27 @@
    ```
    各インストーラはスクリプト自身の位置を基準にパスを解決するため、どのディレクトリから実行してもよい。
 
+## 開発ツールと依存関係の管理方針
+
+ツールの管理元は、次の基準で使い分ける。
+
+```text
+Homebrew
+├── mise自体
+├── macOSアプリ
+└── ffmpegなどのネイティブCLI
+
+mise
+├── Node.js / Python / Ruby / Flutter
+├── Hugo / uv / XcodeGen
+└── Snykなどの独立した開発CLI
+
+プロジェクト内
+├── uv：Python依存関係
+├── npm / pnpm：JavaScript依存関係
+└── Bundler：FastlaneなどのRuby依存関係
+```
+
 ## オリジナルシェル関数
 
 ### App Preview動画の変換

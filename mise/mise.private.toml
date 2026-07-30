@@ -1,0 +1,4 @@
+[tools]
+flutter = "3.44.7"
+hugo = "0.164.0"
+xcodegen = "2.46.0"

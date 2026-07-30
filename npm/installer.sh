@@ -12,6 +12,6 @@ fi
 ln -sf "$script_dir/.npmrc" "$HOME/.npmrc"
 
 echo "Installing node global packages"
-mise exec -C "$mise_dir" -- npm install --global textlint snyk
+mise exec -C "$mise_dir" -- npm install --global textlint
 
 echo "👍 npm setting is done!"

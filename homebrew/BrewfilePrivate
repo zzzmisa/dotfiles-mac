@@ -7,13 +7,11 @@ brew "cocoapods" # Privateのみ
 brew "exiftool"
 brew "ffmpeg" # Privateのみ
 brew "gh"
-brew "hugo" # Privateのみ
 brew "imagemagick"
 brew "jq"
 brew "macvim"
 brew "mise"
 brew "tree"
-brew "yarn"
 
 mas "Keynote", id: 409183694
 mas "Kindle", id: 302584613
@@ -30,7 +28,6 @@ cask "chatgpt"
 cask "claude" # デスクトップアプリ
 cask "claude-code" # ターミナル用CLI
 cask "antigravity" # Privateのみ
-cask "flutter" # Privateのみ
 cask "google-chrome"
 cask "logi-options+"
 cask "okta-verify"

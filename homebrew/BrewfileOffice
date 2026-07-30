@@ -12,7 +12,6 @@ brew "macvim"
 brew "mise"
 brew "tree"
 brew "webp" # Officeのみ
-brew "yarn"
 
 mas "Keynote", id: 409183694
 mas "Kindle", id: 302584613
