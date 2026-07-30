@@ -17,7 +17,6 @@ Use the template sections in the same order:
 - `確認したこと`
 - `確認できていないこと・残る懸念点`
 - `レビューしてほしいポイント`
-- `AIへの指示`
 
 Fill comments and placeholders with concrete, concise Japanese. Remove HTML comments from the final PR body.
 
@@ -27,6 +26,15 @@ In `確認したこと`, mark `[x]` only for checks that were actually run or ve
 
 For `確認できていないこと・残る懸念点` and `レビューしてほしいポイント`, write `なし` when there is nothing specific to call out.
 
-Preserve the `AIへの指示` section unless the user explicitly asks to change it.
+Before drafting or creating the PR:
+
+- Read applicable `AGENTS.md` files and follow their product, design, and workflow instructions.
+- Use a work branch. When creating the branch for a numbered Issue, name it `issue-<number>-<short-description>` (for example, `issue-1-add-new-feature`).
+- If the implementation appears to require a major design change or unrequested specification expansion, stop before implementing or creating the PR and report the proposal to the user.
+- For mobile apps, install and verify on a physical device when the environment supports it and the change requires device verification.
+
+Set the PR title to `Issue #<number> <summary>` when the Issue number is known (for example, `Issue #1 音声ボタンの追加`). Do not invent an Issue number.
 
 If the user asks to actually create the PR and a GitHub tool or `gh` is available, create it after preparing the title and body. If the user asks only for a draft, return the Markdown body without creating anything.
+
+Never merge the PR. The user performs the merge.
