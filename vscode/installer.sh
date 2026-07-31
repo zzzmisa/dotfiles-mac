@@ -25,7 +25,6 @@ pkglist=(
   openai.chatgpt # Codex – OpenAI’s coding agent pre-release
   stylelint.vscode-stylelint # Stylelint
   yzane.markdown-pdf # Markdown to PDF
-  # 3w36zj6.textlint # textlintコミュニティ版
   # github.vscode-github-actions
   # htmlhint.vscode-htmlhint
   # Vue.volar # Vue - Official（Veturの後継）
