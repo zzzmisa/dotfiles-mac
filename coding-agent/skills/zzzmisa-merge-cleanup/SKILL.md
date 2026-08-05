@@ -10,31 +10,37 @@ deleting unmerged work. When in doubt, report instead of delete.
 
 ## Workflow
 
-1. **Sync remote state.**
-   ```
-   git fetch --prune
-   ```
-2. **Return to the default branch and update it.**
+1. **Return to the default branch and update it.**
    ```
    git switch main   # or master — check the repo's default branch
    git pull
    ```
-3. **Clean up worktrees** (`git worktree list`):
-   - For each worktree other than the main one, check its branch and its
-     `git status`.
-   - If the worktree has uncommitted changes, do NOT remove it; report it and skip.
-   - If its branch is confirmed merged (step 4 criteria), remove with
-     `git worktree remove <path>`, then `git worktree prune`.
-4. **Clean up local branches.** For each branch other than the default branch:
-   - `git branch -d <branch>` — succeeds only for branches Git knows are merged.
-   - If `-d` fails, the branch may still be merged via **squash merge** (Git
-     cannot detect this). Verify with:
+2. **Run the mechanical first pass.**
+   ```
+   "$HOME/dotfiles-mac/bin/zzzmisa-delete-merged-local-branches"
+   ```
+   This runs `git fetch --prune`, then deletes local branches Git can prove
+   are merged (`git branch --merged`), removing each branch's worktree first.
+   Protected branches (`main`, `master`, `develop`, `dev`, current branch) are
+   skipped, and worktrees that fail to remove (e.g. uncommitted changes) are
+   skipped with their branches. Pass a base branch argument if the repo's
+   default is not `main`.
+3. **Handle squash-merged branches** — the script cannot detect these. For
+   each remaining branch except the protected ones:
+   - Verify with:
      ```
      gh pr view <branch> --json state,mergedAt
      ```
-     Only when the PR state is `MERGED`, delete with `git branch -D <branch>`.
+   - Only when the PR state is `MERGED`: if the branch has a worktree, check
+     its `git status` first — if it has uncommitted changes, do NOT remove it;
+     report it and skip. Otherwise `git worktree remove <path>`, then delete
+     the branch with `git branch -D <branch>`.
    - A branch with no PR, an open PR, or unpushed commits is NOT deleted;
      list it in the report instead.
+4. **Prune worktree metadata.**
+   ```
+   git worktree prune
+   ```
 5. **Report**: what was deleted (branches, worktrees), and what was kept with
    the reason (uncommitted changes, open PR, no PR found).
 

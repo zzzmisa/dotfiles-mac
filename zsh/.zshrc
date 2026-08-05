@@ -10,5 +10,8 @@ if [ -f "$HOME/dotfiles-mac/zsh/functions.zsh" ]; then
   source "$HOME/dotfiles-mac/zsh/functions.zsh"
 fi
 
+# dotfiles-macのオリジナルコマンド
+export PATH="$HOME/dotfiles-mac/bin:$PATH"
+
 # App Store Connect API credentials
 [ -f "$HOME/.appstoreconnect/asc.env" ] && source "$HOME/.appstoreconnect/asc.env"

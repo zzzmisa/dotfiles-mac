@@ -54,11 +54,19 @@ zzzmisa-resize-video-for-appstore-iphone "ScreenRecording_06-25-2026 08-43-06_1.
 zzzmisa-resize-video-for-appstore-ipad "ScreenRecording_06-25-2026 08-43-06_1.MP4"
 ```
 
+## オリジナルコマンド（bin/）
+
+`bin/` 配下のスクリプトは `.zshrc` でPATHに追加され、ターミナルからそのまま実行できる。
+
 ### mainにマージ済みのローカルブランチとworktreeの削除
 
 `git fetch --prune` を実行したあと、`main` にマージ済みのローカルブランチと、そのブランチに対応するworktreeを削除する。
 `main`、`master`、`develop`、`dev`、現在のブランチは削除対象外。
 リモートブランチは削除しない。
+
+squashマージされたブランチはGitでは検出できないため削除されない。その補完も含めた掃除は
+`zzzmisa-merge-cleanup` スキル（`coding-agent/skills/zzzmisa-merge-cleanup`）が
+このコマンドを第一段階として呼び出す形で行う。
 
 ```
 zzzmisa-delete-merged-local-branches
