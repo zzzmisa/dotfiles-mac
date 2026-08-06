@@ -44,7 +44,7 @@ description: Build or update YouTube Shorts promo videos for Misa's apps with ff
 | --- | --- | --- |
 | `-pix_fmt yuv420p` | **必須** | 指定しないとPNG overlayの影響で4:4:4になり、再生できない環境が出る |
 | ラウドネス | **-14 LUFS前後** | YouTubeの正規化目標。小さい動画は上げてもらえず、小さいまま再生される |
-| キャプション位置 | **上部 y=256** | Shorts UIが下端から約380pxを覆う |
+| キャプション位置 | 上部 y=256 が安全 | Shorts UIが下端から約380pxを覆う。ただし下部配置の方が初速が良かった実績もあるので断定しない（composition.md） |
 | 冒頭キャプション | **1フレーム目から** | 最初のフレームがサムネイルになる |
 
 詳細と根拠は各referenceに書いてある。
