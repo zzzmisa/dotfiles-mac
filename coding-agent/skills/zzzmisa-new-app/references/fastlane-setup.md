@@ -16,10 +16,16 @@ fastlane/
   metadata/{ja,en-US,zh-Hans}/   # description.txt, keywords.txt, name.txt,
                                  # promotional_text.txt, release_notes.txt, subtitle.txt
   screenshots/{ja,en-US,zh-Hans}/
+  previews/{ja,en-US,zh-Hans}/   # iphone.mp4 / ipad.mp4 (uploaded by a dedicated
+                                 # lane; deliver does not support app previews)
 docs/app-store-fastlane.md       # usage + required env vars + "Manual steps in
                                  # App Store Connect" section (pricing, IAP products,
                                  # privacy labels, review submission)
 ```
+
+`fastlane/` holds only what is uploaded to App Store Connect. The unedited recordings,
+screenshot originals, build scripts, and recipes that produce them live under `promo/` —
+see `zzzmisa-store-assets` for that layout and the naming rules.
 
 ## Appfile
 

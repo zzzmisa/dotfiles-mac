@@ -138,8 +138,10 @@ Order and grouping (omit sections that do not apply, keep the rest in this order
 
 - Screenshot sources: the dedicated simulators `Screenshot iPhone 14 Plus` and
   `Screenshot iPad Pro 13-inch` (see `zzzmisa-install-ios-simulator`).
-- Store screenshots and illustration requests live under `store_assets/` or
-  `fastlane/screenshots/{ja,en-US,...}` (when fastlane manages them).
+- Store screenshots go in `fastlane/screenshots/{ja,en-US,...}`; preview videos in
+  `fastlane/previews/{locale}/`. Everything used to *make* them (unedited recordings,
+  screenshot originals, build scripts, recipes) goes under `promo/`.
+  Follow `zzzmisa-store-assets` for the full layout and naming rules.
 - App icon: `flutter_launcher_icons` on Flutter (configure `image_path` in pubspec).
 
 ## Testing

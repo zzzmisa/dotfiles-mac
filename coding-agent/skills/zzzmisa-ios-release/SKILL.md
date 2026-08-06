@@ -6,8 +6,9 @@ description: Run Misa's iOS App Store release flow - version bump, build upload,
 # iOS App Store Release
 
 Misaの個人開発iOSアプリのリリースフロー。プロジェクト固有の手順（fastlaneレーン名・
-素材の作り方など）は各リポジトリの `docs/`（例: `docs/app-store-fastlane.md`）を先に確認し、
-このスキルは共通の流れと約束事として使う。
+素材の作り方など）は各リポジトリの `docs/app-store-fastlane.md` と `promo/README.md` を
+先に確認し、このスキルは共通の流れと約束事として使う。
+ストア素材の置き場所と命名の規約は `zzzmisa-store-assets`。
 
 Read [references/asc-checklist.md](references/asc-checklist.md) before the ASC
 upload and submission steps (credentials, pre-submission checks, known pitfalls).
@@ -36,8 +37,9 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
      `Screenshot iPad Pro 13-inch` = 13インチ）を使う（`zzzmisa-install-ios-simulator` 参照）。
    - エージェントが撮れない画面（カメラ実写など実機でしか撮れないもの）は、
      Misaに再撮影を依頼するか既存素材を流用する。
-   - キャプションや加工が必要な場合は、各リポジトリの制作ワークフロー文書
-     （例: `docs/app-preview-video-workflow.md`）に従う。
+   - プレビュー動画を差し替える場合は `fastlane/previews/{locale}/{iphone,ipad}.mp4` を
+     更新する。キャプションや加工が必要な場合は、各リポジトリの制作レシピ
+     （`promo/app-store/README.md`）と `promo/scripts/` のスクリプトに従う。
 
 3. **リリースノートの起草**
    - `fastlane/metadata/{ja,en-US,zh-Hans}/release_notes.txt` を更新する。
