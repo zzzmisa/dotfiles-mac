@@ -97,3 +97,24 @@ zzzmisa-delete-merged-local-branches
 zzzmisa-delete-merged-local-branches develop
 zzzmisa-delete-merged-local-branches origin/main
 ```
+
+### Claude Code リモートコントロールの一括起動
+
+`~/mySources` 配下のプロジェクトごとに `claude remote-control` サーバーを起動する。
+外出前にこれを1回実行しておけば、claude.ai/code やスマホアプリから各プロジェクトを操作できる。
+
+起動済みのプロジェクトはスキップするため、何度実行しても二重起動しない。
+セッション名にはプロジェクト名がプレフィックスとして付く（`--remote-control-session-name-prefix`）ので、
+claude.ai/code 側でどのプロジェクトのセッションか判別できる。
+
+引数なしで起動するプロジェクトはスクリプト冒頭の `default_projects` を編集する。
+
+```
+zzzmisa-remote-control                   # デフォルトのプロジェクトを起動
+zzzmisa-remote-control chibireco cv      # 指定したプロジェクトだけ起動
+zzzmisa-remote-control status            # 起動状況を表示
+zzzmisa-remote-control stop              # すべて停止
+zzzmisa-remote-control stop chibireco    # 指定したプロジェクトだけ停止
+```
+
+ログは `~/.local/state/zzzmisa/remote-control/<プロジェクト名>.log` に追記される。

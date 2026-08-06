@@ -1,0 +1,139 @@
+#!/usr/bin/env zsh
+# ~/mySources 配下のプロジェクトごとに claude remote-control サーバーをまとめて起動する。
+# 起動済みのプロジェクトはスキップするので、何度実行しても二重起動しない。
+#
+#   zzzmisa-remote-control                   デフォルトのプロジェクトを起動
+#   zzzmisa-remote-control chibireco cv      指定したプロジェクトだけ起動
+#   zzzmisa-remote-control status            起動状況を表示
+#   zzzmisa-remote-control stop              すべて停止
+#   zzzmisa-remote-control stop chibireco    指定したプロジェクトだけ停止
+#
+# セッション名は claude.ai/code 側でプロジェクト名のプレフィックス付きで表示される。
+# 起動済み判定もこのプレフィックスを使うため、プロジェクト名は一意である必要がある。
+
+set -u
+
+sources_dir="$HOME/mySources"
+log_dir="$HOME/.local/state/zzzmisa/remote-control"
+
+# 引数なしのときに起動するプロジェクト。増減はここを編集する。
+default_projects=(chibireco quiz-apps yokai-ar animal-vision-explorer)
+
+# プロジェクトのremote-controlサーバーのPIDを返す（未起動なら何も出力しない）。
+# プレフィックスの値をトークンとして完全一致で比べるので、
+# quiz と quiz-apps のような前方一致の取り違えが起きない。
+rc_pids() {
+  ps -axww -o pid=,command= | awk -v target="$1" '
+    {
+      for (i = 2; i < NF; i++) {
+        if ($i == "--remote-control-session-name-prefix" && $(i + 1) == target) {
+          print $1
+          next
+        }
+      }
+    }'
+}
+
+cmd_start() {
+  local projects=("$@")
+  local started=0 skipped=0
+
+  if ! type claude >/dev/null 2>&1; then
+    echo "Error: claude command not found"
+    return 1
+  fi
+
+  mkdir -p "$log_dir" || return 1
+
+  for project in "${projects[@]}"; do
+    local dir="$sources_dir/$project"
+
+    if [ ! -d "$dir" ]; then
+      echo "⚠️  $project : directory not found ($dir)"
+      continue
+    fi
+
+    if ! git -C "$dir" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      echo "⚠️  $project : not a git repository"
+      continue
+    fi
+
+    local pids=""
+    pids="$(rc_pids "$project")"
+    if [ -n "$pids" ]; then
+      echo "✅ $project : already running (pid ${pids//$'\n'/, })"
+      skipped=$((skipped + 1))
+      continue
+    fi
+
+    local log_file="$log_dir/$project.log"
+    echo "=== started at $(date '+%Y-%m-%d %H:%M:%S') ===" >>"$log_file"
+
+    (
+      cd "$dir" || exit 1
+      nohup claude remote-control --remote-control-session-name-prefix "$project" \
+        </dev/null >>"$log_file" 2>&1 &
+    )
+
+    echo "🚀 $project : started (log: $log_file)"
+    started=$((started + 1))
+  done
+
+  echo
+  echo "started: $started, already running: $skipped"
+}
+
+cmd_status() {
+  local projects=("$@")
+
+  for project in "${projects[@]}"; do
+    local pids=""
+    pids="$(rc_pids "$project")"
+    if [ -n "$pids" ]; then
+      echo "✅ $project : running (pid ${pids//$'\n'/, })"
+    else
+      echo "⛔️ $project : stopped"
+    fi
+  done
+}
+
+cmd_stop() {
+  local projects=("$@")
+  local stopped=0
+
+  for project in "${projects[@]}"; do
+    local pids=""
+    pids="$(rc_pids "$project")"
+    if [ -z "$pids" ]; then
+      echo "⛔️ $project : not running"
+      continue
+    fi
+
+    echo "$pids" | xargs kill
+    echo "🛑 $project : stopped (pid ${pids//$'\n'/, })"
+    stopped=$((stopped + 1))
+  done
+
+  echo
+  echo "stopped: $stopped"
+}
+
+subcommand=""
+case "${1:-}" in
+  status|stop)
+    subcommand="$1"
+    shift
+    ;;
+esac
+
+if [ "$#" -gt 0 ]; then
+  targets=("$@")
+else
+  targets=("${default_projects[@]}")
+fi
+
+case "$subcommand" in
+  status) cmd_status "${targets[@]}" ;;
+  stop)   cmd_stop "${targets[@]}" ;;
+  *)      cmd_start "${targets[@]}" ;;
+esac
