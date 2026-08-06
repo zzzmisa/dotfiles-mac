@@ -43,6 +43,25 @@ mise
 └── Bundler：FastlaneなどのRuby依存関係
 ```
 
+## 読み上げ音声の生成環境（tts/）
+
+テキストから読み上げ音声を作る汎用環境。販促動画のナレーションに限らず、
+デモ動画・解説動画の音声など用途は問わない。日本語は AivisSpeech
+（GUIアプリ・手動インストール）、英語や中国語は Qwen3-TTS（`~/.venvs/qwen-tts`）。
+どちらも商用利用可。
+
+```
+zsh tts/installer.sh
+```
+
+セットアップの詳細と使い方は [tts/README.md](tts/README.md)。
+読み方・アクセント辞書はAivisSpeech側に保存されdotfilesの管理外なので、
+`tts/aivisspeech-dict.sh export` で `tts/user-dict.json` に書き出してコミットしておく
+（新しいMacでは `import` で復元する）。
+
+この環境を使うエージェントスキル: `zzzmisa-shorts-video`
+（`coding-agent/skills/zzzmisa-shorts-video`、YouTube Shorts販促動画の制作）。
+
 ## オリジナルシェル関数
 
 ### App Preview動画の変換

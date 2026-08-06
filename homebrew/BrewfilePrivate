@@ -6,6 +6,7 @@ brew "mas"
 brew "cocoapods" # Privateのみ
 brew "exiftool"
 brew "ffmpeg" # Privateのみ
+brew "librsvg" # Privateのみ（App Storeバッジ等のSVG→PNG変換に使う）
 brew "gh"
 brew "imagemagick"
 brew "jq"
