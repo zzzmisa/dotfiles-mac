@@ -34,6 +34,8 @@ xcrun altool --upload-app -f build/export/<App>.ipa -t ios \
 
 ## ストア素材同期後の検証（毎回やる）
 
+- 今回の変更が反映された素材だけを同期する。未変更のスクリーンショット・プレビュー動画は
+  再アップロードしない。
 - スクリーンショットの**枚数と並び順**をAPIで確認する。
 - **deliverの既知バグ**: `overwrite_screenshots` で同じファイルが1枚重複することがある
   （複数回発生実績あり）。`file_name` の重複を検出して `delete!` する。
@@ -46,18 +48,81 @@ xcrun altool --upload-app -f build/export/<App>.ipa -t ios \
 - [ ] リリースノート等の文言をチャットで見せてMisaの承認を得た
 - [ ] ビルドが `VALID` でバージョンドラフトに紐付いている
 - [ ] `releaseType` が `MANUAL`（公開はMisaの手動操作）
-- [ ] IAPの状態確認: `APPROVED` 済みなら提出物に含めない。
-      **IAPに変更がある場合はアプリと同一提出物で同時提出**（含め忘れは 2.1(b) リジェクト）
+- [ ] IAPの状態確認: 変更がなければ提出物に含めない。変更がある場合は、
+      `PREPARE_FOR_SUBMISSION` のIAPバージョンをアプリと同じ提出物に追加し、親IAPの
+      App Review Screenshot が `COMPLETE` であることを確認する（漏れると 2.1(b) リジェクト）。
 - [ ] 輸出コンプライアンス: `ITSAppUsesNonExemptEncryption = NO` がビルド設定にあること
       （あれば提出時の質問は出ない）
 - [ ] スクリーンショット・プレビューの枚数/並び/重複を最終確認
 
 ## 審査提出（Spaceship ConnectAPI）
 
-```ruby
-sub = Spaceship::ConnectAPI.post_review_submission(app_id: app.id, platform: "IOS").to_models.first
-sub.add_app_store_version_to_review_items(app_store_version_id: version.id)
-sub.submit_for_review   # => state WAITING_FOR_REVIEW
+`ASC_APP_ID`、`ASC_APP_STORE_VERSION_ID`、`ASC_IAP_ID` にASCのリソースIDを指定して実行する。
+
+```sh
+source ~/.appstoreconnect/asc.env
+ASC_APP_ID="<app-id>" \
+ASC_APP_STORE_VERSION_ID="<app-store-version-id>" \
+ASC_IAP_ID="<iap-id>" \
+ruby <<'RUBY'
+require "spaceship"
+
+required = %w[
+  ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_FILEPATH
+  ASC_APP_ID ASC_APP_STORE_VERSION_ID ASC_IAP_ID
+]
+missing = required.reject { |name| ENV[name]&.length&.positive? }
+abort "Missing environment variables: #{missing.join(', ')}" unless missing.empty?
+
+Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+  key_id: ENV.fetch("ASC_KEY_ID"),
+  issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+  filepath: ENV.fetch("ASC_KEY_FILEPATH")
+)
+api = Spaceship::ConnectAPI.client
+request = api.tunes_request_client
+
+versions = request.get(
+  "v2/inAppPurchases/#{ENV.fetch('ASC_IAP_ID')}/versions",
+  { "fields[inAppPurchaseVersions]" => "state", "limit" => 200 }
+).body.fetch("data")
+drafts = versions.select do |item|
+  item.dig("attributes", "state") == "PREPARE_FOR_SUBMISSION"
+end
+abort "Expected one PREPARE_FOR_SUBMISSION IAP version, found #{drafts.size}" unless drafts.one?
+iap_version_id = drafts.first.fetch("id")
+
+sub = api.post_review_submission(
+  app_id: ENV.fetch("ASC_APP_ID"),
+  platform: "IOS"
+).to_models.first
+app_item = sub.add_app_store_version_to_review_items(
+  app_store_version_id: ENV.fetch("ASC_APP_STORE_VERSION_ID")
+)
+abort "App version is not READY_FOR_REVIEW" unless app_item.state == "READY_FOR_REVIEW"
+
+# 変更したIAPバージョンを同じ提出物に加える。
+iap_item = request.post("v1/reviewSubmissionItems", {
+  data: {
+    type: "reviewSubmissionItems",
+    relationships: {
+      reviewSubmission: {
+        data: { type: "reviewSubmissions", id: sub.id }
+      },
+      inAppPurchaseVersion: {
+        data: { type: "inAppPurchaseVersions", id: iap_version_id }
+      }
+    }
+  }
+}).body.fetch("data")
+abort "IAP version is not READY_FOR_REVIEW" unless \
+  iap_item.dig("attributes", "state") == "READY_FOR_REVIEW"
+
+# Misaから審査提出の明示指示を受けた後にだけ実行する。
+submitted = sub.submit_for_review
+abort "Submission failed: #{submitted.state}" unless submitted.state == "WAITING_FOR_REVIEW"
+puts "Submitted: #{submitted.state}"
+RUBY
 ```
 
 - 取り消し: `sub.cancel_submission`。取り消すとバージョンは `DEVELOPER_REJECTED` に

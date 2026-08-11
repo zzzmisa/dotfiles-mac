@@ -31,15 +31,17 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
    - リリースに含める変更がすべてmainにマージ済みであることを確認する。
 
 2. **ストア素材の更新（UIに変更がある場合）**
+   - 今回の変更がストア掲載中の画面や文言に影響するか確認する。既存素材が現在の内容と一致し、
+     素材ファイルも未変更なら、再作成・再アップロードしない。
    - UIに変更があり、**エージェントが撮れる画面**（シミュレータで再現できる画面）は、
      スクリーンショットを再撮影して `fastlane/screenshots/` を更新し、PRを作成する。
      撮影は screenshot 用シミュレータ（`Screenshot iPhone 14 Plus` = 6.5インチ、
      `Screenshot iPad Pro 13-inch` = 13インチ）を使う（`zzzmisa-install-ios-simulator` 参照）。
    - エージェントが撮れない画面（カメラ実写など実機でしか撮れないもの）は、
      Misaに再撮影を依頼するか既存素材を流用する。
-   - プレビュー動画を差し替える場合は `fastlane/previews/{locale}/{iphone,ipad}.mp4` を
-     更新する。キャプションや加工が必要な場合は、各リポジトリの制作レシピ
-     （`promo/app-store/README.md`）と `promo/scripts/` のスクリプトに従う。
+   - プレビュー動画に影響がある場合は、差し替えるかMisaに確認する。承認後に
+     `fastlane/previews/{locale}/{iphone,ipad}.mp4` を更新する。キャプションや加工が必要な場合は、
+     各リポジトリの制作レシピ（`promo/app-store/README.md`）と `promo/scripts/` のスクリプトに従う。
 
 3. **リリースノートの起草**
    - `fastlane/metadata/{ja,en-US,zh-Hans}/release_notes.txt` を更新する。
@@ -60,8 +62,12 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
    - archive → export → アップロードの具体的なコマンドは references を参照。
 
 5. **ASCドラフトへの流し込み**
-   - メタデータ＋スクリーンショット: `fastlane ios upload_store_metadata version:<version>`
-   - プレビュー動画（ある場合）: `fastlane ios upload_store_previews version:<version>`
+   - メタデータ、スクリーンショット、プレビュー動画のうち、変更したものだけを同期する。
+   - メタデータ＋変更済みスクリーンショット:
+     `fastlane ios upload_store_metadata version:<version>`
+   - メタデータのみ: レーンの対象指定またはASC APIで直接パッチする。
+   - **変更済みプレビュー動画がある場合のみ**:
+     `fastlane ios upload_store_previews version:<version>`
    - 同期後は references のチェックリストで検証する（重複スクショの既知バグあり）。
    - ビルドの処理完了（VALID）を待ち、バージョンドラフトに紐付ける。
 
