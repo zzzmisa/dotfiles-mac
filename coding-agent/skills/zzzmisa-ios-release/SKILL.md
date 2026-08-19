@@ -13,6 +13,10 @@ Misaの個人開発iOSアプリのリリースフロー。プロジェクト固�
 Read [references/asc-checklist.md](references/asc-checklist.md) before the ASC
 upload and submission steps (credentials, pre-submission checks, known pitfalls).
 
+リリース対象の判定を始める前に、`scripts/asc_release_state.rb` でASC上の公開済み版・
+作業中バージョン・VALIDビルドを確認する。**Gitタグやautomation memoryだけを前回リリースの
+根拠にしない**。
+
 ## 大原則（Guardrails）
 
 - **審査提出はMisaの明示的な指示があってから実行する**。自律判断では提出しない。
@@ -23,14 +27,36 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
 - **リリース公開（承認後の公開ボタン）とPRマージはMisaが行う**。エージェントは行わない。
 - タグ・GitHubリリースの公開は、審査が通ってリリースバージョンが確定してから
   （Misaから連絡が来る。それまでは下書きのまま）。
+- **ASCを公開状態の正とする**。ASCの最新公開版と対応するGitタグ／GitHubリリースを照合し、
+  不一致ならリリース準備を開始しない。PR作成、バージョン変更、ビルド、素材同期をせず、
+  不整合と必要な復旧だけを報告する。
+- `READY_FOR_DISTRIBUTION`（旧APIの `READY_FOR_SALE` を含む）のバージョンは公開済み。
+  同じマーケティングバージョンへ新しいビルドを提出しない。
+- automation memoryは前回結果の補助情報としてのみ使い、ASCとGitの照合結果で必ず上書きする。
 
 ## リリースフロー
 
-1. **変更内容の確認**
-   - 前回リリースからの差分を確認する（`git log <前回タグ>..main --oneline`）。
-   - リリースに含める変更がすべてmainにマージ済みであることを確認する。
+1. **ASC・Git事前照合（最初に必ず実行）**
+   - `source ~/.appstoreconnect/asc.env` 後、リポジトリのBundle IDを指定して実行する:
+     `bundle exec ruby <skill-dir>/scripts/asc_release_state.rb <bundle-id>`
+   - 出力の `latest_released` と `latest_released_build` を前回リリースとする。
+     `highest_valid_build` でアップロード済みの最大ビルド番号も別途確認する。
+   - ASC公開版に対応するタグ（リポジトリ固有の `v<version>+<build>` または
+     `<app>/v<version>+<build>`）が存在し、公開版のコミットを指すことを確認する。
+   - タグがない、古い、別コミットを指す、またはASC上の公開版がGit記録より新しい場合は
+     **ここで停止**する。差分を推測せず、タグ／GitHubリリースの復旧が必要と報告する。
+   - `draft_versions` に審査中・却下・提出準備中の版がある場合は、その状態を報告し、
+     新規リリースと決めつけない。既存提出の継続・取り下げはMisaの指示に従う。
 
-2. **ストア素材の更新（UIに変更がある場合）**
+2. **変更内容の確認**
+   - 照合済みの公開版タグから最新mainまでを確認する
+     （`git log <公開版タグ>..main --oneline`）。
+   - リリースに含める変更がすべてmainにマージ済みであることを確認する。
+   - ユーザー向け機能更新がなければリリース準備を終了する。
+   - mainのマーケティングバージョンがASC公開版以下なら、その値を再利用せず次の
+     マーケティングバージョンを選ぶ。ビルド番号は `highest_valid_build` より大きい連番にする。
+
+3. **ストア素材の更新（UIに変更がある場合）**
    - 今回の変更がストア掲載中の画面や文言に影響するか確認する。既存素材が現在の内容と一致し、
      素材ファイルも未変更なら、再作成・再アップロードしない。
    - UIに変更があり、**エージェントが撮れる画面**（シミュレータで再現できる画面）は、
@@ -43,7 +69,7 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
      `fastlane/previews/{locale}/{iphone,ipad}.mp4` を更新する。キャプションや加工が必要な場合は、
      各リポジトリの制作レシピ（`promo/app-store/README.md`）と `promo/scripts/` のスクリプトに従う。
 
-3. **リリースノートの起草**
+4. **リリースノートの起草**
    - `fastlane/metadata/{ja,en-US,zh-Hans}/release_notes.txt` を更新する。
    - 書式: **箇条書き（行頭は「- 」）、体言止め**。例:
      ```
@@ -53,7 +79,7 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
      変更が1件でも「- 」から始める。全対応言語で同じ内容にする。
    - **チャットで3言語の全文を見せて承認を得てから**次へ進む。
 
-4. **バージョンバンプとビルドアップロード**
+5. **バージョンバンプとビルドアップロード**
    - **最新のmainをビルドしてアップロードする**（作業ブランチのビルドは上げない）。
    - バージョンは `1.0.1` のような `MARKETING_VERSION` 形式。
      **ビルド番号（`CURRENT_PROJECT_VERSION`）はバージョンを跨いだ通しの連番**
@@ -61,7 +87,7 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
    - `release-<version>-build-<N>` ブランチでバンプし、PRを作成する。
    - archive → export → アップロードの具体的なコマンドは references を参照。
 
-5. **ASCドラフトへの流し込み**
+6. **ASCドラフトへの流し込み**
    - メタデータ、スクリーンショット、プレビュー動画のうち、変更したものだけを同期する。
    - メタデータ＋変更済みスクリーンショット:
      `fastlane ios upload_store_metadata version:<version>`
@@ -71,22 +97,24 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
    - 同期後は references のチェックリストで検証する（重複スクショの既知バグあり）。
    - ビルドの処理完了（VALID）を待ち、バージョンドラフトに紐付ける。
 
-6. **GitHubリリースノートの下書き更新**
+7. **GitHubリリースノートの下書き更新**
    - `gh release create v<version> --draft --title "v<version>" --notes <本文>`
      （既存の下書きがあれば `gh release edit` で更新）。
    - 本文はASCのリリースノート（日本語）＋主なPRへのリンク。提出ビルドを作った
      mainのcommit hashも記載しておく（タグを打つ位置の記録）。
    - **下書きのままにする**（publishしない。下書きはタグを作らない）。
 
-7. **審査提出（Misaの明示指示後のみ）**
+8. **審査提出（Misaの明示指示後のみ）**
    - references の提出前チェックリストを通してから提出する。
    - 提出後の状態（WAITING_FOR_REVIEW）を確認して報告する。
    - 文言修正などで取り下げる場合: 提出取り消し→修正→再提出はペナルティなし。
      取り消し後にバージョンが `DEVELOPER_REJECTED` 表示になるのは正常。
 
-8. **審査通過後（Misaから連絡が来たら）**
+9. **審査通過後（Misaから連絡が来たら）**
    - GitHubリリースの下書きを、記録しておいたcommitを対象に publish する
      （このときタグ `v<version>` が作られる）。
+   - ASCの公開版、GitHubリリース、タグのバージョン・ビルド・commitが一致することを
+     `scripts/asc_release_state.rb` とGitで再確認する。不一致を次回へ持ち越さない。
    - リリース公開の操作自体はMisaが行う。
 
 ## リジェクト時
