@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-ios-release
-description: Run Misa's iOS App Store release flow - version bump, build upload, store assets (screenshots/previews/metadata) sync to App Store Connect, GitHub release draft, and review submission. Use when asked to リリース準備, release a new version, upload a build to ASC, or 審査提出 an iOS app.
+description: Prepare or submit an iOS App Store release by verifying ASC/Git state, updating versions and store assets, uploading builds, and creating draft release notes. Use for リリース準備, ASCアップロード, metadata sync, or 審査提出; submit for review only on explicit instruction.
 ---
 
 # iOS App Store Release
@@ -10,8 +10,11 @@ Misaの個人開発iOSアプリのリリースフロー。プロジェクト固�
 先に確認し、このスキルは共通の流れと約束事として使う。
 ストア素材の置き場所と命名の規約は `zzzmisa-store-assets`。
 
-Read [references/asc-checklist.md](references/asc-checklist.md) before the ASC
-upload and submission steps (credentials, pre-submission checks, known pitfalls).
+Read references only for the step being performed:
+
+- Archive, export, or binary upload: [references/build-upload.md](references/build-upload.md)
+- Metadata, screenshot, or preview sync: [references/store-sync.md](references/store-sync.md)
+- Review submission or cancellation: [references/review-submission.md](references/review-submission.md)
 
 リリース対象の判定を始める前に、`scripts/asc_release_state.rb` でASC上の公開済み版・
 作業中バージョン・VALIDビルドを確認する。**Gitタグやautomation memoryだけを前回リリースの
@@ -62,7 +65,7 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
    - UIに変更があり、**エージェントが撮れる画面**（シミュレータで再現できる画面）は、
      スクリーンショットを再撮影して `fastlane/screenshots/` を更新し、PRを作成する。
      撮影は screenshot 用シミュレータ（`Screenshot iPhone 14 Plus` = 6.5インチ、
-     `Screenshot iPad Pro 13-inch` = 13インチ）を使う（`zzzmisa-install-ios-simulator` 参照）。
+     `Screenshot iPad Pro 13-inch` = 13インチ）を使う（`zzzmisa-install-ios` 参照）。
    - エージェントが撮れない画面（カメラ実写など実機でしか撮れないもの）は、
      Misaに再撮影を依頼するか既存素材を流用する。
    - プレビュー動画に影響がある場合は、差し替えるかMisaに確認する。承認後に
@@ -85,7 +88,7 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
      **ビルド番号（`CURRENT_PROJECT_VERSION`）はバージョンを跨いだ通しの連番**
      （例: 1.0.0が1〜3なら、1.0.1は4から）。
    - `release-<version>-build-<N>` ブランチでバンプし、PRを作成する。
-   - archive → export → アップロードの具体的なコマンドは references を参照。
+   - archive → export → アップロードの具体的なコマンドは `references/build-upload.md` を参照。
 
 6. **ASCドラフトへの流し込み**
    - メタデータ、スクリーンショット、プレビュー動画のうち、変更したものだけを同期する。
@@ -94,7 +97,8 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
    - メタデータのみ: レーンの対象指定またはASC APIで直接パッチする。
    - **変更済みプレビュー動画がある場合のみ**:
      `fastlane ios upload_store_previews version:<version>`
-   - 同期後は references のチェックリストで検証する（重複スクショの既知バグあり）。
+   - 同期後は `references/store-sync.md` のチェックリストで検証する
+     （重複スクショの既知バグあり）。
    - ビルドの処理完了（VALID）を待ち、バージョンドラフトに紐付ける。
 
 7. **GitHubリリースノートの下書き更新**
@@ -105,7 +109,7 @@ upload and submission steps (credentials, pre-submission checks, known pitfalls)
    - **下書きのままにする**（publishしない。下書きはタグを作らない）。
 
 8. **審査提出（Misaの明示指示後のみ）**
-   - references の提出前チェックリストを通してから提出する。
+   - `references/review-submission.md` の提出前チェックリストを通してから提出する。
    - 提出後の状態（WAITING_FOR_REVIEW）を確認して報告する。
    - 文言修正などで取り下げる場合: 提出取り消し→修正→再提出はペナルティなし。
      取り消し後にバージョンが `DEVELOPER_REJECTED` 表示になるのは正常。

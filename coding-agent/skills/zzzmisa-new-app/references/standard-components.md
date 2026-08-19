@@ -16,9 +16,14 @@ Distilled from animal-vision-explorer (Swift), chibireco (Flutter), quiz-apps (F
 
 | File | Role | Notes |
 |---|---|---|
-| `AGENT.md` | 企画書 (product concept doc) | Starts with `# アプリ企画書`; concept, target, feature list. Agents read this as the product source of truth. |
+| `AGENTS.md` | Shared agent instructions | Point to product/design sources and record repository-specific workflow rules. Codex reads this file. |
+| `CLAUDE.md` | Claude entry point | Make this a symlink to `AGENTS.md` when possible; otherwise keep only a pointer to it. |
+| `docs/product.md` | 企画書 | Starts with `# アプリ企画書`; concept, target, feature list, and product constraints. |
 | `docs/design.md` | 設計書 | Version number + 変更履歴 at the top of the file; update the version when design changes. |
 | `README.md` | Repo overview | Short; build/run instructions. |
+
+Keep product knowledge in `docs/product.md`; do not use the unrecognized singular
+`AGENT.md`. Both agent entry points should direct agents to the same product and design files.
 
 App Store submission info is managed fastlane-first (no `APP_STORE_SUBMISSION.md` for
 new apps — older apps still migrating). Mapping:
@@ -137,7 +142,7 @@ Order and grouping (omit sections that do not apply, keep the rest in this order
 ## Store Assets & Screenshots
 
 - Screenshot sources: the dedicated simulators `Screenshot iPhone 14 Plus` and
-  `Screenshot iPad Pro 13-inch` (see `zzzmisa-install-ios-simulator`).
+  `Screenshot iPad Pro 13-inch` (see `zzzmisa-install-ios`).
 - Store screenshots go in `fastlane/screenshots/{ja,en-US,...}`; preview videos in
   `fastlane/previews/{locale}/`. Everything used to *make* them (unedited recordings,
   screenshot originals, build scripts, recipes) goes under `promo/`.

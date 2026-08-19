@@ -34,4 +34,4 @@
 
 - iOS実機: `MisaのiPhone`（iPhone 17）、`MisaのiPad`
 - Android実機: HUAWEI nova lite 3（Android 9 / API 28）。adb接続は開発者向けオプションの「"充電のみ"モードでADBデバッグを許可」ON＋ファイル転送モード、スリープ抑止は `adb shell svc power stayon usb`
-- iOS実機・シミュレータの詳細な手順やデバッグのコツは、install系スキル（`zzzmisa-install-iphone` 等）の references を参照
+- iOS実機・シミュレータの詳細な手順やデバッグのコツは `zzzmisa-install-ios` の references を参照

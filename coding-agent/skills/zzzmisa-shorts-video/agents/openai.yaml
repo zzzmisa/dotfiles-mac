@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: Shorts Video"
+  short_description: "Build reproducible YouTube Shorts videos"
+  default_prompt: "Use $zzzmisa-shorts-video to build or revise a reproducible YouTube Shorts promo video."

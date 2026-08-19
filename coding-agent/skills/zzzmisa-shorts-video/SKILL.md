@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-shorts-video
-description: Build or update YouTube Shorts promo videos for Misa's apps with ffmpeg — scene composition, captions inside the Shorts UI safe area, narration (AivisSpeech / Qwen3-TTS), BGM, endcard, and export settings. Use when asked to create, fix, or 作り直す a Shorts動画 / 販促動画 / プロモ動画, or to change its テロップ・ナレーション・BGM・音量.
+description: Build or revise reproducible YouTube Shorts promo videos with ffmpeg, including scenes, captions, narration, BGM, end cards, and export QA. Use for Shorts・販促・プロモ動画の作成・修正 or テロップ・音声・BGM・音量 changes; not for title or description copy.
 ---
 
 # YouTube Shorts販促動画の制作
@@ -10,11 +10,7 @@ description: Build or update YouTube Shorts promo videos for Misa's apps with ff
 
 ## Workflow
 
-このスキルが持つ知識（`references/`）と、**環境**（`dotfiles-mac` 側）と、
-**素材とレシピ**（**アプリ側のリポジトリ**）は置き場所が違う。以下、どちらのものかを【】で示す。
-
-アプリ側の置き場所は `zzzmisa-store-assets` の規約に従う（`promo/originals/` に原本、
-`promo/scripts/` にスクリプト、`promo/youtube-shorts/` に完成品とレシピ）。
+アプリ側の素材・スクリプト・完成品は `zzzmisa-store-assets` の規約に従う。
 **シーン秒数・文言・機種などアプリ固有の値は毎回そのリポジトリの `promo/README.md` で
 確認する**（このスキルにアプリ固有の値を書かないこと）。規約に移行していない
 リポジトリでは、従来どおりREADME・docsを探す。
@@ -45,24 +41,12 @@ description: Build or update YouTube Shorts promo videos for Misa's apps with ff
    しない）。`promo/youtube-shorts/README.md` には切り出し秒数・ナレーション原稿・
    構成の判断理由を書く。**ナレーション音声ファイルも `narration/` に保管する**
    （TTSのバージョン差で再生成しても同じ音にならないため）。
-   置き場所と命名の規約は `zzzmisa-store-assets`。
 
-## 絶対に外さない設定
-
-| 項目 | 値 | 理由 |
-| --- | --- | --- |
-| `-pix_fmt yuv420p` | **必須** | 指定しないとPNG overlayの影響で4:4:4になり、再生できない環境が出る |
-| ラウドネス | **-14 LUFS前後** | YouTubeの正規化目標。小さい動画は上げてもらえず、小さいまま再生される |
-| キャプション位置 | 上部 y=256 が安全 | Shorts UIが下端から約380pxを覆う。ただし下部配置の方が初速が良かった実績もあるので断定しない（composition.md） |
-| 冒頭キャプション | **1フレーム目から** | 最初のフレームがサムネイルになる |
-
-詳細と根拠は各referenceに書いてある。
+## References
 
 - `references/composition.md` — 構成の型、Shorts UIのセーフエリア実測値、キャプション、エンドカード
 - `references/audio.md` — ナレーション原稿の作り方、BGM、音量設計、ライセンス
 - `references/ffmpeg.md` — 合成レシピ、ffmpegの罠、検証コマンド
-
-素材・スクリプト・完成品の置き場所と命名は `zzzmisa-store-assets` を参照。
 
 ## 原則
 

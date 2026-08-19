@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-new-app
-description: Scaffold a new mobile app project with Misa's standard skeleton (docs, localization, settings screen, fastlane, offline + buy-once IAP). Use when asked to start or 新規作成 a new smartphone/iOS/Flutter app project, or set up its standard 雛形.
+description: Create or align a Flutter or Swift mobile app to Misa's offline, buy-once-IAP standard with docs, localization, design tokens, settings, tests, privacy, and fastlane. Use for 新規アプリ作成, 雛形・初期設定, or bringing an existing app up to the standard.
 ---
 
 # New App Scaffold
@@ -20,7 +20,8 @@ concrete conventions (docs, localization, settings menu, URLs, policies) and
 
 ## Inputs to Confirm
 
-Gather from the user (ask only for what is missing):
+For an existing app, discover these values from the repository first. Ask only for
+missing choices that materially affect the scaffold or alignment:
 
 1. App name (Japanese and English; zh-Hans optional).
 2. Project name: lowercase ASCII, becomes the Bundle ID `com.zzzmisa.<projectname>`.
@@ -30,7 +31,9 @@ Gather from the user (ask only for what is missing):
 
 ## Workflow
 
-1. **Create the project.**
+For an existing app, inventory the gap against these steps and skip project creation.
+
+1. **Create the project when it is new.**
    - Flutter: `flutter create --platforms=ios --org com.zzzmisa --project-name <projectname> <app_dir>`
    - Swift: create the Xcode project with Bundle ID `com.zzzmisa.<projectname>`,
      add `PrivacyInfo.xcprivacy`, and group code by feature (`Features/<Name>/`, `Core/`, `Resources/`).
@@ -38,7 +41,8 @@ Gather from the user (ask only for what is missing):
      skips the export-compliance question — set `ITSAppUsesNonExemptEncryption` to `false`
      (Flutter: `ios/Runner/Info.plist`; Xcode with a generated Info.plist: build setting
      `INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO`).
-2. **Add the standard documents** (AGENT.md 企画書, docs/design.md 設計書, README.md)
+2. **Add the standard documents** (`AGENTS.md`, `CLAUDE.md`, `docs/product.md`,
+   `docs/design.md`, and `README.md`)
    as skeletons per the reference file. Store submission info is NOT a separate
    document; it lives in fastlane (step 7).
 3. **Set up localization** (Japanese primary + English; zh-Hans optional) per the

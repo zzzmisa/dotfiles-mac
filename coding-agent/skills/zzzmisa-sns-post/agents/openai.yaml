@@ -1,4 +1,4 @@
 interface:
   display_name: "Misa: SNS Post"
   short_description: "Write or edit SNS posts in Misa's tone"
-  default_prompt: "Use $zzzmisa-sns-post to write or edit an SNS post."
+  default_prompt: "Use $zzzmisa-sns-post to draft or edit an SNS post for the requested platform."

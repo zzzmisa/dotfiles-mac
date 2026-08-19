@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-store-assets
-description: Standard repository layout for App Store Connect assets (screenshots, preview videos, metadata) and YouTube promo video materials, recipes, and build scripts. Use when placing, moving, renaming, or 整理 store screenshots / プレビュー動画 / 販促動画の素材・レシピ・スクリプト, when setting up these directories in a repo, or when asked どこに置く / 置き場所 for store or promo assets.
+description: Apply Misa's repository layout and naming rules for App Store metadata, screenshots, previews, and promo-video sources, scripts, and outputs. Use when placing, moving, renaming, migrating, or asking where to store these assets; not for ASC upload or video editing.
 ---
 
 # ストア素材・販促素材の置き場
@@ -89,21 +89,8 @@ promo/youtube-shorts/narration/zh-Hans_1_bee.wav
 
 ## 既存リポジトリを移行するとき
 
-1. すべて `git mv` で動かす（内容が変わらなければ新規blobは増えず、リポジトリは太らない）
-2. 録画の撮って出し名（`ScreenRecording_*.mov` など）は、**中身をフレーム抽出して目視で
-   確認してから**内容の分かる名前に付け替える。既存READMEの対応表も根拠になる
-3. スクリプトが `os.path.dirname` を重ねてリポジトリルートを求めている場合、
-   移動先の階層の深さが変わっていないか確認する
-4. 参照の張り替え漏れを潰す:
-   ```sh
-   grep -rn "<旧パス>" --include='*.md' --include='*.py' --include='*.sh' --include='*.rb' .
-   ```
-5. **動画のビルドスクリプトを触ったら、出力が既存の完成品と一致することを確認する**。
-   出力先を差し替えて（`SHORTS_OUT_DIR=/tmp/shorts`）ビルドし、
-   映像は `ffmpeg -i new -i old -lavfi ssim -f null -`（全フレーム `All:1.000000`）、
-   音声は `ffmpeg -i x -map 0:a -f md5 -` の一致で判定する。
-   合わない場合は耳で詰めた値が導出式とズレていることが多いので、**導出をやめて
-   実測値を引数に書く**（推測で作り直さない）
+Read [references/migrate-existing-repository.md](references/migrate-existing-repository.md)
+before moving existing assets or build scripts.
 
 ## 関連スキル
 

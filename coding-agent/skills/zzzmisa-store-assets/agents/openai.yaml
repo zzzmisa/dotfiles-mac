@@ -1,4 +1,4 @@
 interface:
   display_name: "Misa: Store Assets Layout"
-  short_description: "Standard layout for App Store and promo video assets"
-  default_prompt: "Use $zzzmisa-store-assets to place or reorganize App Store screenshots, preview videos, and promo video materials in this repository."
+  short_description: "Organize App Store and promo video assets"
+  default_prompt: "Use $zzzmisa-store-assets to place or migrate store and promo assets in this repository."

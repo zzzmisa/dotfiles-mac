@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-gh-issue
-description: Create, draft, or update GitHub Issues using Misa's AI task issue template. Use when asked to create, draft, 起票, update, or reformat a GitHub Issue, especially AI implementation task Issues.
+description: Draft, create, or update GitHub Issues with Misa's template. Also investigate repository evidence for refactoring or cleanup Issue proposals. Use for Issue作成・起票・更新, 改善Issue, 技術的負債, 未使用コード, performance, or app-size Issue requests; do not implement the proposed refactor.
 ---
 
 # GitHub Issue
@@ -8,6 +8,10 @@ description: Create, draft, or update GitHub Issues using Misa's AI task issue t
 ## Workflow
 
 Read `references/ai-task-issue.md` before drafting or creating the Issue body.
+
+For a refactoring, cleanup, performance, or app-size investigation whose requested
+outcome is an Issue, also read `references/refactor-investigation.md`. Investigate
+first and stop after drafting or creating the Issue; do not implement it.
 
 Use the template's body sections in the same order:
 
