@@ -5,8 +5,8 @@ set -e
 #
 #   ./aivisspeech-dict.sh list
 #   ./aivisspeech-dict.sh add みえかた図鑑 ミエカタズカン 5
-#   ./aivisspeech-dict.sh export   # このフォルダの user-dict.json に書き出す（バックアップ）
-#   ./aivisspeech-dict.sh import   # user-dict.json の内容を登録する（新しいMacで復元）
+#   ./aivisspeech-dict.sh export   # 環境別の user-dict.*.json に書き出す（バックアップ）
+#   ./aivisspeech-dict.sh import   # 環境別の辞書を登録する（新しいMacで復元）
 #
 # 辞書の実体は ~/Library/Application Support/AivisSpeech-Engine/user_dict.json にあり、
 # dotfilesの管理外。PCを買い替えると失われるので、変更したら export してコミットする。
@@ -16,7 +16,10 @@ set -e
 # 固有名詞（アプリ名など）は登録しておかないと単語が分割され、別々の語のように読まれる。
 
 script_dir="${0:A:h}"
-backup="$script_dir/user-dict.json"
+source "$script_dir/../lib/environment.zsh"
+resolve_dotfiles_environment || exit 1
+
+backup="$script_dir/user-dict.$DOTFILES_ENV.json"
 base="http://127.0.0.1:10101"
 
 if ! curl -s -m 3 -o /dev/null "$base/version"; then

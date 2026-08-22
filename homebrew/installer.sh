@@ -2,6 +2,8 @@
 set -e
 
 script_dir="${0:A:h}"
+source "$script_dir/../lib/environment.zsh"
+resolve_dotfiles_environment "${1:-}" || exit 1
 
 # Xcodeライセンスが未同意だとbrew/flutter/cocoapods等が失敗するため、同意を促す。
 # 同意後、初回起動時の追加コンポーネント（実機通信用のMobileDevice等）もインストールする
@@ -25,9 +27,7 @@ source "$script_dir/install-homebrew.sh"
 accept_xcode_license
 
 # Brewfile実行
-printf "Press O for office use, press any key for private use :  "
-read install_env
-if [ "$install_env" = "O" ]; then
+if [[ "$DOTFILES_ENV" = "office" ]]; then
   brew bundle --file "$script_dir/BrewfileOffice"
 else
   brew bundle --file "$script_dir/BrewfilePrivate"

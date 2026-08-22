@@ -2,6 +2,9 @@
 set -e
 
 script_dir="${0:A:h}"
+source "$script_dir/../lib/environment.zsh"
+resolve_dotfiles_environment "${1:-}" || exit 1
+
 config_dir="$HOME/.config/mise"
 conf_dir="$config_dir/conf.d"
 config_file="$config_dir/config.toml"
@@ -16,9 +19,7 @@ fi
 mkdir -p "$conf_dir"
 ln -sf "$script_dir/mise.toml" "$config_file"
 
-printf "Press O for office use, press any key for private use :  "
-IFS= read -r install_env
-if [[ "$install_env" = "O" ]]; then
+if [[ "$DOTFILES_ENV" = "office" ]]; then
   environment_config="$script_dir/mise.office.toml"
 else
   environment_config="$script_dir/mise.private.toml"

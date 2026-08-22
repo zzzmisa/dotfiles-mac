@@ -1,5 +1,5 @@
 ---
-name: zzzmisa-gh-issue
+name: misa-gh-issue
 description: Draft, create, or update GitHub Issues with Misa's template. Also investigate repository evidence for refactoring or cleanup Issue proposals. Use for Issue作成・起票・更新, 改善Issue, 技術的負債, 未使用コード, performance, or app-size Issue requests; do not implement the proposed refactor.
 ---
 

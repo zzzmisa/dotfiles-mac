@@ -2,6 +2,13 @@
 set -e
 
 script_dir="${0:A:h}"
+source "$script_dir/../../lib/environment.zsh"
+resolve_dotfiles_environment "${1:-}" || exit 1
+
+if [[ "$DOTFILES_ENV" = "office" ]]; then
+  echo "Skipped private agent memory in office environment."
+  exit 0
+fi
 
 # Claude Code のプロジェクト別メモリディレクトリ。
 # 端末をまたいで引き継ぎたいメモリだけをこのフォルダで管理し、

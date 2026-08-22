@@ -1,5 +1,5 @@
 ---
-name: zzzmisa-merge-cleanup
+name: misa-merge-cleanup
 description: Safely remove local branches and worktrees only after confirming their PRs are merged. Use when told a PR was merged, asked to 掃除・後片付け, or before a new task when stale worktrees may exist.
 ---
 
@@ -17,7 +17,7 @@ deleting unmerged work. When in doubt, report instead of delete.
    ```
 2. **Run the mechanical first pass.**
    ```
-   "$HOME/dotfiles-mac/bin/zzzmisa-delete-merged-local-branches"
+   "$HOME/dotfiles-mac/bin/common/misa-delete-merged-local-branches"
    ```
    This runs `git fetch --prune`, then deletes local branches Git can prove
    are merged (`git branch --merged`), removing each branch's worktree first.

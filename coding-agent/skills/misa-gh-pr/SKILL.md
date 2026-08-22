@@ -1,5 +1,5 @@
 ---
-name: zzzmisa-gh-pr
+name: misa-gh-pr
 description: Draft or create GitHub pull requests with Misa's template and delivery rules. Use for PR作成, pull request, draft PR, or publishing completed local changes as a PR; never merge.
 ---
 

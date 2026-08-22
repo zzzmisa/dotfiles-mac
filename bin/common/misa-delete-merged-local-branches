@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 # mainにマージ済みのローカルブランチと、対応するworktreeを削除する。
-# squashマージされたブランチは検出できない（zzzmisa-merge-cleanupスキルがghで補完する）。
+# squashマージされたブランチは検出できない（misa-merge-cleanupスキルがghで補完する）。
 
 base="${1:-main}"
 

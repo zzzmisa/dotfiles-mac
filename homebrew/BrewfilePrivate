@@ -5,7 +5,7 @@ brew "mas"
 
 brew "cocoapods" # Privateのみ
 brew "exiftool"
-brew "ffmpeg" # Privateのみ
+brew "ffmpeg" # 汎用的な動画作成
 brew "librsvg" # Privateのみ（App Storeバッジ等のSVG→PNG変換に使う）
 brew "gh"
 brew "imagemagick"
@@ -24,7 +24,7 @@ mas "Slack", id: 803453959 # Privateのみ
 mas "ToyViewer", id: 414298354
 mas "Xcode", id: 497799835 # Privateのみ
 
-cask "capcut" # Privateのみ
+cask "capcut" # 汎用的な動画作成
 cask "chatgpt"
 cask "claude" # デスクトップアプリ
 cask "claude-code" # ターミナル用CLI

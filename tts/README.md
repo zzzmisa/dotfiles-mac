@@ -53,14 +53,15 @@ open("out.wav", "wb").write(wav)
 #### 読み方・アクセント辞書
 
 辞書の実体は **`~/Library/Application Support/AivisSpeech-Engine/user_dict.json`** にあり、
-**dotfilesの管理外**。放置するとPC買い替えで失われるので、`user-dict.json` に
-書き出してコミットしておく。
+**dotfilesの管理外**。放置するとPC買い替えで失われるので、Privateでは
+`user-dict.private.json`、Officeでは `user-dict.office.json` に書き出してコミットしておく。
+環境は `~/.config/dotfiles-mac/environment` の値から選ばれる。
 
 ```sh
 ./aivisspeech-dict.sh list                        # 登録内容の確認
 ./aivisspeech-dict.sh add みえかた図鑑 ミエカタズカン 5   # 登録（アクセント型は下記）
-./aivisspeech-dict.sh export                      # user-dict.json へ書き出す（変更したら必ず）
-./aivisspeech-dict.sh import                      # 新しいMacで復元する
+./aivisspeech-dict.sh export                      # 環境別ファイルへ書き出す（変更したら必ず）
+./aivisspeech-dict.sh import                      # 新しいMacで環境別ファイルから復元する
 ```
 
 アクセント型は「何モーラ目の直後で音が下がるか」。0は平板。

@@ -2,10 +2,16 @@
 set -e
 
 script_dir="${0:A:h}"
-profile_source="$script_dir/AGENTS.md"
+source "$script_dir/../../lib/environment.zsh"
+resolve_dotfiles_environment "${1:-}" || exit 1
 
-# プロファイルの実体はリポジトリ内のAGENTS.md 1つで、
-# 各エージェントのグローバル設定ファイルとしてシンボリックリンクする
+if [[ "$DOTFILES_ENV" = "office" ]]; then
+  profile_source="$script_dir/AGENTS.office.md"
+else
+  profile_source="$script_dir/AGENTS.md"
+fi
+
+# 選択した環境のプロファイルを、各エージェントのグローバル設定としてリンクする
 link_profile() {
   local destination="$1"
 

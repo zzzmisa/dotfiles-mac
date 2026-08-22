@@ -1,17 +1,25 @@
-# Added by Antigravity
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+dotfiles_environment_file="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles-mac/environment"
+if [[ -r "$dotfiles_environment_file" ]]; then
+  IFS= read -r DOTFILES_ENV < "$dotfiles_environment_file"
+  export DOTFILES_ENV
+fi
 
 # mise setting
 if type mise > /dev/null 2>&1; then
   eval "$(mise activate zsh)"
 fi
 
-if [ -f "$HOME/dotfiles-mac/zsh/functions.zsh" ]; then
+if [[ -f "$HOME/dotfiles-mac/zsh/functions.zsh" ]]; then
   source "$HOME/dotfiles-mac/zsh/functions.zsh"
 fi
 
-# dotfiles-macのオリジナルコマンド
-export PATH="$HOME/dotfiles-mac/bin:$PATH"
+# dotfiles-macの共通コマンド
+export PATH="$HOME/dotfiles-mac/bin/common:$PATH"
 
-# App Store Connect API credentials
-[ -f "$HOME/.appstoreconnect/asc.env" ] && source "$HOME/.appstoreconnect/asc.env"
+if [[ "$DOTFILES_ENV" = "private" ]]; then
+  [[ -f "$HOME/dotfiles-mac/zsh/private.zsh" ]] && source "$HOME/dotfiles-mac/zsh/private.zsh"
+  [[ -f "$HOME/dotfiles-mac/zsh/functions.private.zsh" ]] && source "$HOME/dotfiles-mac/zsh/functions.private.zsh"
+  export PATH="$HOME/dotfiles-mac/bin/private:$PATH"
+fi
+
+unset dotfiles_environment_file

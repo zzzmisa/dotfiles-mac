@@ -2,10 +2,29 @@
 set -e
 
 script_dir="${0:A:h}"
+source "$script_dir/../../lib/environment.zsh"
+resolve_dotfiles_environment "${1:-}" || exit 1
+
+common_skill_names=(
+  misa-gh-issue
+  misa-gh-pr
+  misa-merge-cleanup
+)
+private_skill_names=(
+  zzzmisa-install-ios
+  zzzmisa-ios-release
+  zzzmisa-new-app
+  zzzmisa-shorts-video
+  zzzmisa-sns-post
+  zzzmisa-store-assets
+)
 external_skill_sources=(
   "$HOME/mySources/photo-cleanup/skills/zzzmisa-photo-cleanup"
 )
 obsolete_skill_names=(
+  zzzmisa-gh-issue
+  zzzmisa-gh-pr
+  zzzmisa-merge-cleanup
   zzzmisa-install-ios-simulator
   zzzmisa-install-ipad
   zzzmisa-install-iphone
@@ -48,18 +67,15 @@ remove_obsolete_link() {
 
 linked_count=0
 
-for skill_source in "$script_dir"/*; do
-  [[ -d "$skill_source" ]] || continue
-  [[ -f "$skill_source/SKILL.md" ]] || continue
+skill_names=("${common_skill_names[@]}")
+if [[ "$DOTFILES_ENV" = "private" ]]; then
+  skill_names+=("${private_skill_names[@]}")
+fi
 
-  link_skill "$skill_source" "$HOME/.agents/skills"
-  link_skill "$skill_source" "$HOME/.claude/skills"
-  linked_count=$((linked_count + 1))
-done
-
-for skill_source in "${external_skill_sources[@]}"; do
+for skill_name in "${skill_names[@]}"; do
+  skill_source="$script_dir/$skill_name"
   if [[ ! -f "$skill_source/SKILL.md" ]]; then
-    echo "Skipped missing external skill: $skill_source"
+    echo "Skipped missing skill: $skill_source"
     continue
   fi
 
@@ -67,6 +83,19 @@ for skill_source in "${external_skill_sources[@]}"; do
   link_skill "$skill_source" "$HOME/.claude/skills"
   linked_count=$((linked_count + 1))
 done
+
+if [[ "$DOTFILES_ENV" = "private" ]]; then
+  for skill_source in "${external_skill_sources[@]}"; do
+    if [[ ! -f "$skill_source/SKILL.md" ]]; then
+      echo "Skipped missing external skill: $skill_source"
+      continue
+    fi
+
+    link_skill "$skill_source" "$HOME/.agents/skills"
+    link_skill "$skill_source" "$HOME/.claude/skills"
+    linked_count=$((linked_count + 1))
+  done
+fi
 
 for skill_name in "${obsolete_skill_names[@]}"; do
   remove_obsolete_link "$HOME/.agents/skills" "$skill_name"

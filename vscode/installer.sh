@@ -2,6 +2,8 @@
 set -e
 
 script_dir="${0:A:h}"
+source "$script_dir/../lib/environment.zsh"
+resolve_dotfiles_environment "${1:-}" || exit 1
 
 # codeコマンドがなければ
 # Homebrew経由でVSCodeをインストール
@@ -14,10 +16,9 @@ fi
 ln -sf "$script_dir/settings.json" ~/Library/Application\ Support/Code/User/
 
 # プラグインのインストール
-pkglist=(
+common_extensions=(
   anthropic.claude-code # Claude Code for VS Code
   dbaeumer.vscode-eslint # ESLint
-  dart-code.flutter # Flutter
   eamodio.gitlens # GitLens — Git supercharged
   esbenp.prettier-vscode # Prettier - Code formatter
   github.copilot # GitHub Copilot
@@ -31,7 +32,16 @@ pkglist=(
   # ritwickdey.liveserver # 最終更新が古いため必要になったら再検討
 )
 
-for i in "${pkglist[@]}"; do
+private_extensions=(
+  dart-code.flutter # Flutter
+)
+
+extensions=("${common_extensions[@]}")
+if [[ "$DOTFILES_ENV" = "private" ]]; then
+  extensions+=("${private_extensions[@]}")
+fi
+
+for i in "${extensions[@]}"; do
   code --install-extension "$i"
 done
 

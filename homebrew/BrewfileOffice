@@ -4,6 +4,7 @@
 brew "mas"
 
 brew "exiftool"
+brew "ffmpeg" # 汎用的な動画作成
 brew "gh"
 brew "git-lfs" # Officeのみ
 brew "imagemagick"
@@ -19,6 +20,7 @@ mas "Numbers", id: 409203825
 mas "ToyViewer", id: 414298354
 
 cask "chatgpt"
+cask "capcut" # 汎用的な動画作成
 cask "claude" # デスクトップアプリ
 cask "claude-code" # ターミナル用CLI
 cask "firefox"

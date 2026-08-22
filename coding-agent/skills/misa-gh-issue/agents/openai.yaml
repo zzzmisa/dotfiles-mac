@@ -1,4 +1,4 @@
 interface:
   display_name: "Misa: GitHub Issue"
   short_description: "Draft GitHub issues with Misa's template"
-  default_prompt: "Use $zzzmisa-gh-issue to investigate when needed and draft or create a GitHub issue."
+  default_prompt: "Use $misa-gh-issue to investigate when needed and draft or create a GitHub issue."

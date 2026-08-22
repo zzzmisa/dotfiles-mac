@@ -3,6 +3,10 @@
 # 各フォルダ配下の installer.sh を順番に実行し、出力をそのままTerminalに流す
 
 script_dir="${0:A:h}"
+source "$script_dir/lib/environment.zsh"
+resolve_dotfiles_environment "${1:-}" || exit 1
+
+echo "Install environment: $DOTFILES_ENV"
 
 for dir in "$script_dir"/*; do
   # ディレクトリでない、または .git なら skip
@@ -12,7 +16,7 @@ for dir in "$script_dir"/*; do
   installer="$dir/installer.sh"
   if [[ -f "$installer" ]]; then
     echo 📁 "$dir"
-    (set +e; zsh "$installer")
+    (set +e; zsh "$installer" "$DOTFILES_ENV")
   fi
 done
 
