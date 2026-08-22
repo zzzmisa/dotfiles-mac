@@ -1,4 +1,4 @@
 interface:
   display_name: "Misa: iOS App Store Release"
-  short_description: "Prepare and submit App Store releases"
-  default_prompt: "Use $zzzmisa-ios-release to prepare the current iOS app release, stopping before review submission unless explicitly instructed."
+  short_description: "Reconcile, prepare, and submit App Store releases"
+  default_prompt: "Use $zzzmisa-ios-release to reconcile any published ASC release with GitHub before preparing the next iOS app release."

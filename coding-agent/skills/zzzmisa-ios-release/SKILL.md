@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-ios-release
-description: Prepare or submit an iOS App Store release by verifying ASC/Git state, updating versions and store assets, uploading builds, and creating draft release notes. Use for リリース準備, ASCアップロード, metadata sync, or 審査提出; submit for review only on explicit instruction.
+description: Reconcile, prepare, or submit an iOS App Store release by repairing missing GitHub tags/releases after ASC publication, verifying ASC/Git state, updating versions and store assets, and uploading builds. Use for 週次リリース準備, 公開後処理, タグ・GitHub Release作成, ASCアップロード, metadata sync, or 審査提出; submit for review only on explicit instruction.
 ---
 
 # iOS App Store Release
@@ -17,8 +17,8 @@ Read references only for the step being performed:
 - Review submission or cancellation: [references/review-submission.md](references/review-submission.md)
 
 リリース対象の判定を始める前に、`scripts/asc_release_state.rb` でASC上の公開済み版・
-作業中バージョン・VALIDビルドを確認する。**Gitタグやautomation memoryだけを前回リリースの
-根拠にしない**。
+作業中バージョン・VALIDビルドを確認し、GitHubのタグ・Releaseと照合する。
+**Misaからの公開報告、Gitタグ、automation memoryだけを前回リリースの根拠にしない**。
 
 ## 大原則（Guardrails）
 
@@ -28,28 +28,39 @@ Read references only for the step being performed:
 - **ユーザーの目に触れる文言**（`release_notes.txt`、ストア説明文、スクショのキャプション等）を
   新規作成・変更したときは、**提出前に必ずチャットで全文を見せて確認を取る**。
 - **リリース公開（承認後の公開ボタン）とPRマージはMisaが行う**。エージェントは行わない。
-- タグ・GitHubリリースの公開は、審査が通ってリリースバージョンが確定してから
-  （Misaから連絡が来る。それまでは下書きのまま）。
-- **ASCを公開状態の正とする**。ASCの最新公開版と対応するGitタグ／GitHubリリースを照合し、
-  不一致ならリリース準備を開始しない。PR作成、バージョン変更、ビルド、素材同期をせず、
-  不整合と必要な復旧だけを報告する。
-- `READY_FOR_DISTRIBUTION`（旧APIの `READY_FOR_SALE` を含む）のバージョンは公開済み。
-  同じマーケティングバージョンへ新しいビルドを提出しない。
+- **ASCを公開状態の正とする**。`READY_FOR_DISTRIBUTION`（旧APIの `READY_FOR_SALE` を含む）を
+  確認するまで、タグとGitHub Releaseは公開せず下書きのままにする。Misaからの報告は
+  公開後処理を早く始めるための合図として扱い、報告がなくてもASCから公開を検出する。
+  公開済みのマーケティングバージョンへ新しいビルドを提出しない。
+- GitHub APIでリポジトリの可視性を毎回確認する。**非公開リポジトリでは**、ASC公開済み版に
+  対応するタグ／GitHub Releaseの自動作成・公開を許可し、次回の週次実行でも未完了分を補完する。
+  **公開リポジトリでは**自動公開せず、Misaの内容確認と明示指示を待つ。
+- ASC公開版とGitHubの不一致を検出したら、次版のPR作成、バージョン変更、ビルド、素材同期より
+  先に前回版を復旧する。安全に復旧できない場合だけ停止し、不整合と必要な対応を報告する。
 - automation memoryは前回結果の補助情報としてのみ使い、ASCとGitの照合結果で必ず上書きする。
 
 ## リリースフロー
 
-1. **ASC・Git事前照合（最初に必ず実行）**
+1. **ASC・GitHub・Gitの照合と復旧（毎回最初に必ず実行）**
    - `source ~/.appstoreconnect/asc.env` 後、リポジトリのBundle IDを指定して実行する:
      `bundle exec ruby <skill-dir>/scripts/asc_release_state.rb <bundle-id>`
    - 出力の `latest_released` と `latest_released_build` を前回リリースとする。
      `highest_valid_build` でアップロード済みの最大ビルド番号も別途確認する。
-   - ASC公開版に対応するタグ（リポジトリ固有の `v<version>+<build>` または
-     `<app>/v<version>+<build>`）が存在し、公開版のコミットを指すことを確認する。
-   - タグがない、古い、別コミットを指す、またはASC上の公開版がGit記録より新しい場合は
-     **ここで停止**する。差分を推測せず、タグ／GitHubリリースの復旧が必要と報告する。
-   - `draft_versions` に審査中・却下・提出準備中の版がある場合は、その状態を報告し、
-     新規リリースと決めつけない。既存提出の継続・取り下げはMisaの指示に従う。
+   - `git fetch --tags` 後、`gh repo view --json visibility,nameWithOwner` と
+     `gh release list` でリポジトリの可視性、公開済みRelease、下書きを確認する。
+   - タグ名はリポジトリ既存の規約を使う。規約がなければ単一アプリは
+     `v<version>+<build>`、モノレポは `<app>/v<version>+<build>` とする。
+     GitHub Releaseのタイトルは `v<version>` とする。
+   - ASCの最新公開版に対応するタグとGitHub Releaseが存在し、提出ビルドを作ったmainの
+     commitを指すことを確認する。commitはGitHub Release下書きに記録したhashを使い、
+     記録がなければバージョンバンプPRなどの一次情報で一意に確認する。推測しない。
+   - **ASC公開済み・GitHub未完了**の場合は、次版準備より先に手順9を実行する。
+     復旧成功後はこの照合をやり直し、整合すれば同じ実行内で手順2へ進む。
+   - **ASC未公開・GitHub公開済み、commit不明、タグが別commitを指す**場合は停止する。
+     タグやReleaseを削除・付け替えず、不整合を報告する。
+   - `draft_versions` に審査中・承認済み手動リリース待ち・却下・提出準備中の版がある場合は、
+     その状態を報告して新規リリース準備を開始しない。承認済み手動リリース待ちなら、
+     MisaにASCでの公開操作を依頼する。既存提出の継続・取り下げはMisaの指示に従う。
 
 2. **変更内容の確認**
    - 照合済みの公開版タグから最新mainまでを確認する
@@ -102,8 +113,12 @@ Read references only for the step being performed:
    - ビルドの処理完了（VALID）を待ち、バージョンドラフトに紐付ける。
 
 7. **GitHubリリースノートの下書き更新**
-   - `gh release create v<version> --draft --title "v<version>" --notes <本文>`
+   - 手順1で決めた `<release-tag>` を使い、
+     `gh release create <release-tag> --draft --target <main-commit> --title "v<version>" --notes <本文>`
      （既存の下書きがあれば `gh release edit` で更新）。
+   - `gh release view <release-tag> --json isDraft,tagName,targetCommitish,body` で、下書きの
+     `targetCommitish` が提出ビルドのmain commitと一致することを確認する。不一致なら公開前に
+     `gh release edit <release-tag> --target <main-commit>` で修正し、再取得して確認する。
    - 本文はASCのリリースノート（日本語）＋主なPRへのリンク。提出ビルドを作った
      mainのcommit hashも記載しておく（タグを打つ位置の記録）。
    - **下書きのままにする**（publishしない。下書きはタグを作らない）。
@@ -114,12 +129,24 @@ Read references only for the step being performed:
    - 文言修正などで取り下げる場合: 提出取り消し→修正→再提出はペナルティなし。
      取り消し後にバージョンが `DEVELOPER_REJECTED` 表示になるのは正常。
 
-9. **審査通過後（Misaから連絡が来たら）**
-   - GitHubリリースの下書きを、記録しておいたcommitを対象に publish する
-     （このときタグ `v<version>` が作られる）。
-   - ASCの公開版、GitHubリリース、タグのバージョン・ビルド・commitが一致することを
-     `scripts/asc_release_state.rb` とGitで再確認する。不一致を次回へ持ち越さない。
-   - リリース公開の操作自体はMisaが行う。
+9. **ASC公開後のタグ・GitHub Release補完**
+   - Misaから公開報告を受けたときと、週次実行の手順1でASC公開済み・GitHub未完了を
+     検出したときに実行する。報告の有無にかかわらずASC状態を再取得する。
+   - ASCがまだ公開状態でなければ何も公開しない。承認済み手動リリース待ちなら、Misaに
+     ASCでの公開操作を依頼する。
+   - GitHub Release下書きのcommit hash、ASCのversion/build、タグ名を照合する。
+     下書きがない場合でもcommitを一次情報から一意に確認できれば、同じ本文で作成する。
+   - 下書きの `targetCommitish` が提出ビルドのmain commitと一致することをAPIで確認する。
+     本文中のhashだけでは一致確認とみなさない。不一致なら下書きのtargetを修正し、再確認する。
+   - リポジトリが非公開なら、`gh release edit <release-tag> --target <main-commit> --draft=false` で
+     下書きをpublishしてタグを作成する。タグだけ存在する場合は、そのタグを使って
+     GitHub Releaseを作成・公開する。すでに両方あれば何もしない。
+   - リポジトリが公開なら、公開予定のタグ、commit、Release本文をMisaに提示し、明示指示を
+     受けてからpublishする。
+   - ASC公開版、GitHub Release、タグのversion/build/commitが一致することを
+     `scripts/asc_release_state.rb`、GitHub API、`git fetch --tags` 後のGitで再確認する。
+     整合確認後にだけ手順2へ進む。
+   - 復旧できない不整合を次回へ持ち越したまま、次版の準備を進めない。
 
 ## リジェクト時
 
