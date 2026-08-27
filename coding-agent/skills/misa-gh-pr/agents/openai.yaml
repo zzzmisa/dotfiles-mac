@@ -1,4 +1,4 @@
 interface:
   display_name: "Misa: GitHub PR"
-  short_description: "Draft pull requests with Misa's template"
-  default_prompt: "Use $misa-gh-pr to draft or create a GitHub pull request without merging it."
+  short_description: "Draft PRs using repository rules or Misa's template"
+  default_prompt: "Use $misa-gh-pr to follow repository-specific rules and draft or create a GitHub pull request without merging it."
