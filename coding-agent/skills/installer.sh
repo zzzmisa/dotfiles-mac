@@ -15,6 +15,7 @@ private_skill_names=(
   zzzmisa-ios-release
   zzzmisa-new-app
   zzzmisa-shorts-video
+  zzzmisa-slide-compress
   zzzmisa-sns-post
   zzzmisa-store-assets
 )

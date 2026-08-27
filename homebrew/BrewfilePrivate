@@ -8,10 +8,12 @@ brew "exiftool"
 brew "ffmpeg" # 汎用的な動画作成
 brew "librsvg" # Privateのみ（App Storeバッジ等のSVG→PNG変換に使う）
 brew "gh"
+brew "ghostscript" # Privateのみ（プレゼン資料PDFの最適化：画像ダウンサンプル・フォントサブセット）
 brew "imagemagick"
 brew "jq"
 brew "macvim"
 brew "mise"
+brew "qpdf" # Privateのみ（PDFの可逆最適化：重複オブジェクト除去・オブジェクトストリーム化）
 brew "tree"
 
 mas "Keynote", id: 409183694
