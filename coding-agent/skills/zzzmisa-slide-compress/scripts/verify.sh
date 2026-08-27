@@ -16,8 +16,14 @@ find "$WORK" -name "*.pdf" ! -name "._*" | sort | while IFS= read -r b; do
   [ -f "$a" ] || { printf '%-44s %s\n' "$(basename "$rel")" "バックアップなし"; continue; }
   p1=$(pdfinfo "$a" 2>/dev/null | awk '/^Pages:/{print $2}')
   p2=$(pdfinfo "$b" 2>/dev/null | awk '/^Pages:/{print $2}')
-  nf=$(pdffonts "$b" 2>/dev/null | tail -n +3 | wc -l | tr -d ' ')
-  ne=$(pdffonts "$b" 2>/dev/null | tail -n +3 | awk '$(NF-3)=="no"' | wc -l | tr -d ' ')
+  # pdffonts の列は可変長（"Type 3" は2語、フォント名が [none] のこともある）。
+  # $(NF-3) で数えると sub 列を emb 列と取り違えて誤報になる。ヘッダの桁位置で見る。
+  fr=$(pdffonts "$b" 2>/dev/null | awk '
+    /^name /{c=index($0,"emb"); next}
+    /^-----/{next}
+    NF && c { t++; if (substr($0,c,3) ~ /no/) e++ }
+    END { print t+0, e+0 }')
+  nf=${fr% *}; ne=${fr#* }
   txt=$(python3 - "$a" "$b" <<'PY'
 import subprocess, sys, collections
 def chars(p):

@@ -16,21 +16,40 @@ tell application id "com.apple.Keynote" to get count of documents
 end timeout' 2>/dev/null; }
 wins()   { osascript -e 'tell application "System Events" to tell process "Keynote" to get count of windows' 2>/dev/null; }
 
+# 書類を伴わずにKeynoteを起動すると「開く」パネルが出る。これは書類ではないので
+# docs=0 / windows=1 になり、状態チェックが永久に通らなくなる。Escapeで閉じる。
+dismiss_panels() {
+  for _ in 1 2 3; do
+    [ "$(docs)" = "0" ] || return 0          # 書類が開いているなら対象外
+    [ "$(wins)" = "0" ] && return 0
+    osascript -e 'tell application id "com.apple.Keynote" to activate' >/dev/null 2>&1
+    sleep 1
+    osascript -e 'tell application "System Events" to key code 53' >/dev/null 2>&1
+    sleep 2
+  done
+}
+
 restart_keynote() {
   pkill -x Keynote 2>/dev/null; sleep 6
   open -b com.apple.Keynote 2>/dev/null            # -j（隠して起動）は使わない。
   osascript -e 'tell application "System Events" to tell process "Keynote" to set visible to true' >/dev/null 2>&1
-  for _ in $(seq 1 30); do sleep 1; [ "$(docs)" = "0" ] && return 0; done
+  for _ in $(seq 1 30); do
+    sleep 1
+    [ "$(docs)" = "0" ] && { dismiss_panels; return 0; }
+  done
   return 1
 }
 
 # 書類はウインドウを持たずに残ることがある。必ず両方を見る。
 ensure_clean() {
   [ "$(docs)" = "0" ] && [ "$(wins)" = "0" ] && return 0
+  dismiss_panels
+  [ "$(docs)" = "0" ] && [ "$(wins)" = "0" ] && return 0
   osascript -e 'with timeout of 60 seconds
 tell application id "com.apple.Keynote" to close every document saving no
 end timeout' >/dev/null 2>&1
   sleep 3
+  dismiss_panels
   [ "$(docs)" = "0" ] && [ "$(wins)" = "0" ] && return 0
   restart_keynote
 }
