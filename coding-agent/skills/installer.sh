@@ -19,9 +19,6 @@ private_skill_names=(
   zzzmisa-sns-post
   zzzmisa-store-assets
 )
-external_skill_sources=(
-  "$HOME/mySources/photo-cleanup/skills/zzzmisa-photo-cleanup"
-)
 obsolete_skill_names=(
   zzzmisa-gh-issue
   zzzmisa-gh-pr
@@ -84,19 +81,6 @@ for skill_name in "${skill_names[@]}"; do
   link_skill "$skill_source" "$HOME/.claude/skills"
   linked_count=$((linked_count + 1))
 done
-
-if [[ "$DOTFILES_ENV" = "private" ]]; then
-  for skill_source in "${external_skill_sources[@]}"; do
-    if [[ ! -f "$skill_source/SKILL.md" ]]; then
-      echo "Skipped missing external skill: $skill_source"
-      continue
-    fi
-
-    link_skill "$skill_source" "$HOME/.agents/skills"
-    link_skill "$skill_source" "$HOME/.claude/skills"
-    linked_count=$((linked_count + 1))
-  done
-fi
 
 for skill_name in "${obsolete_skill_names[@]}"; do
   remove_obsolete_link "$HOME/.agents/skills" "$skill_name"
