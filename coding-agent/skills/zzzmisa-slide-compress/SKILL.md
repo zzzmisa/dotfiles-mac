@@ -1,11 +1,11 @@
 ---
 name: zzzmisa-slide-compress
-description: Shrink Keynote decks (.key) and slide PDFs while keeping them projector- and print-quality, with backups and before/after verification. Use for プレゼン資料の容量削減・軽量化, Keynoteのファイルサイズを減らす, PDFの最適化・圧縮; not for exporting or re-authoring slides.
+description: Shrink Keynote decks (.key), PowerPoint files (.pptx), and slide PDFs while keeping them projector- and print-quality, with backups and before/after verification. Use for プレゼン資料の容量削減・軽量化, Keynoteのファイルサイズを減らす, pptxの圧縮, PDFの最適化; not for exporting or re-authoring slides.
 ---
 
 # プレゼン資料の容量削減
 
-`.key` と `.pdf` をまとめて軽量化する。**フルHD投影と印刷に耐える画質を保つ**のが基準で、
+`.key` / `.pptx` / `.pdf` を軽量化する。**フルHD投影と印刷に耐える画質を保つ**のが基準で、
 Web表示用まで落とさない。
 
 ## Workflow
@@ -19,7 +19,8 @@ Web表示用まで落とさない。
    iCloud Drive上のファイルはバックアップ先を **iCloud外**（`~/Desktop` 等）にする。
    処理中にKeynoteが自動保存でバックアップ側を書き換えるのを防げる。
 
-2. **`.key` を処理**（`scripts/keynote-reduce.sh` を1ファイルずつ）
+2. **`.key` を処理**（`scripts/keynote-batch.sh`。単体なら `scripts/keynote-reduce.sh`）
+2b. **`.pptx` を処理**（`scripts/pptx-optimize.py`）
 3. **`.pdf` を処理**（`scripts/pdf-optimize.sh`。必ず**バックアップの原本から**掛ける）
 4. **検証**（`scripts/verify.sh <backup_root> <work_root>`）。ここまで終わるまでバックアップを消さない
 5. **更新日時を戻す**（アーカイブでは原本の日時に価値がある）
@@ -39,12 +40,21 @@ Web表示用まで落とさない。
 
 ### 詰まりどころ
 
+**「開けませんでした」が連続したら、原因は次の4つのどれか。** 全部この症状に化けるので、
+1つ直して安心せずに順に潰す（実測で3つとも踏んだ）。
+
 | 症状 | 原因と対処 |
 | --- | --- |
+| 全件が「開けませんでした」 / 前面に出せない | **画面がロックされている。** GUIスクリプティングはロック中に動かない。`ioreg -n Root -d1 -a \| grep CGSSessionScreenIsLocked` で判定し、`caffeinate -d` で予防する |
+| 途中から全件が「開けませんでした」 | **ウインドウを持たない書類が溜まっている。** 縮小が途中で止まると書類だけが残り、`count of windows` は0のままなので「クリーン」と誤判定する。**必ず `count of documents` も見る**。実測で36件溜まって全滅した |
+| 書類は開くのにウインドウが0のまま | **`open -b -j`（非表示起動）を使っている。** 可視で起動し、必要なら `set visible to true` してから待つ |
 | メニューをclickしても無反応 | メニューを開く前の `enabled` はキャッシュで `false`。**メニューバー項目を先にclickして開き**、`enabled` が `true` になるまで待ってからclickする |
-| 2件目以降が全部失敗する | エラーダイアログが1枚出ると以降の `open` が全部詰まる。**1ファイルずつ**処理し、開始前に `count of windows = 0` を確認、`subrole = AXDialog` を検出したら中断する |
-| `AppleEventがタイムアウト` | AppleScript内でループを完結させない。**bash側から1ステップずつ**叩いてポーリングする |
+| 2件目以降が全部失敗する | エラーダイアログが1枚出ると以降の `open` が全部詰まる。**1ファイルずつ**処理し、`subrole = AXDialog` を検出したら閉じる |
+| `AppleEventがタイムアウト` | AppleScript内でループを完結させない。**bash側から1ステップずつ**叩いてポーリングする。`count of documents` が**空文字**を返すのは「0件」ではなく「無応答」。取り違えるとメッセージが嘘になる |
 | `ファイルを読み取れませんでした` | 多くは上記の連鎖の巻き添え。ファイル破損ではないので、状態をクリアして再実行すれば通る |
+
+**どの失敗経路でも書類を必ず閉じること**（`trap` で `close every document saving no`）。
+閉じ忘れが1件でもあると上記2つ目の症状に化ける。
 
 ### 削減の中身と限界
 
@@ -55,6 +65,45 @@ Keynoteの縮小は **画像を「スライド上の表示サイズ × 約2〜2.
 - **テーマ付属画像（`Data/PresetImageFill*.jpg`）は対象外**。これが容量の大半を占める資料は
   ほとんど縮まない（実測 -0.1% / +0.03%）
 - 720×405ptのスライドなら **1080p投影は等倍相当で劣化ほぼ無し、4Kでは約2倍アップスケールで甘くなる**
+
+## PowerPoint (.pptx)
+
+`scripts/pptx-optimize.py <in.pptx> <out.pptx> [--dpi 350] [--drop-cropped]`。
+**PowerPointもLibreOfficeも不要**で、Python + Pillow だけで完結する。`.docx` / `.xlsx` も同じ構造。
+
+`.pptx` はZIPで、画像は `ppt/media/` に素のファイルとして入っている。**OOXMLでは画像の表示サイズは
+図形の `<a:ext cx cy>`（EMU）で決まり、画像のピクセル数とは無関係**。だから解像度を落としても
+レイアウトは1ptも動かない。Keynoteのようにレンダリングして検証する必要がない。
+
+| やること | 既定 | 備考 |
+| --- | --- | --- |
+| 過剰解像度の画像を目標ppiまで縮小 | ON | 使用箇所ごとの表示サイズ×dpiで必要画素を計算。複数箇所で使われていれば最も厳しい箇所に合わせる |
+| 孤児メディアの削除 | ON | どの `.rels` からも参照されていないパート。OPC上、到達不可能なので安全 |
+| `docProps/thumbnail.*` の削除 | ON | Finderのプレビュー用だけ |
+| JPEGのEXIF/GPS除去 | ON | セグメントを落とすだけで圧縮データには触れない＝可逆 |
+| トリミング領域の物理削除 | **OFF** | `--drop-cropped`。**後からトリミングを広げ直せなくなる**ので明示指定制 |
+| 非表示スライド・背後に隠れた画像の削除 | しない | 前者は表示に戻せなくなる。後者は重なり順や不透明度の解釈が要り誤判定が危険 |
+| PNG→JPEG変換 | しない | `[Content_Types].xml` と `.rels` の書き換えが必要で透過も失う |
+
+### 鉄則
+
+- **パート名と拡張子を変えない。** `image1.jpeg` は `image1.jpeg` のまま中身だけ差し替える
+- **目標ppiを下回る画像には触らない。拡大は絶対にしない。** 実測例では同じファイル内に
+  790 ppi の写真と 59 ppi の図が同居していた。一律圧縮は後者の画質を落とすだけで容量も減らない
+- **解像度を変えないJPEGは再圧縮しない。** 既に非可逆なものを再エンコードすると劣化するだけ。
+  メタデータの可逆除去にとどめる。PNGは可逆なので再最適化してよい
+- 検証は `[Content_Types].xml` と全 `.rels` が**バイト単位で不変**、パート構成が一致、
+  全画像がデコード可能、の3点（`--drop-cropped` のときだけスライドXMLの `srcRect` が変わる）
+
+### 実測（A4ポスター1枚、5,639,966バイト）
+
+| モード | 結果 | 内訳 |
+| --- | ---: | --- |
+| 既定 | **1,179,904（-79.1%）** | 6534x3890/510ppiの写真を3913x2669へ。孤児は0件だった |
+| `--drop-cropped` | **857,244（-84.8%）** | 上記＋切り捨て領域48%を物理削除して2687x2314へ |
+
+「孤児画像の削除」は宣伝されがちだが、このファイルでは**0件**だった。PowerPointは画像を消すと実体も
+片付けるので、孤児が溜まるのは他ツールを経由した場合が主。**効くのはトリミング破棄と過剰解像度**。
 
 ## PDF
 
@@ -103,6 +152,10 @@ GhostscriptがFlate画像をJPEGに変換して**逆に増える**（実測 1.70
 
 ## 運用上の落とし穴
 
+- **画面ロック中はGUIスクリプティングが一切動かない。** ウインドウをAXで取得できず、
+  Keynoteを前面にも出せないため「開けませんでした」が延々と続く。バッチは必ず
+  `caffeinate -d` でディスプレイスリープを抑止して走らせる（`keynote-batch.sh` が自動で行う）。
+  `ioreg -n Root -d1 -a | grep CGSSessionScreenIsLocked` でロック状態を判定できる
 - **バッチ実行中はMacに触らない。** Keynoteのウインドウを閉じたり別アプリを操作すると、
   その時間帯のファイルがまとめて `開けませんでした` で失敗する。ファイルは書き換わらないので
   無傷だが、後でリトライが要る（実測: 50件中37件が巻き添えで失敗、再実行で全て通った）
@@ -117,3 +170,13 @@ GhostscriptがFlate画像をJPEGに変換して**逆に増える**（実測 1.70
 ## References
 
 - `references/quality-benchmarks.md` — 実測値（解像度・JPEG品質・投影時の必要px）
+
+## スクリプト
+
+| スクリプト | 役割 |
+| --- | --- |
+| `scripts/keynote-batch.sh` | `.key` の一括処理。ロック検出・`caffeinate`・増加時の原本復帰・mtime復元・Keynote定期再起動を内包 |
+| `scripts/keynote-reduce.sh` | `.key` 1件分のGUI操作 |
+| `scripts/pptx-optimize.py` | `.pptx`（`.docx` / `.xlsx` も可）の最適化 |
+| `scripts/pdf-optimize.sh` | `.pdf` をA/B2方式で最適化し良い方を採用 |
+| `scripts/verify.sh` | バックアップ原本との突合検証 |
