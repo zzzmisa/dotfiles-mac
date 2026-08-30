@@ -10,6 +10,10 @@ Misaの個人開発iOSアプリのリリースフロー。プロジェクト固�
 先に確認し、このスキルは共通の流れと約束事として使う。
 ストア素材の置き場所と命名の規約は `zzzmisa-store-assets`。
 
+**リリースではなく動作確認のためにTestFlightへ上げたいだけの場合は、このスキルではなく
+`zzzmisa-install-ios` の TestFlight リファレンスを使う**（バージョンバンプ・ストア素材・
+タグ・審査提出を伴わない確認用ビルド）。
+
 Read references only for the step being performed:
 
 - Archive, export, or binary upload: [references/build-upload.md](references/build-upload.md)

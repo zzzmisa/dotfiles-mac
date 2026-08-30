@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-install-ios
-description: Build, install, launch, and verify Flutter or Swift/Xcode apps on `MisaのiPhone`, `ミサのiPad`, or Misa's named iOS simulators. Use for 実機確認, iPhone/iPadインストール, simulator verification, screenshots, or permission-state testing.
+description: Build, install, launch, and verify Flutter or Swift/Xcode apps on `MisaのiPhone`, `ミサのiPad`, Misa's named iOS simulators, or TestFlight when Misa is away from the Mac. Use for 実機確認, iPhone/iPadインストール, simulator verification, TestFlightにあげて確認, 出先・リモートでの動作確認, screenshots, or permission-state testing.
 ---
 
 # Install and Verify an iOS App
@@ -13,11 +13,14 @@ Use the target named by the user. When none is specified:
 - Use `ミサのiPad` for iPad-specific behavior or layout.
 - Use `Screenshot iPhone 14 Plus` or `Screenshot iPad Pro 13-inch` for App Store screenshots.
 - Use `iPhone SE2` for small-screen layout checks or reproducible simulator permission tests.
+- Use TestFlight when Misa is away from the Mac and a device build is impossible
+  (出先・リモートでの動作確認). This is verification, not a release.
 
 Read only the reference for the selected target:
 
 - Physical device: [references/physical-devices.md](references/physical-devices.md)
 - Simulator: [references/simulators.md](references/simulators.md)
+- TestFlight (remote verification): [references/testflight.md](references/testflight.md)
 - Permission or console debugging: [references/debugging.md](references/debugging.md)
 
 ## Detect the project
@@ -34,3 +37,6 @@ Read only the reference for the selected target:
 - Prefer an existing simulator with the exact configured name over creating a duplicate.
 - Request narrow approval when device services, Simulator.app, Flutter/Xcode caches, or paths outside the workspace require it.
 - Report the project type, target, build/install/launch results, and relevant errors.
+- Build a TestFlight verification build from `main`, never from a working branch,
+  and never submit for App Store review or touch store metadata from this skill.
+  An actual release belongs to `zzzmisa-ios-release`.
