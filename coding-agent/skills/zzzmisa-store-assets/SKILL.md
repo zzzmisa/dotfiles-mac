@@ -89,8 +89,8 @@ promo/youtube-shorts/narration/zh-Hans_1_bee.wav
 
 ## 既存リポジトリを移行するとき
 
-Read [references/migrate-existing-repository.md](references/migrate-existing-repository.md)
-before moving existing assets or build scripts.
+既存の素材やビルドスクリプトを移動する前に
+[references/migrate-existing-repository.md](references/migrate-existing-repository.md) を読む。
 
 ## 関連スキル
 

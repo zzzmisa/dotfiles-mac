@@ -3,29 +3,26 @@ name: misa-gh-pr
 description: Draft or create GitHub pull requests using repository-specific rules and templates when present, otherwise Misa's template and delivery rules. Use for PR作成, pull request, draft PR, or publishing completed local changes as a PR; never merge.
 ---
 
-# GitHub Pull Request
+# GitHub Pull Requestの作成
 
 ## Workflow
 
-Before drafting or creating the PR:
+PRを書き始める前に:
 
-1. Identify the target repository.
-2. Read all applicable repository instructions, including `AGENTS.md` and
-   `CLAUDE.md`, plus relevant contribution guidance and PR templates such as
-   `CONTRIBUTING.md`, `.github/pull_request_template.md`, and
-   `.github/PULL_REQUEST_TEMPLATE/` when present.
-3. Follow explicit instructions from the current user first, then the target
-   repository's rules and templates. Repository-specific guidance overrides this
-   skill's default format and delivery conventions.
+1. 対象リポジトリを特定する。
+2. そのリポジトリの指示を全部読む。`AGENTS.md` と `CLAUDE.md` に加えて、
+   `CONTRIBUTING.md`、`.github/pull_request_template.md`、
+   `.github/PULL_REQUEST_TEMPLATE/` があればコントリビューションガイドと
+   PRテンプレートも読む。
+3. 優先順位は、ユーザーからの明示的な指示 → 対象リポジトリのルールとテンプレート。
+   リポジトリ固有の指定は、このスキルの既定フォーマットと進め方より優先する。
 
-If the repository has an applicable PR template, use its sections and
-requirements. Otherwise, read `references/pull_request_template.md` and use
-Misa's default template.
+リポジトリに使えるPRテンプレートがあれば、そのセクション構成と要求事項に従う。
+無ければ `references/pull_request_template.md` を読み、Misaの既定テンプレートを使う。
 
-### Misa's default template
+### Misaの既定テンプレート
 
-When the repository has no applicable PR template, use these sections in the
-same order:
+リポジトリに使えるPRテンプレートが無いときは、この順のセクションで構成する:
 
 - `対応Issue`
 - `変更内容`
@@ -34,24 +31,33 @@ same order:
 - `確認できていないこと・残る懸念点`
 - `レビューしてほしいポイント`
 
-Fill comments and placeholders with concrete, concise Japanese. Remove HTML comments from the final PR body.
+コメントとプレースホルダは、具体的で簡潔な日本語で埋める。最終的なPR本文から
+HTMLコメントは削除する。
 
-In `対応Issue`, use `Closes #<number>` when the linked Issue number is known. Do not invent an Issue number; leave `Closes #` or write `なし` according to the user's context.
+`対応Issue` には、対応するIssue番号が分かっているときだけ `Closes #<number>` と書く。
+Issue番号を推測して書かない。番号が不明なら、文脈に応じて `Closes #` のまま残すか
+`なし` と書く。
 
-In `確認したこと`, mark `[x]` only for checks that were actually run or verified in this session. Leave unchecked items as `[ ]` when not confirmed.
+`確認したこと` は、このセッションで実際に実行・確認したものだけ `[x]` にする。
+確認できていない項目は `[ ]` のまま残す。
 
-For `確認できていないこと・残る懸念点` and `レビューしてほしいポイント`, write `なし` when there is nothing specific to call out.
+`確認できていないこと・残る懸念点` と `レビューしてほしいポイント` は、
+特に挙げることが無ければ `なし` と書く。
 
-Also apply these delivery rules unless the repository has a more specific rule:
+リポジトリにより具体的なルールが無い限り、進め方も次に従う:
 
-- Use a work branch. When creating the branch for a numbered Issue, name it `issue-<number>-<short-description>` (for example, `issue-1-add-new-feature`).
-- If the implementation appears to require a major design change or unrequested specification expansion, stop before implementing or creating the PR and report the proposal to the user.
-- For mobile apps, install and verify on a physical device when the environment supports it and the change requires device verification.
+- 作業ブランチを使う。番号付きIssueに対する作業ブランチ名は
+  `issue-<number>-<short-description>`（例: `issue-1-add-new-feature`）。
+- 大きな設計変更や、依頼されていない仕様拡張が必要になりそうなときは、実装やPR作成の
+  前に手を止め、提案としてユーザーに報告する。
+- モバイルアプリでは、環境が許し、変更内容が実機確認を要するものなら、実機に
+  インストールして確認する。
 
-Unless the repository specifies another title format, set the PR title to
-`Issue #<number> <summary>` when the Issue number is known (for example,
-`Issue #1 音声ボタンの追加`). Do not invent an Issue number.
+リポジトリで別のタイトル形式が指定されていない限り、Issue番号が分かっているPRの
+タイトルは `Issue #<number> <summary>` にする（例: `Issue #1 音声ボタンの追加`）。
+Issue番号を推測して書かない。
 
-If the user asks to actually create the PR and a GitHub tool or `gh` is available, create it after preparing the title and body. If the user asks only for a draft, return the Markdown body without creating anything.
+実際にPRを作るよう頼まれていて、GitHubツールか `gh` が使えるなら、タイトルと本文を
+用意したうえで作成する。下書きだけを頼まれている場合は、何も作らずMarkdownの本文を返す。
 
-Never merge the PR. The user performs the merge.
+PRのマージは絶対にしない。マージはMisaが行う。

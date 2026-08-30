@@ -3,42 +3,43 @@ name: misa-gh-issue
 description: Draft, create, or update GitHub Issues using repository-specific rules and templates when present, otherwise Misa's template. Also investigate repository evidence for refactoring or cleanup Issue proposals. Use for Issue作成・起票・更新, 改善Issue, 技術的負債, 未使用コード, performance, or app-size Issue requests; do not implement the proposed refactor.
 ---
 
-# GitHub Issue
+# GitHub Issueの作成
 
 ## Workflow
 
-Before drafting or creating the Issue:
+Issueを書き始める前に:
 
-1. Identify the target repository.
-2. Read all applicable repository instructions, including `AGENTS.md` and
-   `CLAUDE.md`, plus relevant contribution guidance and Issue templates such as
-   `CONTRIBUTING.md` and `.github/ISSUE_TEMPLATE/` when present.
-3. Follow explicit instructions from the current user first, then the target
-   repository's rules and templates. Repository-specific guidance overrides this
-   skill's default format.
+1. 対象リポジトリを特定する。
+2. そのリポジトリの指示を全部読む。`AGENTS.md` と `CLAUDE.md` に加えて、
+   `CONTRIBUTING.md` や `.github/ISSUE_TEMPLATE/` があればコントリビューション
+   ガイドとIssueテンプレートも読む。
+3. 優先順位は、ユーザーからの明示的な指示 → 対象リポジトリのルールとテンプレート。
+   リポジトリ固有の指定は、このスキルの既定フォーマットより優先する。
 
-If the repository has an applicable Issue template, use its sections and
-requirements. Otherwise, read `references/ai-task-issue.md` and use Misa's
-default template.
+リポジトリに使えるIssueテンプレートがあれば、そのセクション構成と要求事項に従う。
+無ければ `references/ai-task-issue.md` を読み、Misaの既定テンプレートを使う。
 
-For a refactoring, cleanup, performance, or app-size investigation whose requested
-outcome is an Issue, also read `references/refactor-investigation.md`. Investigate
-first and stop after drafting or creating the Issue; do not implement it.
+リファクタリング・不要コード削除・パフォーマンス・アプリサイズの調査で、成果物として
+Issueを求められている場合は、`references/refactor-investigation.md` も読む。先に調査し、
+Issueを書く（または起票する）ところで止める。実装はしない。
 
-### Misa's default template
+### Misaの既定テンプレート
 
-When the repository has no applicable Issue template, use these body sections
-in the same order:
+リポジトリに使えるIssueテンプレートが無いときは、本文をこの順のセクションで構成する:
 
 - `目的`
 - `やること`
 - `やらないこと`
 - `完了条件`
 
-Use the frontmatter in `references/ai-task-issue.md` only as template metadata, not as Issue body text. Set the Issue title from the user's actual task.
+`references/ai-task-issue.md` のフロントマターはテンプレートのメタデータであって、
+Issue本文には含めない。Issueのタイトルは、ユーザーの実際のタスクから付ける。
 
-Fill comments and placeholders with concrete, concise Japanese. Remove HTML comments from the final Issue body. If `やらないこと` has no entries, write `なし`.
+コメントとプレースホルダは、具体的で簡潔な日本語で埋める。最終的なIssue本文から
+HTMLコメントは削除する。`やらないこと` に書くことが無ければ `なし` と書く。
 
-Keep the default completion checklist unless the user asks for different acceptance criteria; add task-specific checks only when they clarify done-ness.
+完了条件の既定チェックリストは、ユーザーから別の受け入れ条件を指定されない限り残す。
+タスク固有のチェックは、完了の判定が明確になる場合だけ足す。
 
-If the user asks to actually create the Issue and a GitHub tool or `gh` is available, create it after preparing the title and body. If the user asks only for a draft, return the Markdown body without creating anything.
+実際に起票するよう頼まれていて、GitHubツールか `gh` が使えるなら、タイトルと本文を
+用意したうえで起票する。下書きだけを頼まれている場合は、何も作らずMarkdownの本文を返す。

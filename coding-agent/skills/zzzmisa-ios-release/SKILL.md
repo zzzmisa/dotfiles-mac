@@ -3,7 +3,7 @@ name: zzzmisa-ios-release
 description: Reconcile, prepare, or submit an iOS App Store release by repairing missing GitHub tags/releases after ASC publication, verifying ASC/Git state, updating versions and store assets, and uploading builds. Use for 週次リリース準備, 公開後処理, タグ・GitHub Release作成, ASCアップロード, metadata sync, or 審査提出; submit for review only on explicit instruction.
 ---
 
-# iOS App Store Release
+# iOS App Storeリリース
 
 Misaの個人開発iOSアプリのリリースフロー。プロジェクト固有の手順（fastlaneレーン名・
 素材の作り方など）は各リポジトリの `docs/app-store-fastlane.md` と `promo/README.md` を
@@ -14,11 +14,11 @@ Misaの個人開発iOSアプリのリリースフロー。プロジェクト固�
 `zzzmisa-install-ios` の TestFlight リファレンスを使う**（バージョンバンプ・ストア素材・
 タグ・審査提出を伴わない確認用ビルド）。
 
-Read references only for the step being performed:
+実施するステップに対応するリファレンスだけを読む:
 
-- Archive, export, or binary upload: [references/build-upload.md](references/build-upload.md)
-- Metadata, screenshot, or preview sync: [references/store-sync.md](references/store-sync.md)
-- Review submission or cancellation: [references/review-submission.md](references/review-submission.md)
+- アーカイブ・エクスポート・バイナリのアップロード: [references/build-upload.md](references/build-upload.md)
+- メタデータ・スクリーンショット・プレビューの同期: [references/store-sync.md](references/store-sync.md)
+- 審査提出・提出の取り消し: [references/review-submission.md](references/review-submission.md)
 
 リリース対象の判定を始める前に、`scripts/asc_release_state.rb` でASC上の公開済み版・
 作業中バージョン・VALIDビルドを確認し、GitHubのタグ・Releaseと照合する。

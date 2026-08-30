@@ -3,75 +3,72 @@ name: zzzmisa-new-app
 description: Create or align a Flutter or Swift mobile app to Misa's offline, buy-once-IAP standard with docs, localization, design tokens, settings, tests, privacy, and fastlane. Use for 新規アプリ作成, 雛形・初期設定, or bringing an existing app up to the standard.
 ---
 
-# New App Scaffold
+# 新規アプリの雛形
 
-Set up a new app project so it starts with the structures Misa's existing apps
-(animal-vision-explorer, chibireco, quiz-apps) have in common.
+Misaの既存アプリ（animal-vision-explorer、chibireco、quiz-apps）に共通する構造を、
+新しいアプリでも最初から備えた状態にする。
 
-Read [references/standard-components.md](references/standard-components.md) for the
-concrete conventions (docs, localization, settings menu, URLs, policies) and
-[references/fastlane-setup.md](references/fastlane-setup.md) for the fastlane files.
+具体的な規約（ドキュメント、多言語対応、設定メニュー、URL、方針）は
+[references/standard-components.md](references/standard-components.md) を、
+fastlaneのファイル構成は [references/fastlane-setup.md](references/fastlane-setup.md) を読む。
 
-## Scope Check First
+## 先に適用範囲を確認する
 
-- If the new app is part of the quiz series, do NOT use this skill's scaffold;
-  follow `tools/new_app.md` in the quiz-apps monorepo (`~/mySources/confusing-hiragana`).
-- Otherwise continue here.
+- クイズシリーズの新作なら、このスキルの雛形は使わない。quiz-appsモノレポ
+  （`~/mySources/confusing-hiragana`）の `tools/new_app.md` に従う。
+- それ以外はこのまま進める。
 
-## Inputs to Confirm
+## 確認する入力
 
-For an existing app, discover these values from the repository first. Ask only for
-missing choices that materially affect the scaffold or alignment:
+既存アプリの場合は、まずリポジトリから値を読み取る。雛形や既存構成の是正に実質的な
+影響がある未確定の選択だけを聞く:
 
-1. App name (Japanese and English; zh-Hans optional).
-2. Project name: lowercase ASCII, becomes the Bundle ID `com.zzzmisa.<projectname>`.
-3. Platform: Flutter by default; Swift/Xcode when the app depends on native-heavy
-   features (camera pipelines, Core Image, multi-cam, etc.).
-4. Target audience (kids/family vs general) — decides which privacy policy URL to use.
+1. アプリ名（日本語と英語。zh-Hansは任意）。
+2. プロジェクト名: 小文字ASCII。バンドルIDは `com.zzzmisa.<projectname>` になる。
+3. プラットフォーム: 既定はFlutter。ネイティブ依存の強い機能（カメラパイプライン、
+   Core Image、マルチカム等）が必要ならSwift/Xcode。
+4. 対象ユーザー（キッズ・ファミリー向けか一般向けか） — どのプライバシーポリシーURLを
+   使うかがこれで決まる。
 
 ## Workflow
 
-For an existing app, inventory the gap against these steps and skip project creation.
+既存アプリの場合は、以下の各ステップに対して現状とのギャップを洗い出し、プロジェクト
+作成の手順は飛ばす。
 
-1. **Create the project when it is new.**
+1. **新規ならプロジェクトを作成する。**
    - Flutter: `flutter create --platforms=ios --org com.zzzmisa --project-name <projectname> <app_dir>`
-   - Swift: create the Xcode project with Bundle ID `com.zzzmisa.<projectname>`,
-     add `PrivacyInfo.xcprivacy`, and group code by feature (`Features/<Name>/`, `Core/`, `Resources/`).
-   - Both platforms: declare encryption compliance in Info.plist so App Store Connect
-     skips the export-compliance question — set `ITSAppUsesNonExemptEncryption` to `false`
-     (Flutter: `ios/Runner/Info.plist`; Xcode with a generated Info.plist: build setting
-     `INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO`).
-2. **Add the standard documents** (`AGENTS.md`, `CLAUDE.md`, `docs/product.md`,
-   `docs/design.md`, and `README.md`)
-   as skeletons per the reference file. Store submission info is NOT a separate
-   document; it lives in fastlane (step 7).
-3. **Set up localization** (Japanese primary + English; zh-Hans optional) per the
-   reference file, including the in-app language picker requirement.
-4. **Set up the design token layer** (colors, spacing, radii, shadows, text styles as
-   named constants in one theme directory) per the reference file, before building
-   any screens.
-5. **Build the settings screen** with the standard menu sections and URLs from the
-   reference file, wired to real implementations (version from package info, etc.),
-   using only design tokens for styling.
-6. **Apply the standard policies**: no backend, fully offline, no analytics/tracking/ads,
-   buy-once IAP prepared behind a flag, local persistence (shared_preferences / UserDefaults),
-   and record first-install date/version locally (Keychain on iOS) for future
-   free-tier grandfathering.
-7. **Set up fastlane** per [references/fastlane-setup.md](references/fastlane-setup.md),
-   including `docs/app-store-fastlane.md`, metadata skeletons for each locale, and the
-   Deliverfile fields that replace APP_STORE_SUBMISSION.md (categories, age rating,
-   review information).
-8. **Finish**: app icon generation (`flutter_launcher_icons` on Flutter), a test target
-   with at least one meaningful data-driven test (`test/` on Flutter, `<App>Tests` on Xcode),
-   a smoke check that the project builds, and a report listing the human-only follow-ups
-   (App Store Connect registration, icon/illustration assets, store metadata text).
+   - Swift: バンドルID `com.zzzmisa.<projectname>` でXcodeプロジェクトを作り、
+     `PrivacyInfo.xcprivacy` を追加し、コードを機能単位でまとめる（`Features/<Name>/`、`Core/`、`Resources/`）。
+   - 両方共通: App Store Connectで輸出コンプライアンスを聞かれないよう、Info.plistで
+     暗号化コンプライアンスを宣言する。`ITSAppUsesNonExemptEncryption` を `false` にする
+     （Flutterは `ios/Runner/Info.plist`。Info.plistを生成するXcodeプロジェクトはビルド設定
+     `INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO`）。
+2. **標準ドキュメントを追加する**（`AGENTS.md`、`CLAUDE.md`、`docs/product.md`、
+   `docs/design.md`、`README.md`）。リファレンスに沿って骨組みだけ作る。ストア入稿情報は
+   独立したドキュメントにしない。fastlane側に置く（ステップ7）。
+3. **多言語対応を用意する**（日本語を主、英語を副。zh-Hansは任意）。リファレンスに従い、
+   アプリ内の言語切り替えも必須要件として入れる。
+4. **デザイントークン層を用意する**（色・余白・角丸・影・テキストスタイルを、1つのテーマ
+   ディレクトリに名前付き定数として置く）。リファレンスに従い、画面を作り始める前にやる。
+5. **設定画面を作る**。リファレンスの標準メニュー構成とURLを使い、実装に実際に配線する
+   （バージョンはpackage infoから取得する等）。スタイルはデザイントークンだけで組む。
+6. **標準の方針を適用する**: バックエンドなし、完全オフライン、解析・トラッキング・広告
+   なし、買い切りIAPをフラグの裏に準備、ローカル永続化（shared_preferences / UserDefaults）、
+   将来の無料枠グランドファザリングのために初回インストール日とバージョンをローカルに記録
+   （iOSはKeychain）。
+7. **fastlaneを用意する**。[references/fastlane-setup.md](references/fastlane-setup.md) に従い、
+   `docs/app-store-fastlane.md`、ロケールごとのメタデータの雛形、APP_STORE_SUBMISSION.mdの
+   代わりになるDeliverfileの項目（カテゴリ、年齢レーティング、審査情報）まで用意する。
+8. **仕上げ**: アプリアイコンの生成（Flutterは `flutter_launcher_icons`）、意味のある
+   データ駆動テストを最低1つ持つテストターゲット（Flutterは `test/`、Xcodeは `<App>Tests`）、
+   ビルドが通ることのスモークチェック、そして人手でしかできない残作業の一覧
+   （App Store Connectでのアプリ登録、アイコン・イラスト素材、ストアメタデータの文言）を報告する。
 
 ## Guardrails
 
-- Do not invent store metadata text, pricing, or category choices; leave clear
-  placeholders and list them as follow-ups.
-- Do not commit secrets: no `.p8` keys, no `.env`, no App Store Connect credentials.
-- Reuse the standard URLs and conventions from the reference file instead of
-  inventing new ones; ask before deviating.
-- Keep everything working offline; do not add backend dependencies or analytics/tracking.
-- Verification on simulators/devices is covered by the `zzzmisa-install-*` skills.
+- ストアメタデータの文言、価格、カテゴリの選択を勝手に作らない。分かりやすい
+  プレースホルダを置き、残作業として報告する。
+- 秘密情報をコミットしない。`.p8` キー、`.env`、App Store Connectの認証情報は入れない。
+- 新しい規約を発明せず、リファレンスの標準URLと規約を再利用する。逸脱するときは先に聞く。
+- 全部オフラインで動く状態を保つ。バックエンド依存や解析・トラッキングを足さない。
+- シミュレータ・実機での動作確認は `zzzmisa-install-*` スキルの担当。

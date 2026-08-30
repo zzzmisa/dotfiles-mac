@@ -3,52 +3,50 @@ name: misa-merge-cleanup
 description: Safely remove local branches and worktrees only after confirming their PRs are merged. Use when told a PR was merged, asked to 掃除・後片付け, or before a new task when stale worktrees may exist.
 ---
 
-# Merge Cleanup
+# マージ後の後片付け
 
-Remove local branches and worktrees whose PRs are already merged, without ever
-deleting unmerged work. When in doubt, report instead of delete.
+PRが既にマージされたローカルブランチとworktreeを削除する。未マージの作業は絶対に
+消さない。判断がつかないものは、削除せず報告する。
 
 ## Workflow
 
-1. **Return to the default branch and update it.**
+1. **デフォルトブランチに戻して更新する。**
    ```
-   git switch main   # or master — check the repo's default branch
+   git switch main   # main か master か、リポジトリのデフォルトブランチを確認する
    git pull
    ```
-2. **Run the mechanical first pass.**
+2. **機械的な一次処理を流す。**
    ```
    "$HOME/dotfiles-mac/bin/common/misa-delete-merged-local-branches"
    ```
-   This runs `git fetch --prune`, then deletes local branches Git can prove
-   are merged (`git branch --merged`), removing each branch's worktree first.
-   Protected branches (`main`, `master`, `develop`, `dev`, current branch) are
-   skipped, and worktrees that fail to remove (e.g. uncommitted changes) are
-   skipped with their branches. Pass a base branch argument if the repo's
-   default is not `main`.
-3. **Handle squash-merged branches** — the script cannot detect these. For
-   each remaining branch except the protected ones:
-   - Verify with:
+   `git fetch --prune` を実行したうえで、Gitがマージ済みと判定できるブランチ
+   （`git branch --merged`）を、worktreeを先に削除してからブランチごと削除する。
+   保護ブランチ（`main`、`master`、`develop`、`dev`、現在のブランチ）はスキップし、
+   worktreeの削除に失敗したもの（未コミットの変更がある等）はブランチごとスキップする。
+   リポジトリのデフォルトが `main` でない場合は、ベースブランチを引数で渡す。
+3. **squashマージされたブランチを処理する** — スクリプトはこれを検出できない。
+   保護ブランチを除く残りのブランチそれぞれについて:
+   - 状態を確認する:
      ```
      gh pr view <branch> --json state,mergedAt
      ```
-   - Only when the PR state is `MERGED`: if the branch has a worktree, check
-     its `git status` first — if it has uncommitted changes, do NOT remove it;
-     report it and skip. Otherwise `git worktree remove <path>`, then delete
-     the branch with `git branch -D <branch>`.
-   - A branch with no PR, an open PR, or unpushed commits is NOT deleted;
-     list it in the report instead.
-4. **Prune worktree metadata.**
+   - PRの状態が `MERGED` のときだけ処理する。worktreeがある場合は先に `git status` を
+     確認し、未コミットの変更があれば削除しない（報告してスキップ）。無ければ
+     `git worktree remove <path>` してから `git branch -D <branch>` で削除する。
+   - PRが無いブランチ、オープンなPRのブランチ、未pushのコミットがあるブランチは
+     削除しない。報告に一覧として載せる。
+4. **worktreeのメタデータを掃除する。**
    ```
    git worktree prune
    ```
-5. **Report**: what was deleted (branches, worktrees), and what was kept with
-   the reason (uncommitted changes, open PR, no PR found).
+5. **報告する**: 削除したもの（ブランチ・worktree）と、残したものとその理由
+   （未コミットの変更あり、PRがオープン、PRが見つからない）。
 
 ## Guardrails
 
-- Never delete a branch or worktree whose merge status cannot be positively
-  confirmed; keeping garbage is cheaper than losing work.
-- Never use `git branch -D` without confirming `MERGED` via `gh pr view`.
-- Do not touch remote branches; GitHub's "delete branch on merge" and
-  `git fetch --prune` handle those.
-- Do not delete stashes or uncommitted changes; surface them in the report.
+- マージ済みだと確証が取れないブランチ・worktreeは削除しない。ゴミが残るコストより、
+  作業を失うコストのほうが高い。
+- `gh pr view` で `MERGED` を確認せずに `git branch -D` を使わない。
+- リモートブランチには触らない。GitHubの「マージ時にブランチを削除」と
+  `git fetch --prune` が処理する。
+- stashや未コミットの変更は削除しない。報告に載せて可視化する。
