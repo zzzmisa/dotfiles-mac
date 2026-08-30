@@ -1,23 +1,23 @@
-# Physical iOS Devices
+# iOS実機
 
-## Targets
+## ターゲット
 
-| Purpose | Device name |
+| 用途 | デバイス名 |
 | --- | --- |
-| Phone verification | `MisaのiPhone` |
-| iPad verification | `ミサのiPad` |
+| iPhoneでの確認 | `MisaのiPhone` |
+| iPadでの確認 | `ミサのiPad` |
 
-Use the exact device name throughout the build and install workflow.
+ビルドからインストールまで、デバイス名は常にこの表記どおりに使う。
 
 ## Flutter
 
-1. Build the Release app:
+1. Releaseビルドを作る:
 
    ```bash
    flutter build ios --release
    ```
 
-2. After a successful build, install it:
+2. ビルドが成功したらインストールする:
 
    ```bash
    flutter install -d "<device-name>" --release
@@ -25,8 +25,9 @@ Use the exact device name throughout the build and install workflow.
 
 ## Swift/Xcode
 
-1. Identify the project/workspace and scheme. Use `xcodebuild -list` when unknown.
-2. Build Release for the selected device. Use `-workspace` instead of `-project` when applicable:
+1. プロジェクト/ワークスペースとスキームを特定する。分からなければ `xcodebuild -list` を使う。
+2. 対象デバイス向けにReleaseでビルドする。ワークスペースの場合は `-project` ではなく
+   `-workspace` を使う:
 
    ```bash
    xcodebuild build -project <Name>.xcodeproj -scheme <Scheme> \
@@ -34,11 +35,11 @@ Use the exact device name throughout the build and install workflow.
      -derivedDataPath build/DerivedData
    ```
 
-3. After a successful build, install the app:
+3. ビルドが成功したらインストールする:
 
    ```bash
    xcrun devicectl device install app --device "<device-name>" \
      build/DerivedData/Build/Products/Release-iphoneos/<AppName>.app
    ```
 
-If a UUID is required, resolve it with `xcrun devicectl list devices`; do not guess it.
+UUIDが必要な場合は `xcrun devicectl list devices` で調べる。推測で書かない。

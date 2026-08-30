@@ -1,8 +1,8 @@
-# iOS Debugging
+# iOSのデバッグ
 
-## Simulator permissions
+## シミュレータの権限
 
-Script TCC state to reproduce permission paths:
+TCCの状態をスクリプトで操作し、権限まわりの経路を再現する:
 
 ```bash
 xcrun simctl privacy <UDID> grant photos-add <bundle-id>
@@ -10,16 +10,19 @@ xcrun simctl privacy <UDID> revoke photos-add <bundle-id>
 xcrun simctl privacy <UDID> reset photos-add <bundle-id>
 ```
 
-Services such as `photos`, `camera`, `microphone`, and `location` follow the same form. Use `reset` to make the permission prompt appear again.
+`photos`、`camera`、`microphone`、`location` などのサービスも同じ形式で指定する。
+権限ダイアログをもう一度出したいときは `reset` を使う。
 
-## Physical-device console
+## 実機のコンソール
 
-`MisaのiPhone` is an iPhone 17. Launch an installed app with its console attached when diagnostic output is needed:
+`MisaのiPhone` はiPhone 17。診断出力が必要なときは、インストール済みのアプリを
+コンソールを繋いだ状態で起動する:
 
 ```bash
 xcrun devicectl device process launch --console --device "MisaのiPhone" <bundle-id>
 ```
 
-Prefer this to `log collect --device`, which requires `sudo`.
+`log collect --device` は `sudo` が必要なので、こちらを優先する。
 
-On a physical device, iOS does not show a permission prompt again after denial. Check Settings first and verify that the app provides an Open Settings path for denied permissions.
+実機では、一度拒否した権限のダイアログはiOSが二度と出さない。まず設定アプリを確認し、
+拒否された権限に対してアプリが「設定を開く」導線を用意しているかも確認する。

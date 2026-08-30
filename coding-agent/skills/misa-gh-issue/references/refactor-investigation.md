@@ -1,19 +1,21 @@
-# Refactoring Issue Investigation
+# リファクタリングIssueの調査
 
-Investigate the repository and turn evidence into a concrete Issue. Do not implement the proposal.
+リポジトリを調査し、根拠のある事実を具体的なIssueに落とす。提案の実装はしない。
 
-## Evidence
+## 根拠の集め方
 
-- Search code references with `rg`.
-- Inspect manifests, dependencies, assets, generated files, tests, and build settings.
-- Run cheap project-native analysis commands when useful.
-- Cite concrete paths, symbols, assets, or dependencies.
+- `rg` でコードの参照箇所を検索する。
+- マニフェスト、依存関係、アセット、生成ファイル、テスト、ビルド設定を調べる。
+- 有用なら、そのプロジェクトで標準的な軽量の解析コマンドを実行する。
+- 具体的なパス、シンボル、アセット、依存関係を明記する。
 
-## Candidate areas
+## 候補になる領域
 
-- Unused code, files, assets, feature flags, or build settings.
-- Legacy code, technical debt, unclear ownership, or duplicate implementations.
-- Unnecessary processing, readability problems, and missing tests or documentation.
-- Performance and app-size improvements, including oversized assets and unnecessary dependencies.
+- 未使用のコード、ファイル、アセット、フィーチャーフラグ、ビルド設定。
+- レガシーコード、技術的負債、責務が不明瞭な箇所、重複した実装。
+- 不要な処理、可読性の問題、不足しているテストやドキュメント。
+- パフォーマンスとアプリサイズの改善（サイズ過大なアセット、不要な依存関係を含む）。
 
-Prefer small follow-up tasks over broad rewrites. State uncertainty when runtime or product confirmation is needed, and avoid generic recommendations without repository evidence.
+大規模な書き直しより、小さく分割したフォローアップタスクを優先する。実行時の挙動や
+プロダクト面での確認が必要な点は、不確かであることを明記する。リポジトリの根拠を
+伴わない一般論の提案は書かない。

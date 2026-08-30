@@ -1,41 +1,42 @@
-# TestFlight (remote verification)
+# TestFlight（リモートでの動作確認）
 
-Use this path when Misa cannot build to a physical device — away from the Mac,
-no cable, or verifying from another location. The goal is **verification, not a
-release**: no store metadata, no release notes, no tag, no review submission.
+Misaが実機にビルドできないとき（Macから離れている、ケーブルが無い、別の場所から
+確認したい）に使う経路。目的は**動作確認であってリリースではない**。ストアメタデータ、
+リリースノート、タグ、審査提出のいずれも扱わない。
 
-For an actual App Store release, use `zzzmisa-ios-release` instead. That skill
-owns version bumps, store assets, tags, and submission.
+実際のApp Storeリリースは `zzzmisa-ios-release` の担当。バージョンバンプ、ストア素材、
+タグ、提出はあちらが持つ。
 
-## 1. Preflight — check before building
+## 1. 事前確認 — ビルド前にチェックする
 
-A TestFlight upload fails late and slowly when the app is not registered, so
-verify all of the following first and stop early if any is missing.
+アプリが登録されていないと、TestFlightへのアップロードは時間をかけたうえで最後に
+失敗する。次を全部先に確認し、1つでも欠けていたら早い段階で止まる。
 
 ```bash
 source ~/.appstoreconnect/asc.env   # ASC_KEY_ID / ASC_ISSUER_ID / ASC_KEY_FILEPATH
 security show-keychain-info ~/Library/Keychains/login.keychain-db
 ```
 
-**Check the keychain first.** When Misa is away, the Mac is often locked, which
-locks the login keychain. Everything then fails far apart from the real cause:
+**まずキーチェーンを確認する。** Misaが外出しているときはMacがロックされていることが
+多く、そうするとloginキーチェーンもロックされる。すると原因から遠く離れた場所で
+次々に失敗する:
 
-| Symptom | Command |
+| 症状 | コマンド |
 | --- | --- |
 | `The user name or passphrase you entered is not correct` | `security show-keychain-info` |
-| `errSecInternalComponent` on `CodeSign` | `xcodebuild archive` |
-| `could not read Username` / keychain `-25293` | `git fetch` |
+| `CodeSign` で `errSecInternalComponent` | `xcodebuild archive` |
+| `could not read Username` / キーチェーンの `-25293` | `git fetch` |
 | `The token in default is invalid` | `gh auth status` |
 
-`security find-identity -p codesigning -v` still lists the identities while
-locked, so a present Apple Distribution identity does not mean signing will
-work. Ask Misa to unlock the Mac, or to run
-`security unlock-keychain ~/Library/Keychains/login.keychain-db` themselves.
-**Never handle Misa's login password.** Stop here until it is unlocked; nothing
-downstream can succeed.
+ロック中でも `security find-identity -p codesigning -v` は証明書を一覧するので、
+Apple Distribution証明書が見えることは署名が通る保証にならない。Misaにロック解除を
+依頼するか、Misa自身に
+`security unlock-keychain ~/Library/Keychains/login.keychain-db` を実行してもらう。
+**Misaのログインパスワードは絶対に扱わない。** 解除されるまでここで止まる。この先は
+何をやっても成功しない。
 
-Confirm both the Developer Portal Bundle ID and the App Store Connect app
-record exist for the target bundle ID:
+対象のバンドルIDについて、Developer PortalのBundle IDと、App Store Connectの
+アプリレコードの両方が存在することを確認する:
 
 ```bash
 bundle exec ruby -e '
@@ -48,116 +49,111 @@ puts "asc app record:   #{!Spaceship::ConnectAPI::App.find(id).nil?}"
 '
 ```
 
-- **Both true** → continue.
-- **Either false** → stop and ask Misa to create them in the Developer Portal /
-  App Store Connect UI. **Do not create a Bundle ID or an app record yourself**:
-  a Bundle ID cannot be deleted once used, and the app record fixes the name,
-  SKU, and primary language. Report exactly which one is missing.
-- The API key may also be app-restricted. When the portal Bundle ID exists but
-  the ASC record is invisible, say both are possible causes rather than
-  asserting the record is missing.
+- **両方 true** → 続行する。
+- **どちらかが false** → 止まって、Developer Portal / App Store ConnectのUIで作成する
+  ようMisaに依頼する。**Bundle IDやアプリレコードを自分で作らない**。Bundle IDは一度
+  使うと削除できず、アプリレコードは名前・SKU・主要言語を固定してしまう。どちらが
+  欠けているかを正確に報告する。
+- APIキーが特定アプリに限定されている可能性もある。PortalにBundle IDがあるのにASCの
+  レコードが見えない場合は、レコードが無いと断定せず、両方の可能性があると伝える。
 
-### Borrowing an existing app record
+### 既存のアプリレコードを借りる
 
-When the app has no record yet and the goal is only to look at the build, Misa
-may approve uploading under an app record that already exists — the placeholder
-`com.zzzmisa.example` is there for this. **Ask before doing it**; do not pick a
-substitute bundle ID on your own, and never borrow the record of a shipping app.
+アプリレコードがまだ無く、目的がビルドを見ることだけなら、既存のアプリレコードで
+アップロードすることをMisaが許可する場合がある。プレースホルダの
+`com.zzzmisa.example` はそのために用意してある。**やる前に必ず聞く。** 代わりの
+バンドルIDを勝手に選ばない。公開中のアプリのレコードは絶対に借りない。
 
-Patch `PRODUCT_BUNDLE_IDENTIFIER` in the scratch worktree's `project.yml` (not
-on the `xcodebuild` command line, which would apply to every target) and confirm
-the diff touches only the intended target. Never commit it. The installed app
-still shows its own `CFBundleDisplayName`, so the build is recognisable on the
-device even though TestFlight lists it under the borrowed record's name.
+`PRODUCT_BUNDLE_IDENTIFIER` は、使い捨てworktreeの `project.yml` 側でパッチする
+（`xcodebuild` のコマンドラインで指定すると全ターゲットに適用されてしまう）。差分が
+意図したターゲットだけに当たっていることを確認する。絶対にコミットしない。インストール
+されたアプリは自分の `CFBundleDisplayName` を表示し続けるので、TestFlight上では借りた
+レコードの名前で並んでいても、デバイス上では見分けがつく。
 
-### App icon
+### アプリアイコン
 
-Uploads are rejected without a 1024×1024 marketing icon, and a new app target
-often has `ASSETCATALOG_COMPILER_APPICON_NAME: ""` until the real icon is drawn.
-Generate a throwaway placeholder into the scratch worktree's asset catalog
-(single `universal` 1024×1024 entry) and set the build setting to it. Never
-commit the placeholder, and tell Misa the icon in the build is not real.
+1024×1024のマーケティングアイコンが無いとアップロードは弾かれる。新規アプリの
+ターゲットは、実物のアイコンを描くまで `ASSETCATALOG_COMPILER_APPICON_NAME: ""` の
+ままになっていることが多い。使い捨てのプレースホルダを生成して、使い捨てworktreeの
+アセットカタログに入れ（`universal` の1024×1024エントリ1つ）、ビルド設定をそれに向ける。
+プレースホルダはコミットしない。ビルドに入っているアイコンは本物ではないとMisaに伝える。
 
-Also confirm the App Store Connect agreements (contracts, tax, banking) are not
-blocking, since TestFlight external testing requires them. Internal testing does
-not.
+App Store Connectの各種契約（契約・税務・銀行情報）がブロックしていないことも確認する。
+TestFlightの外部テストにはこれが必要（内部テストには不要）。
 
-## 2. Build the latest main, not the working branch
+## 2. 作業ブランチではなく最新のmainからビルドする
 
-Verification builds must come from `main`, the same rule as a release build.
+確認用ビルドも `main` から作る。リリースビルドと同じルール。
 
 ```bash
 git fetch origin --prune
 git log --oneline -1 origin/main
 ```
 
-When `git fetch` or `gh auth status` fails, say so and report which commit the
-build actually came from. **Do not claim the build is "the latest main" from a
-stale local ref.**
+`git fetch` や `gh auth status` が失敗したときは、そのことを伝え、ビルドが実際には
+どのコミットから作られたかを報告する。**古いローカル参照を根拠に「最新のmain」だと
+主張しない。**
 
-Build from a throwaway worktree so the main checkout and any in-progress work
-stay untouched:
+メインのチェックアウトと作業中の変更に触れないよう、使い捨てのworktreeからビルドする:
 
 ```bash
 git worktree add <scratch-dir>/tf-main origin/main --detach
 ```
 
-Regenerate the project first when the repository uses XcodeGen (`project.yml`).
+XcodeGen（`project.yml`）を使っているリポジトリでは、先にプロジェクトを再生成する。
 
-## 3. Choose a build number without committing a bump
+## 3. バンプをコミットせずにビルド番号を決める
 
-TestFlight builds share the build-number space with release builds. Pick a
-number greater than every build already uploaded (`highest_valid_build` from
-`zzzmisa-ios-release/scripts/asc_release_state.rb`), and pass it on the command
-line instead of committing a version bump for a throwaway build:
+TestFlightのビルドは、リリースビルドとビルド番号の空間を共有する。既にアップロード済みの
+どのビルドよりも大きい番号を選び（`zzzmisa-ios-release/scripts/asc_release_state.rb` の
+`highest_valid_build`）、使い捨てビルドのためにバージョンバンプをコミットするのではなく、
+コマンドラインで渡す:
 
 ```bash
 xcodebuild archive ... CURRENT_PROJECT_VERSION=<N>
 ```
 
-Tell Misa which number was consumed, so the next release build continues the
-sequence from there.
+次のリリースビルドがその続きから採番できるよう、どの番号を消費したかをMisaに伝える。
 
-## 4. Archive, export, upload
+## 4. アーカイブ・エクスポート・アップロード
 
-Follow `zzzmisa-ios-release/references/build-upload.md` for the archive, export,
-and upload commands, including the manual-signing fallback when cloud signing is
-refused. Only these differ for a verification build:
+アーカイブ、エクスポート、アップロードのコマンドは
+`zzzmisa-ios-release/references/build-upload.md` に従う。クラウド署名が拒否された
+ときの手動署名フォールバックも同様。確認用ビルドで違うのは次の点だけ:
 
-- Pass `CURRENT_PROJECT_VERSION=<N>` on the `xcodebuild archive` command line
-  rather than committing a version bump (see step 3).
-- Write the `ExportOptions.plist` into the scratch directory when the repository
-  has none, and do not commit it: `method` = `app-store-connect`,
-  `destination` = `export`, the team ID.
-- A `visionOS` / `UIRequiredDeviceCapabilities: [arkit]` warning (90984) from
-  `altool` is expected for an ARKit app and does not block the upload.
+- バージョンバンプをコミットする代わりに、`xcodebuild archive` のコマンドラインで
+  `CURRENT_PROJECT_VERSION=<N>` を渡す（ステップ3）。
+- リポジトリに `ExportOptions.plist` が無い場合は、スクラッチディレクトリに書き、
+  コミットしない。`method` = `app-store-connect`、`destination` = `export`、team ID。
+- `altool` が出す `visionOS` / `UIRequiredDeviceCapabilities: [arkit]` の警告(90984)は、
+  ARKitアプリでは想定どおりで、アップロードは止まらない。
 
-## 5. Wait for processing, then distribute
+## 5. 処理の完了を待ってから配布する
 
-Upload processing takes several minutes. Poll until the build is `VALID`, then
-assign it to the internal tester group so it appears in TestFlight.
+アップロード後の処理には数分かかる。ビルドが `VALID` になるまでポーリングし、内部
+テスターグループに割り当ててTestFlightに出す。
 
-Internal testing needs the export-compliance answer. Setting
-`ITSAppUsesNonExemptEncryption` to `false` in the app's Info.plist avoids the
-per-build prompt; without it, answer it on the build in ASC.
+内部テストでも輸出コンプライアンスの回答が要る。アプリのInfo.plistで
+`ITSAppUsesNonExemptEncryption` を `false` にしておけばビルドごとの確認は出ない。
+設定していない場合はASC上でそのビルドに対して回答する。
 
-**Internal testers only.** External testing means a Beta App Review and is a
-public-facing step — do not start it without Misa's explicit instruction.
+**内部テスターのみ。** 外部テストはBeta App Reviewを伴う対外的な操作なので、Misaの
+明示的な指示なしに開始しない。
 
-## 6. Report
+## 6. 報告する
 
-Tell Misa:
+Misaに次を伝える:
 
-- the app, marketing version, and build number
-- the commit the build came from, and whether `main` was verified as up to date
-- that the build is on TestFlight and where to install it
-- what changed since the last build, so there is something specific to check
+- アプリ名、マーケティングバージョン、ビルド番号
+- ビルド元のコミットと、`main` が最新であることを確認できたかどうか
+- TestFlightに上がっていることと、どこからインストールするか
+- 前回のビルドからの変更点（確認すべき箇所が具体的に分かるように）
 
 ## Guardrails
 
-- Never submit for App Store review from this flow.
-- Never upload or change store metadata, screenshots, previews, or release
-  notes here — those belong to `zzzmisa-ios-release`.
-- Do not create tags or GitHub Releases for a verification build.
-- Do not create Bundle IDs or ASC app records; ask Misa to do it in the UI.
-- Do not upload a build made from a working branch while calling it `main`.
+- このフローからApp Storeの審査提出は絶対にしない。
+- ストアメタデータ、スクリーンショット、プレビュー、リリースノートをここで
+  アップロード・変更しない。`zzzmisa-ios-release` の担当。
+- 確認用ビルドにタグやGitHub Releaseを作らない。
+- Bundle IDやASCのアプリレコードを作らない。UIでの作成をMisaに依頼する。
+- 作業ブランチから作ったビルドを `main` だと言ってアップロードしない。

@@ -1,19 +1,20 @@
-# App Store Review Submission
+# App Store審査提出
 
-Read and execute this reference only after Misa explicitly asks to submit for review.
+このリファレンスは、Misaが明示的に審査提出を依頼したときだけ読み、実行する。
 
-## Pre-submission checklist
+## 提出前チェックリスト
 
-- [ ] Misa approved all user-visible release notes and changed store copy in chat.
-- [ ] The selected build is `VALID` and attached to the version draft.
-- [ ] `releaseType` is `MANUAL`; Misa performs the public release.
-- [ ] Unchanged IAPs are excluded. When an IAP changed, its `PREPARE_FOR_SUBMISSION` version and complete App Review Screenshot are included in the same submission.
-- [ ] `ITSAppUsesNonExemptEncryption = NO` is present when applicable.
-- [ ] Screenshot and preview counts, ordering, duplicates, and processing state are correct.
+- [ ] ユーザーの目に触れるリリースノートと、変更したストア文言を、チャットでMisaに承認してもらった。
+- [ ] 対象のビルドが `VALID` で、バージョンの下書きに紐付いている。
+- [ ] `releaseType` が `MANUAL` になっている。公開はMisaが行う。
+- [ ] 変更のないIAPを含めていない。IAPを変更した場合は、その `PREPARE_FOR_SUBMISSION` バージョンと完全なApp Review Screenshotを同じ提出に含めている。
+- [ ] 該当する場合、`ITSAppUsesNonExemptEncryption = NO` が入っている。
+- [ ] スクリーンショットとプレビューの枚数・順序・重複・処理状態が正しい。
 
-## Submit with Spaceship ConnectAPI
+## Spaceship ConnectAPIで提出する
 
-Set `ASC_APP_ID` and `ASC_APP_STORE_VERSION_ID`. Set `ASC_IAP_ID` only when an IAP version changed.
+`ASC_APP_ID` と `ASC_APP_STORE_VERSION_ID` を設定する。`ASC_IAP_ID` はIAPのバージョンを
+変更したときだけ設定する。
 
 ```ruby
 require "spaceship"
@@ -73,12 +74,12 @@ abort "Submission failed: #{submitted.state}" unless submitted.state == "WAITING
 puts "Submitted: #{submitted.state}"
 ```
 
-Do not silently omit a changed IAP. Pass `ASC_IAP_ID` only when that IAP changed;
-the script then requires exactly one editable IAP version and verifies
-its review item reaches `READY_FOR_REVIEW` before submitting.
+変更したIAPを黙って外さない。`ASC_IAP_ID` はそのIAPを変更したときだけ渡す。渡すと
+スクリプトは編集可能なIAPバージョンがちょうど1つあることを要求し、その審査アイテムが
+`READY_FOR_REVIEW` になることを確認してから提出する。
 
-## Cancellation and rejection
+## 提出の取り消しとリジェクト
 
-- Cancel with `submission.cancel_submission`. `DEVELOPER_REJECTED` after cancellation is normal and remains editable.
-- Accept both `PREPARE_FOR_SUBMISSION` and `DEVELOPER_REJECTED` when validating a corrected resubmission.
-- Read rejection details with `submission.latest_resolution_center_messages`, report the issue, then rerun the release flow after fixing it.
+- 取り消しは `submission.cancel_submission`。取り消し後に `DEVELOPER_REJECTED` になるのは正常で、編集可能なまま。
+- 修正して再提出するときの検証では、`PREPARE_FOR_SUBMISSION` と `DEVELOPER_REJECTED` の両方を有効な状態として扱う。
+- リジェクトの詳細は `submission.latest_resolution_center_messages` で読む。内容を報告し、修正してからリリースフローをやり直す。

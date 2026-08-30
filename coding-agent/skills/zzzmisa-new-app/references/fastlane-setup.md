@@ -1,31 +1,31 @@
-# fastlane Setup (App Store metadata upload)
+# fastlaneのセットアップ（App Storeメタデータのアップロード）
 
-Standard layout from animal-vision-explorer: fastlane is the source of truth for App
-Store Connect metadata, screenshots, categories, age rating, and review information
-(replacing the old APP_STORE_SUBMISSION.md). Binary upload and review submission stay
-manual, as do pricing, IAP product setup, and privacy labels.
+animal-vision-explorerで確立した標準構成。App Store Connectのメタデータ、スクリーン
+ショット、カテゴリ、年齢制限、審査情報は、fastlaneを正とする（旧APP_STORE_SUBMISSION.md
+の置き換え）。バイナリのアップロードと審査提出は手作業のまま。価格、IAP商品の登録、
+プライバシーラベルも手作業。
 
-## Files
+## ファイル構成
 
 ```
 fastlane/
   Appfile
   Fastfile
   Deliverfile
-  rating_config.json             # age rating answers (uploaded via app_rating_config_path)
+  rating_config.json             # 年齢制限の回答（app_rating_config_path でアップロード）
   metadata/{ja,en-US,zh-Hans}/   # description.txt, keywords.txt, name.txt,
                                  # promotional_text.txt, release_notes.txt, subtitle.txt
   screenshots/{ja,en-US,zh-Hans}/
-  previews/{ja,en-US,zh-Hans}/   # iphone.mp4 / ipad.mp4 (uploaded by a dedicated
-                                 # lane; deliver does not support app previews)
-docs/app-store-fastlane.md       # usage + required env vars + "Manual steps in
-                                 # App Store Connect" section (pricing, IAP products,
-                                 # privacy labels, review submission)
+  previews/{ja,en-US,zh-Hans}/   # iphone.mp4 / ipad.mp4（専用レーンでアップロード。
+                                 # deliverはApp Previewに対応していない）
+docs/app-store-fastlane.md       # 使い方＋必要な環境変数＋「App Store Connectでの
+                                 # 手作業の手順」節（価格、IAP商品、プライバシーラベル、
+                                 # 審査提出）
 ```
 
-`fastlane/` holds only what is uploaded to App Store Connect. The unedited recordings,
-screenshot originals, build scripts, and recipes that produce them live under `promo/` —
-see `zzzmisa-store-assets` for that layout and the naming rules.
+`fastlane/` にはApp Store Connectへアップロードするものだけを置く。それらを作るための
+未加工の録画、スクリーンショットの原本、ビルドスクリプト、レシピは `promo/` 配下に置く。
+配置と命名のルールは `zzzmisa-store-assets` を参照。
 
 ## Appfile
 
@@ -71,8 +71,8 @@ end
 
 ## Deliverfile
 
-Also carries the submission info that used to live in APP_STORE_SUBMISSION.md
-(categories, age rating, review info, copyright):
+APP_STORE_SUBMISSION.mdにあった申請情報（カテゴリ、年齢制限、審査情報、著作権表記）も
+ここが持つ:
 
 ```ruby
 app_identifier("com.zzzmisa.<projectname>")
@@ -80,13 +80,13 @@ app_identifier("com.zzzmisa.<projectname>")
 metadata_path("fastlane/metadata")
 screenshots_path("fastlane/screenshots")
 
-# --- 申請情報 (formerly APP_STORE_SUBMISSION.md) ---
+# --- 申請情報（旧APP_STORE_SUBMISSION.md） ---
 copyright("#{Time.now.year} zzzmisa")
-primary_category("EDUCATION")        # adjust per app
-secondary_category("LIFESTYLE")      # optional; remove when none
+primary_category("EDUCATION")        # アプリに合わせて変える
+secondary_category("LIFESTYLE")      # 任意。無ければ削除する
 app_rating_config_path("fastlane/rating_config.json")
 app_review_information(
-  notes: "<review notes: what the app does, how to test; no account needed (offline app)>"
+  notes: "<審査メモ: 何をするアプリか、どう試すか。オフラインアプリなのでアカウント不要>"
 )
 
 skip_binary_upload(true)
@@ -99,26 +99,26 @@ overwrite_screenshots(true)
 precheck_include_in_app_purchases(false)
 ```
 
-## Secrets (never commit)
+## 秘密情報（絶対にコミットしない）
 
-`docs/app-store-fastlane.md` must document these local env vars; `.p8` keys and
-`.env` files stay out of the repo:
+`docs/app-store-fastlane.md` に、ローカルの環境変数として次を記載する。`.p8` キーと
+`.env` はリポジトリに入れない:
 
 ```sh
 export ASC_KEY_ID="YOUR_KEY_ID"
 export ASC_ISSUER_ID="YOUR_ISSUER_ID"
 export ASC_KEY_FILEPATH="$HOME/.appstoreconnect/AuthKey_YOUR_KEY_ID.p8"
-# Optional for multiple accounts/teams:
+# 複数アカウント・複数チームのときだけ:
 export FASTLANE_APPLE_ID="apple-id@example.com"
 export FASTLANE_TEAM_ID="APPLE_DEVELOPER_TEAM_ID"
 export FASTLANE_ITC_TEAM_ID="APP_STORE_CONNECT_TEAM_ID"
 ```
 
-## Usage
+## 使い方
 
 ```sh
-bundle exec fastlane ios upload_store_metadata   # or `fastlane ios upload_store_metadata`
+bundle exec fastlane ios upload_store_metadata   # または `fastlane ios upload_store_metadata`
 ```
 
-Flutter projects: place the `fastlane/` directory at the repo root (not under `ios/`)
-and keep paths as above, matching the animal-vision-explorer layout.
+Flutterプロジェクトでは、`fastlane/` をリポジトリルートに置く（`ios/` の下ではない）。
+パスは上記のまま、animal-vision-explorerの構成に合わせる。

@@ -1,13 +1,14 @@
-# App Store Build Upload
+# App Storeビルドのアップロード
 
-## Authentication
+## 認証
 
-- Load App Store Connect API credentials from `~/.appstoreconnect/asc.env`.
-- Keep `.p8` keys under `~/.appstoreconnect/private_keys/`; never commit credentials.
+- App Store Connect APIの認証情報は `~/.appstoreconnect/asc.env` から読み込む。
+- `.p8` キーは `~/.appstoreconnect/private_keys/` の下に置く。認証情報は絶対にコミットしない。
 
-## Archive, export, and upload
+## アーカイブ・エクスポート・アップロード
 
-Use the repository's project/workspace, scheme, archive name, export plist, and app name:
+プロジェクト/ワークスペース、スキーム、アーカイブ名、エクスポート用plist、アプリ名は
+そのリポジトリのものを使う:
 
 ```sh
 xcodebuild archive -project <Name>.xcodeproj -scheme <Scheme> \
@@ -23,19 +24,17 @@ xcrun altool --upload-app -f build/export/<App>.ipa -t ios \
   --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID"
 ```
 
-## Fallback: manual signing
+## フォールバック: 手動署名
 
-`-allowProvisioningUpdates` fails when the ASC API key lacks cloud-signing
-permission:
+ASC APIキーにクラウド署名の権限が無いと `-allowProvisioningUpdates` は失敗する:
 
 ```
 error: exportArchive Cloud signing permission error
 error: exportArchive No profiles for '<bundle-id>' were found
 ```
 
-The archive still succeeds (it signs with a development identity); only the
-export fails. Do not create a new certificate. Look for an existing
-`IOS_APP_STORE` profile and sign manually:
+アーカイブ自体は成功する（開発用の証明書で署名される）。失敗するのはエクスポートだけ。
+新しい証明書を作らないこと。既存の `IOS_APP_STORE` プロファイルを探して手動で署名する:
 
 ```bash
 bundle exec ruby -e '
@@ -48,27 +47,30 @@ puts p.uuid
 '
 ```
 
-Before exporting, confirm the profile is usable:
+エクスポートの前に、そのプロファイルが使えることを確認する:
 
-- `security cms -D -i <file>` → `application-identifier` matches the bundle ID
-  and `ExpirationDate` is in the future.
-- The SHA1 of each `DeveloperCertificates` entry appears in
-  `security find-identity -p codesigning -v`. A profile whose certificate has no
-  private key in the keychain cannot sign, and the export error will not say so.
+- `security cms -D -i <file>` → `application-identifier` がバンドルIDと一致し、
+  `ExpirationDate` が未来であること。
+- `DeveloperCertificates` の各エントリのSHA1が
+  `security find-identity -p codesigning -v` に出ていること。証明書の秘密鍵が
+  キーチェーンに無いプロファイルでは署名できないが、エクスポートのエラーはそれを
+  教えてくれない。
 
-Install the profile under **both** directories (Xcode versions disagree on
-which one they read):
+プロファイルは**両方の**ディレクトリに置く（Xcodeのバージョンによってどちらを読むかが
+異なるため）:
 
 ```
 ~/Library/MobileDevice/Provisioning Profiles/<uuid>.mobileprovision
 ~/Library/Developer/Xcode/UserData/Provisioning Profiles/<uuid>.mobileprovision
 ```
 
-Then export with `signingStyle` = `manual`, `signingCertificate` =
-`Apple Distribution`, and `provisioningProfiles` mapping the bundle ID to the
-profile **name**. Drop the `-allowProvisioningUpdates` and authentication flags
-from the export command; they are only needed for cloud signing.
+そのうえで、`signingStyle` = `manual`、`signingCertificate` = `Apple Distribution`、
+`provisioningProfiles` でバンドルIDをプロファイル**名**にマッピングしてエクスポートする。
+エクスポートのコマンドからは `-allowProvisioningUpdates` と認証系のフラグを外す。
+これらはクラウド署名のときだけ必要。
 
-Do not infer missing signing or export values. Prefer a repository-provided release lane or documented command when available.
+署名やエクスポートの値が分からないときに推測で埋めない。リポジトリにリリースレーンや
+手順化されたコマンドがあれば、そちらを優先する。
 
-After upload, wait until App Store Connect reports the build as `VALID`, then attach it to the intended version draft. Upload processing can take several minutes.
+アップロード後は、App Store Connectがビルドを `VALID` と報告するまで待ってから、
+対象バージョンの下書きに紐付ける。アップロード後の処理には数分かかることがある。

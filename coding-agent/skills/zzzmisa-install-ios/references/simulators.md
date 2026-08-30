@@ -1,17 +1,17 @@
-# iOS Simulators
+# iOSシミュレータ
 
-## Configured targets
+## 設定済みのターゲット
 
-| Request | Simulator name | Device type |
+| 呼び方 | シミュレータ名 | デバイスタイプ |
 | --- | --- | --- |
-| SE2, iPhone SE2 | `iPhone SE2` | `com.apple.CoreSimulator.SimDeviceType.iPhone-SE--2nd-generation-` |
-| iPhone 14 Plus, screenshot iPhone | `Screenshot iPhone 14 Plus` | `com.apple.CoreSimulator.SimDeviceType.iPhone-14-Plus` |
-| iPad Pro 13-inch, screenshot iPad | `Screenshot iPad Pro 13-inch` | Newest available type containing `iPad-Pro-13-inch` |
+| SE2、iPhone SE2 | `iPhone SE2` | `com.apple.CoreSimulator.SimDeviceType.iPhone-SE--2nd-generation-` |
+| iPhone 14 Plus、スクショ用iPhone | `Screenshot iPhone 14 Plus` | `com.apple.CoreSimulator.SimDeviceType.iPhone-14-Plus` |
+| iPad Pro 13-inch、スクショ用iPad | `Screenshot iPad Pro 13-inch` | `iPad-Pro-13-inch` を含むもののうち最新のタイプ |
 
-## Prepare the simulator
+## シミュレータを準備する
 
-1. Find the named simulator with `xcrun simctl list devices available`.
-2. If it is missing, confirm the requested type and newest available iOS runtime:
+1. `xcrun simctl list devices available` で、その名前のシミュレータを探す。
+2. 無ければ、要求されたタイプと、利用できる最新のiOSランタイムを確認して作る:
 
    ```bash
    xcrun simctl list devicetypes
@@ -19,28 +19,29 @@
    xcrun simctl create "<simulator-name>" <device-type-id> <runtime-id>
    ```
 
-3. Boot it and open Simulator.app:
+3. 起動してSimulator.appを開く:
 
    ```bash
    xcrun simctl boot <UDID>
    open -a Simulator
    ```
 
-Continue when it is already booted. Use the same exact UDID for every later command.
+既に起動済みならそのまま進める。以降のコマンドでは、必ず同じUDIDを使う。
 
 ## Flutter
 
-1. Confirm `flutter devices` lists the simulator.
-2. Run the app with `flutter run -d <UDID>`.
-3. Treat the Dart VM Service message as evidence that the app launched.
-4. If the run process must stop, inspect `pgrep -alf flutter` and stop only
-   `flutter_tools.snapshot run -d <UDID>` for this target; do not kill unrelated editor daemons.
-5. Relaunch an installed build when needed with `xcrun simctl launch <UDID> <bundle-id>`.
+1. `flutter devices` にそのシミュレータが出ることを確認する。
+2. `flutter run -d <UDID>` でアプリを実行する。
+3. Dart VM Serviceのメッセージが出れば、アプリが起動したと判断してよい。
+4. 実行中のプロセスを止める必要があるときは `pgrep -alf flutter` で確認し、この
+   ターゲットの `flutter_tools.snapshot run -d <UDID>` だけを止める。無関係な
+   エディタのデーモンをkillしない。
+5. インストール済みのビルドを起動し直すときは `xcrun simctl launch <UDID> <bundle-id>`。
 
 ## Swift/Xcode
 
-1. Resolve the project/workspace and scheme with `xcodebuild -list` when necessary.
-2. Build Debug for the exact simulator:
+1. 必要なら `xcodebuild -list` でプロジェクト/ワークスペースとスキームを特定する。
+2. 対象のシミュレータ向けにDebugでビルドする:
 
    ```bash
    xcodebuild build -project <Name>.xcodeproj -scheme <Scheme> \
@@ -48,7 +49,7 @@ Continue when it is already booted. Use the same exact UDID for every later comm
      -derivedDataPath build/DerivedData
    ```
 
-3. Install and launch the successful build:
+3. ビルドが成功したらインストールして起動する:
 
    ```bash
    xcrun simctl install <UDID> \
@@ -56,4 +57,5 @@ Continue when it is already booted. Use the same exact UDID for every later comm
    xcrun simctl launch <UDID> <bundle-id>
    ```
 
-Read `PRODUCT_BUNDLE_IDENTIFIER` from `xcodebuild -showBuildSettings` when it is unknown.
+バンドルIDが分からないときは `xcodebuild -showBuildSettings` の
+`PRODUCT_BUNDLE_IDENTIFIER` を読む。

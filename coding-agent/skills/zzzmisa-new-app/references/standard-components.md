@@ -1,114 +1,111 @@
-# Standard Components for Misa's Apps
+# Misaのアプリの標準構成要素
 
-Distilled from animal-vision-explorer (Swift), chibireco (Flutter), quiz-apps (Flutter monorepo).
+animal-vision-explorer（Swift）、chibireco（Flutter）、quiz-apps（Flutterモノレポ）から
+抽出した共通の型。
 
-## Product Policies (apply to every app)
+## プロダクトの方針（全アプリ共通）
 
-- No backend, fully offline. No analytics, no tracking, no ads.
-- Monetization: free app + single buy-once IAP (premium unlock). Implement the purchase
-  service and gate it behind a flag so v1 can ship with purchase UI hidden
-  (e.g. `isPurchaseUIEnabled = false`). Record first-install date/version locally
-  (Keychain on iOS) so future free-tier limits can grandfather existing users.
-- Bundle ID / applicationId: `com.zzzmisa.<projectname>` (lowercase ASCII).
-- Local persistence: `shared_preferences` (Flutter) / `UserDefaults` + Keychain (Swift).
+- バックエンドなし、完全オフライン。解析・トラッキング・広告は入れない。
+- 収益化: 無料アプリ＋買い切りIAP1つ（プレミアム解放）。購入サービスは実装したうえで
+  フラグの裏に置き、v1は購入UIを隠した状態でリリースできるようにする
+  （例: `isPurchaseUIEnabled = false`）。将来の無料枠制限で既存ユーザーをグランド
+  ファザリングできるよう、初回インストール日とバージョンをローカルに記録する
+  （iOSはKeychain）。
+- Bundle ID / applicationId: `com.zzzmisa.<projectname>`（小文字ASCII）。
+- ローカル永続化: `shared_preferences`（Flutter）/ `UserDefaults` + Keychain（Swift）。
 
-## Standard Documents
+## 標準ドキュメント
 
-| File | Role | Notes |
+| ファイル | 役割 | 備考 |
 |---|---|---|
-| `AGENTS.md` | Shared agent instructions | Point to product/design sources and record repository-specific workflow rules. Codex reads this file. |
-| `CLAUDE.md` | Claude entry point | Make this a symlink to `AGENTS.md` when possible; otherwise keep only a pointer to it. |
-| `docs/product.md` | 企画書 | Starts with `# アプリ企画書`; concept, target, feature list, and product constraints. |
-| `docs/design.md` | 設計書 | Version number + 変更履歴 at the top of the file; update the version when design changes. |
-| `README.md` | Repo overview | Short; build/run instructions. |
+| `AGENTS.md` | エージェント共通の指示 | 企画書・設計書への参照と、リポジトリ固有の進め方を書く。Codexはこのファイルを読む。 |
+| `CLAUDE.md` | Claudeのエントリポイント | 可能なら `AGENTS.md` へのシンボリックリンクにする。無理ならそちらを指す記述だけを置く。 |
+| `docs/product.md` | 企画書 | `# アプリ企画書` で始める。コンセプト、ターゲット、機能一覧、プロダクト上の制約。 |
+| `docs/design.md` | 設計書 | ファイル冒頭にバージョン番号と変更履歴。設計を変えたらバージョンを上げる。 |
+| `README.md` | リポジトリの概要 | 短く。ビルド・実行手順。 |
 
-Keep product knowledge in `docs/product.md`; do not use the unrecognized singular
-`AGENT.md`. Both agent entry points should direct agents to the same product and design files.
+プロダクトの知識は `docs/product.md` に置く。認識されない単数形の `AGENT.md` は使わない。
+2つのエージェント用エントリポイントは、同じ企画書・設計書を指すようにする。
 
-App Store submission info is managed fastlane-first (no `APP_STORE_SUBMISSION.md` for
-new apps — older apps still migrating). Mapping:
+App Storeの申請情報はfastlaneを正として管理する（新規アプリで `APP_STORE_SUBMISSION.md`
+は作らない。旧いアプリは移行中）。対応は次のとおり:
 
-| 申請情報 | Where it lives |
+| 申請情報 | 置き場所 |
 |---|---|
-| 名前・サブタイトル・説明・キーワード・プロモテキスト・リリースノート | `fastlane/metadata/<locale>/*.txt` (per language) |
-| カテゴリ | `Deliverfile` `primary_category` / `secondary_category` |
-| 年齢制限指定 | `Deliverfile` `app_rating_config_path` (JSON) |
-| 審査メモ・デモアカウント・連絡先 | `Deliverfile` `app_review_information` |
-| 著作権表記 | `Deliverfile` `copyright` |
-| 価格・IAP商品の登録と説明文・プライバシーラベル | App Store Connect manual — record in the "Manual steps" section of `docs/app-store-fastlane.md` |
+| 名前・サブタイトル・説明・キーワード・プロモテキスト・リリースノート | `fastlane/metadata/<locale>/*.txt`（言語ごと） |
+| カテゴリ | `Deliverfile` の `primary_category` / `secondary_category` |
+| 年齢制限指定 | `Deliverfile` の `app_rating_config_path`（JSON） |
+| 審査メモ・デモアカウント・連絡先 | `Deliverfile` の `app_review_information` |
+| 著作権表記 | `Deliverfile` の `copyright` |
+| 価格・IAP商品の登録と説明文・プライバシーラベル | App Store Connectで手作業。`docs/app-store-fastlane.md` の「手作業の手順」節に記録する |
 
-## Localization
+## 多言語対応
 
-- Languages: Japanese (primary/template) + English required; zh-Hans optional but
-  preferred for store reach.
-- Flutter: `l10n.yaml` with
-  `arb-dir: lib/l10n`, `template-arb-file: app_ja.arb`,
-  `output-localization-file: app_localizations.dart`, `nullable-getter: false`.
-- Swift: String Catalogs (`.xcstrings`), including `InfoPlist.xcstrings` for the
-  display name and permission strings in all supported languages.
-- The app must offer an in-app language picker in Settings (persisted locally),
-  not only follow the OS locale.
+- 言語: 日本語（主言語・テンプレート）＋英語は必須。zh-Hansは任意だが、ストアでの
+  リーチを考えると入れたい。
+- Flutter: `l10n.yaml` に
+  `arb-dir: lib/l10n`、`template-arb-file: app_ja.arb`、
+  `output-localization-file: app_localizations.dart`、`nullable-getter: false`。
+- Swift: String Catalog（`.xcstrings`）。表示名と権限の説明文を全対応言語で入れるため
+  `InfoPlist.xcstrings` も含める。
+- OSのロケールに追従するだけでなく、設定画面にアプリ内の言語切り替えを必ず用意する
+  （選択はローカルに保存する）。
 
-## Design Token Layer
+## デザイントークン層
 
-Every screen styles itself through named tokens; no hardcoded colors, spacing,
-radii, or text styles inside widgets/views.
+すべての画面は名前付きトークン経由でスタイルを当てる。ウィジェット/ビューの中に色・
+余白・角丸・テキストスタイルをハードコードしない。
 
-- Flutter: one theme directory (`lib/app/theme/` or the package equivalent) with
-  one file per token family, classes named `<AppName>Colors`, `<AppName>Spacing`,
-  `<AppName>Radii`, `<AppName>Shadows`, `<AppName>TextStyles` (private constructor,
-  `static const` members), plus a `<AppName>Theme` that assembles the Material theme.
-  Chibireco's `lib/app/theme/` is the reference implementation; quiz-apps'
-  `QuizTheme` shows the multi-app variant (tokens in the shared package, per-app
-  values injected via app config).
-- Color tokens are grouped semantically: surface / background / brand / semantic
-  (danger etc.) / text-border. The shared visual identity is one brand accent color
-  plus a soft pastel background gradient (top→bottom color list).
-- Swift: centralize presentation constants the same way (a `Presentation`/theme layer;
-  animal-vision-explorer's `ModePresentation` pattern — name, emoji, color, symbol per
-  content item — is the reference).
-- Build reusable components (tiles, cards, buttons) on top of the tokens early,
-  starting with the settings screen widgets.
+- Flutter: テーマ用のディレクトリを1つ作り（`lib/app/theme/` またはパッケージ相当の場所）、
+  トークンの種類ごとにファイルを分ける。クラス名は `<AppName>Colors`、`<AppName>Spacing`、
+  `<AppName>Radii`、`<AppName>Shadows`、`<AppName>TextStyles`（privateコンストラクタ、
+  メンバは `static const`）。加えてMaterialテーマを組み立てる `<AppName>Theme` を置く。
+  chibirecoの `lib/app/theme/` が参照実装。quiz-appsの `QuizTheme` は複数アプリ版の例
+  （トークンは共有パッケージ、アプリごとの値はapp config経由で注入）。
+- 色トークンは意味で分類する: surface / background / brand / semantic（danger等）/
+  text-border。共通のビジュアルアイデンティティは、ブランドのアクセントカラー1色＋
+  淡いパステルの背景グラデーション（上→下の色リスト）。
+- Swift: 表示用の定数を同じように一箇所へ集約する（`Presentation`/テーマ層。
+  animal-vision-explorerの `ModePresentation` パターン — コンテンツ項目ごとに名前・
+  絵文字・色・シンボルを持つ — が参照実装）。
+- トークンの上に再利用可能なコンポーネント（タイル、カード、ボタン）を早めに作る。
+  設定画面のウィジェットから始めるとよい。
 
-## Settings Screen — Standard Menu
+## 設定画面 — 標準メニュー
 
-Order and grouping (omit sections that do not apply, keep the rest in this order):
+並び順とグルーピング（該当しないセクションは省き、残りはこの順を保つ）:
 
-1. **Language** — in-app language picker (ja/en/zh-Hans as supported). Implement
-   it as an inline single-select dropdown/list that opens the available language
-   choices, rather than as separate menu items or a separate screen.
-2. **App-specific preferences** — e.g. BGM/sound toggles; app-dependent.
-3. **Purchase** — buy-once unlock CTA, purchased state, and "Restore purchases".
-   Hidden while the purchase flag is off.
-4. **Links**
-   - プライバシーポリシー: `https://policies.zzzmisa.com/privacy-kids` (kids/family apps)
-     or the appropriate page under `https://policies.zzzmisa.com/`
+1. **言語** — アプリ内の言語切り替え（対応する ja/en/zh-Hans）。個別のメニュー項目や
+   別画面ではなく、選択肢がその場で開くインラインの単一選択ドロップダウン/リストとして
+   実装する。
+2. **アプリ固有の設定** — BGM・効果音のオン/オフなど。アプリによる。
+3. **購入** — 買い切り解放のCTA、購入済み状態、「購入を復元」。購入フラグがオフの間は隠す。
+4. **リンク**
+   - プライバシーポリシー: `https://policies.zzzmisa.com/privacy-kids`（キッズ・
+     ファミリー向けアプリ）、または `https://policies.zzzmisa.com/` 配下の該当ページ
    - 利用規約: `https://policies.zzzmisa.com/terms`
-   - 著作権・ライセンス (in-app page; follow the specification below)
+   - 著作権・ライセンス（アプリ内ページ。仕様は下記）
    - 開発者ホームページ: `https://zzzmisa.com`
-   - External links open in the external browser (`LaunchMode.externalApplication` / `openURL`).
-5. **Reset** — restore settings to defaults (optional; include when settings are non-trivial).
+   - 外部リンクは外部ブラウザで開く（`LaunchMode.externalApplication` / `openURL`）。
+5. **リセット** — 設定を初期値に戻す（任意。設定項目が少なくないときに入れる）。
 
-- Do not render headings for the menu groups. Separate the logical groups with
-  horizontal dividers instead.
-- Place one final divider below the last menu item, then show the version as small
-  footer text at the bottom of the screen; do not render it as a menu item. Use
-  `<localized version label>: <version>+<build number>` (for example,
-  `バージョン: 1.0.0+6`) and read both values from package information
-  (`package_info_plus` / Bundle).
+- メニューのグループに見出しは付けない。論理的なグループの区切りは水平線で表現する。
+- 最後のメニュー項目の下にもう1本区切り線を引き、画面下部に小さいフッターテキストとして
+  バージョンを表示する。メニュー項目としては表示しない。表記は
+  `<ローカライズしたバージョンのラベル>: <version>+<build number>`（例: `バージョン: 1.0.0+6`）。
+  どちらの値もパッケージ情報から読む（`package_info_plus` / Bundle）。
 
-### Copyright & Licenses Page
+### 著作権・ライセンスページ
 
-- Use `著作権・ライセンス` for both the Settings menu item and the page title.
-  Localize the label for supported languages when appropriate (for example,
-  `Copyright & Licenses` in English), and use a hiragana rendering such as
-  `ちょさくけん・ライセンス` when the target audience requires it.
-- Show the content in two cards: **About This App** and **Licenses**.
-- Keep all content inside the cards in English in every app locale; do not add
-  localization keys for the card headings or license entries.
-- The **About This App** card shows the app icon, app name, and
-  `© <initial release year> Misa Inome (zzzmisa)`.
-- The **Licenses** card uses only the applicable sections from this format:
+- 設定メニューの項目名もページタイトルも `著作権・ライセンス` にする。対応言語では
+  適宜ローカライズし（英語なら `Copyright & Licenses` など）、対象ユーザーによっては
+  `ちょさくけん・ライセンス` のようにひらがな表記にする。
+- 内容は2枚のカードで見せる: **About This App** と **Licenses**。
+- カードの中身は、どのロケールでも英語のまま表示する。カードの見出しやライセンス項目に
+  ローカライズキーを作らない。
+- **About This App** カードには、アプリアイコン、アプリ名、
+  `© <初回リリース年> Misa Inome (zzzmisa)` を表示する。
+- **Licenses** カードは、この形式のうち該当するセクションだけを使う:
 
   ```text
   Framework:
@@ -128,29 +125,28 @@ Order and grouping (omit sections that do not apply, keep the rest in this order
     by <creator name>
   ```
 
-- For Flutter apps, include Flutter under `Framework:`. For native Swift/Xcode
-  apps, omit the `Framework:` section entirely.
-- Omit empty media sections. Use `Images:` instead of `Photos:` when the app
-  credits both photographs and illustrations.
-- Do not link work titles, creators, sources, or license names from this page.
-- List libraries used by the shipped app at runtime. Omit development-only tools
-  and dependencies used solely for builds, code generation, linting, or tests
-  (for example, `build_runner`, generators, and test packages).
-- Display the license name and copyright notice only; a full license-text view is
-  not part of the standard page.
+- FlutterアプリはFlutterを `Framework:` に載せる。ネイティブのSwift/Xcodeアプリでは
+  `Framework:` セクションごと省く。
+- 該当のないメディアのセクションは省く。写真とイラストの両方をクレジットするアプリでは
+  `Photos:` の代わりに `Images:` を使う。
+- このページから作品名・作者・出典・ライセンス名へリンクを張らない。
+- 出荷したアプリが実行時に使うライブラリを載せる。開発時だけのツールや、ビルド・
+  コード生成・lint・テストのためだけの依存は省く（`build_runner`、各種ジェネレータ、
+  テスト用パッケージなど）。
+- 表示するのはライセンス名と著作権表記だけ。ライセンス全文の表示は標準ページに含めない。
 
-## Store Assets & Screenshots
+## ストア素材・スクリーンショット
 
-- Screenshot sources: the dedicated simulators `Screenshot iPhone 14 Plus` and
-  `Screenshot iPad Pro 13-inch` (see `zzzmisa-install-ios`).
-- Store screenshots go in `fastlane/screenshots/{ja,en-US,...}`; preview videos in
-  `fastlane/previews/{locale}/`. Everything used to *make* them (unedited recordings,
-  screenshot originals, build scripts, recipes) goes under `promo/`.
-  Follow `zzzmisa-store-assets` for the full layout and naming rules.
-- App icon: `flutter_launcher_icons` on Flutter (configure `image_path` in pubspec).
+- スクリーンショットの撮影元: 専用シミュレータの `Screenshot iPhone 14 Plus` と
+  `Screenshot iPad Pro 13-inch`（`zzzmisa-install-ios` 参照）。
+- ストア用スクリーンショットは `fastlane/screenshots/{ja,en-US,...}`、プレビュー動画は
+  `fastlane/previews/{locale}/`。それらを*作るため*のもの（未加工の録画、
+  スクリーンショットの原本、ビルドスクリプト、レシピ）は `promo/` 配下に置く。
+  配置と命名の全ルールは `zzzmisa-store-assets` に従う。
+- アプリアイコン: Flutterは `flutter_launcher_icons`（pubspecで `image_path` を設定）。
 
-## Testing
+## テスト
 
-- Keep a test target from day one (`test/` on Flutter, `<App>Tests` on Xcode).
-- Prefer data-driven checks that iterate over all modes/content and validate
-  consistency between code enums, JSON content, and docs.
+- 初日からテストターゲットを持つ（Flutterは `test/`、Xcodeは `<App>Tests`）。
+- 全モード・全コンテンツをイテレートして、コードのenum・JSONのコンテンツ・ドキュメントの
+  整合を検証する、データ駆動のチェックを優先する。
