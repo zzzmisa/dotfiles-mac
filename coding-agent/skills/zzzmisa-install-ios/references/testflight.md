@@ -14,7 +14,25 @@ verify all of the following first and stop early if any is missing.
 
 ```bash
 source ~/.appstoreconnect/asc.env   # ASC_KEY_ID / ASC_ISSUER_ID / ASC_KEY_FILEPATH
+security show-keychain-info ~/Library/Keychains/login.keychain-db
 ```
+
+**Check the keychain first.** When Misa is away, the Mac is often locked, which
+locks the login keychain. Everything then fails far apart from the real cause:
+
+| Symptom | Command |
+| --- | --- |
+| `The user name or passphrase you entered is not correct` | `security show-keychain-info` |
+| `errSecInternalComponent` on `CodeSign` | `xcodebuild archive` |
+| `could not read Username` / keychain `-25293` | `git fetch` |
+| `The token in default is invalid` | `gh auth status` |
+
+`security find-identity -p codesigning -v` still lists the identities while
+locked, so a present Apple Distribution identity does not mean signing will
+work. Ask Misa to unlock the Mac, or to run
+`security unlock-keychain ~/Library/Keychains/login.keychain-db` themselves.
+**Never handle Misa's login password.** Stop here until it is unlocked; nothing
+downstream can succeed.
 
 Confirm both the Developer Portal Bundle ID and the App Store Connect app
 record exist for the target bundle ID:
@@ -38,6 +56,27 @@ puts "asc app record:   #{!Spaceship::ConnectAPI::App.find(id).nil?}"
 - The API key may also be app-restricted. When the portal Bundle ID exists but
   the ASC record is invisible, say both are possible causes rather than
   asserting the record is missing.
+
+### Borrowing an existing app record
+
+When the app has no record yet and the goal is only to look at the build, Misa
+may approve uploading under an app record that already exists — the placeholder
+`com.zzzmisa.example` is there for this. **Ask before doing it**; do not pick a
+substitute bundle ID on your own, and never borrow the record of a shipping app.
+
+Patch `PRODUCT_BUNDLE_IDENTIFIER` in the scratch worktree's `project.yml` (not
+on the `xcodebuild` command line, which would apply to every target) and confirm
+the diff touches only the intended target. Never commit it. The installed app
+still shows its own `CFBundleDisplayName`, so the build is recognisable on the
+device even though TestFlight lists it under the borrowed record's name.
+
+### App icon
+
+Uploads are rejected without a 1024×1024 marketing icon, and a new app target
+often has `ASSETCATALOG_COMPILER_APPICON_NAME: ""` until the real icon is drawn.
+Generate a throwaway placeholder into the scratch worktree's asset catalog
+(single `universal` 1024×1024 entry) and set the build setting to it. Never
+commit the placeholder, and tell Misa the icon in the build is not real.
 
 Also confirm the App Store Connect agreements (contracts, tax, banking) are not
 blocking, since TestFlight external testing requires them. Internal testing does
