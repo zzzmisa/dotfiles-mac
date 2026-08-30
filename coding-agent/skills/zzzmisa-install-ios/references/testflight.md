@@ -120,27 +120,17 @@ sequence from there.
 
 ## 4. Archive, export, upload
 
-```bash
-xcodebuild archive -project <Name>.xcodeproj -scheme <Scheme> \
-  -destination 'generic/platform=iOS' -archivePath build/<name>.xcarchive \
-  -allowProvisioningUpdates \
-  -authenticationKeyPath "$ASC_KEY_FILEPATH" -authenticationKeyID "$ASC_KEY_ID" \
-  -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
-  CURRENT_PROJECT_VERSION=<N>
+Follow `zzzmisa-ios-release/references/build-upload.md` for the archive, export,
+and upload commands, including the manual-signing fallback when cloud signing is
+refused. Only these differ for a verification build:
 
-xcodebuild -exportArchive -archivePath build/<name>.xcarchive \
-  -exportPath build/export -exportOptionsPlist <ExportOptions.plist> \
-  -allowProvisioningUpdates \
-  -authenticationKeyPath "$ASC_KEY_FILEPATH" -authenticationKeyID "$ASC_KEY_ID" \
-  -authenticationKeyIssuerID "$ASC_ISSUER_ID"
-
-xcrun altool --upload-app -f build/export/<App>.ipa -t ios \
-  --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID"
-```
-
-When the repository has no `ExportOptions.plist`, write one into the scratch
-directory (do not commit it) with `method` = `app-store-connect`,
-`destination` = `export`, the team ID, and `signingStyle` = `automatic`.
+- Pass `CURRENT_PROJECT_VERSION=<N>` on the `xcodebuild archive` command line
+  rather than committing a version bump (see step 3).
+- Write the `ExportOptions.plist` into the scratch directory when the repository
+  has none, and do not commit it: `method` = `app-store-connect`,
+  `destination` = `export`, the team ID.
+- A `visionOS` / `UIRequiredDeviceCapabilities: [arkit]` warning (90984) from
+  `altool` is expected for an ARKit app and does not block the upload.
 
 ## 5. Wait for processing, then distribute
 
