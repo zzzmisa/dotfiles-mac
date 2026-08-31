@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-new-app
-description: Create or align a Flutter or Swift mobile app to Misa's offline, buy-once-IAP standard with docs, localization, design tokens, settings, tests, privacy, and fastlane. Use for 新規アプリ作成, 雛形・初期設定, or bringing an existing app up to the standard.
+description: FlutterまたはSwiftのモバイルアプリを、Misaの標準（バックエンドなしのオフライン・買い切りIAP・ドキュメント・多言語対応・デザイントークン・設定画面・テスト・プライバシー・fastlane）で新規作成する、または既存アプリをその標準に合わせる。新規アプリ作成、雛形・初期設定、既存アプリを標準に揃えたいときに使う。
 ---
 
 # 新規アプリの雛形

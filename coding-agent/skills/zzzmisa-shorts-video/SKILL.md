@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-shorts-video
-description: Build or revise reproducible YouTube Shorts promo videos with ffmpeg, including scenes, captions, narration, BGM, end cards, and export QA. Use for Shorts・販促・プロモ動画の作成・修正 or テロップ・音声・BGM・音量 changes; not for title or description copy.
+description: YouTube Shortsの販促動画を、ffmpegで再現可能な形で作る・直す。シーン、キャプション（テロップ）、ナレーション、BGM、エンドカード、書き出しの検証まで扱う。Shorts・販促・プロモ動画の作成・修正、テロップ・音声・BGM・音量の変更で使う。タイトルや説明欄の文章には使わない。
 ---
 
 # YouTube Shorts販促動画の制作

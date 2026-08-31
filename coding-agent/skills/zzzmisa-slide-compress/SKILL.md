@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-slide-compress
-description: Shrink Keynote decks (.key), PowerPoint files (.pptx), and slide PDFs while keeping them projector- and print-quality, with backups and before/after verification. Use for プレゼン資料の容量削減・軽量化, Keynoteのファイルサイズを減らす, pptxの圧縮, PDFの最適化; not for exporting or re-authoring slides.
+description: Keynote（.key）、PowerPoint（.pptx）、スライドのPDFを、フルHD投影と印刷に耐える画質を保ったまま軽量化する。バックアップと前後比較の検証込み。プレゼン資料の容量削減・軽量化、Keynoteのファイルサイズを減らす、pptxの圧縮、PDFの最適化で使う。スライドの書き出しや作り直しには使わない。
 ---
 
 # プレゼン資料の容量削減

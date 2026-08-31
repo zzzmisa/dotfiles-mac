@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-sns-post
-description: Draft or edit posts for X, Facebook, or YouTube Shorts. Use for X投稿, tweet, SNS投稿, リリース告知, or Shorts title/description. Verify repository facts only for app-related posts; do not use for editing video files.
+description: X、Facebook、YouTube Shortsの投稿文を作成・添削する。X投稿、tweet、SNS投稿、リリース告知、Shortsのタイトル・説明欄で使う。アプリ関連の投稿だけ、リポジトリを見て実仕様との整合を確認する。動画ファイルの編集には使わない。
 ---
 
 # SNS投稿文の作成・添削

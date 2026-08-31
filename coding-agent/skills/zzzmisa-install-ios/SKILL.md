@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-install-ios
-description: Build, install, launch, and verify Flutter or Swift/Xcode apps on `MisaのiPhone`, `ミサのiPad`, Misa's named iOS simulators, or TestFlight when Misa is away from the Mac. Use for 実機確認, iPhone/iPadインストール, simulator verification, TestFlightにあげて確認, 出先・リモートでの動作確認, screenshots, or permission-state testing.
+description: FlutterまたはSwift/Xcodeのアプリをビルドしてインストールし、起動して動作を確認する。対象は`MisaのiPhone`、`ミサのiPad`、Misa専用の名前付きiOSシミュレータ、またはMisaがMacから離れているときのTestFlight。実機確認、iPhone/iPadインストール、シミュレータでの確認、TestFlightにあげて確認、出先・リモートでの動作確認、スクリーンショット撮影、権限まわりのテストで必ず使う。
 ---
 
 # iOSアプリのインストールと動作確認

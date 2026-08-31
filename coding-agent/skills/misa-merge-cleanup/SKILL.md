@@ -1,6 +1,6 @@
 ---
 name: misa-merge-cleanup
-description: Safely remove local branches and worktrees only after confirming their PRs are merged. Use when told a PR was merged, asked to 掃除・後片付け, or before a new task when stale worktrees may exist.
+description: PRがマージ済みだと確認できたローカルブランチとworktreeだけを安全に削除する。PRがマージされたと伝えられたとき、掃除・後片付けを頼まれたとき、新しい作業を始める前に古いworktreeが残っていそうなときに使う。
 ---
 
 # マージ後の後片付け

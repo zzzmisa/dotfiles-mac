@@ -1,6 +1,6 @@
 ---
 name: misa-gh-pr
-description: Draft or create GitHub pull requests using repository-specific rules and templates when present, otherwise Misa's template and delivery rules. Use for PR作成, pull request, draft PR, or publishing completed local changes as a PR; never merge.
+description: GitHub pull requestの下書き・作成を行う。リポジトリ固有のルールとテンプレートがあればそれに従い、無ければMisaの既定テンプレートと進め方に従う。PR作成、pull request、Draft PR、ローカルで完了した変更をPRとして出したいときに必ず使う。マージはしない。
 ---
 
 # GitHub Pull Requestの作成

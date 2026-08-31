@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-ios-release
-description: Reconcile, prepare, or submit an iOS App Store release by repairing missing GitHub tags/releases after ASC publication, verifying ASC/Git state, updating versions and store assets, and uploading builds. Use for 週次リリース準備, 公開後処理, タグ・GitHub Release作成, ASCアップロード, metadata sync, or 審査提出; submit for review only on explicit instruction.
+description: iOS App Storeのリリースを整合・準備・提出する。ASC公開後に欠けているGitHubのタグ・Releaseの復旧、ASCとGitの状態確認、バージョンとストア素材の更新、ビルドのアップロードを行う。週次リリース準備、公開後処理、タグ・GitHub Release作成、ASCアップロード、メタデータ同期、審査提出で使う。審査提出は明示的な指示があったときだけ実行する。
 ---
 
 # iOS App Storeリリース

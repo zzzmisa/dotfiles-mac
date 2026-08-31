@@ -1,6 +1,6 @@
 ---
 name: zzzmisa-store-assets
-description: Apply Misa's repository layout and naming rules for App Store metadata, screenshots, previews, and promo-video sources, scripts, and outputs. Use when placing, moving, renaming, migrating, or asking where to store these assets; not for ASC upload or video editing.
+description: App Storeのメタデータ、スクリーンショット、プレビュー、販促動画の素材・スクリプト・成果物について、Misaのリポジトリ配置と命名の規約を適用する。これらの素材を置く・移動する・リネームする・移行するとき、どこに置けばよいか聞かれたときに使う。ASCへのアップロードや動画編集には使わない。
 ---
 
 # ストア素材・販促素材の置き場

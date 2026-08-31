@@ -1,6 +1,6 @@
 ---
 name: misa-gh-issue
-description: Draft, create, or update GitHub Issues using repository-specific rules and templates when present, otherwise Misa's template. Also investigate repository evidence for refactoring or cleanup Issue proposals. Use for Issue作成・起票・更新, 改善Issue, 技術的負債, 未使用コード, performance, or app-size Issue requests; do not implement the proposed refactor.
+description: GitHub Issueの下書き・起票・更新を行う。リポジトリ固有のルールとテンプレートがあればそれに従い、無ければMisaの既定テンプレートを使う。リファクタリングや不要コード削除のIssue提案では、先にリポジトリを調査して根拠を集める。Issue作成・起票・更新、改善Issue、技術的負債、未使用コード、パフォーマンス、アプリサイズのIssueを求められたら必ず使う。提案した内容の実装はしない。
 ---
 
 # GitHub Issueの作成
