@@ -16,6 +16,9 @@ fi
 # dotfiles-macの共通コマンド
 export PATH="$HOME/dotfiles-mac/bin/common:$PATH"
 
+# uv tool installの実行ファイル置き場（photo-cleanup, osxphotos等）
+export PATH="$HOME/.local/bin:$PATH"
+
 if [[ "$DOTFILES_ENV" = "private" ]]; then
   [[ -f "$HOME/dotfiles-mac/zsh/private.zsh" ]] && source "$HOME/dotfiles-mac/zsh/private.zsh"
   [[ -f "$HOME/dotfiles-mac/zsh/functions.private.zsh" ]] && source "$HOME/dotfiles-mac/zsh/functions.private.zsh"
