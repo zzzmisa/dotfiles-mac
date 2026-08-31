@@ -35,3 +35,4 @@ cask "google-chrome"
 cask "logi-options+"
 cask "okta-verify"
 cask "scratch" # Privateのみ
+cask "tailscale-app" # Privateのみ（photo-cleanupレポートをiPhoneで見るためのVPN。インストール時にsudoパスワードが必要）
