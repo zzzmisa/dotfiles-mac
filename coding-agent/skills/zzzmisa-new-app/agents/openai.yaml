@@ -1,4 +1,4 @@
 interface:
-  display_name: "Misa: App Standard"
-  short_description: "Create or align apps to Misa's standard"
-  default_prompt: "Use $zzzmisa-new-app to create a mobile app or align an existing app to Misa's standard structure."
+  display_name: "Misa: アプリ標準構成"
+  short_description: "アプリを新規作成、または標準構成に揃える"
+  default_prompt: "$zzzmisa-new-app を使って、モバイルアプリを新規作成する、または既存アプリをMisaの標準構成に揃える。"

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Misa: SNS Post"
-  short_description: "Write or edit SNS posts in Misa's tone"
-  default_prompt: "Use $zzzmisa-sns-post to draft or edit an SNS post for the requested platform."
+  display_name: "Misa: SNS投稿"
+  short_description: "MisaのトーンでSNS投稿文を書く・直す"
+  default_prompt: "$zzzmisa-sns-post を使って、指定されたプラットフォーム向けのSNS投稿文を作成・添削する。"

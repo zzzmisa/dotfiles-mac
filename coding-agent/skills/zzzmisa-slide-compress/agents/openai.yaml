@@ -1,4 +1,4 @@
 interface:
-  display_name: "Misa: Slide Compress"
-  short_description: "Shrink Keynote, PowerPoint, and PDF decks safely"
-  default_prompt: "Use $zzzmisa-slide-compress to reduce the file size of the Keynote, PowerPoint, and PDF files in this folder."
+  display_name: "Misa: スライド軽量化"
+  short_description: "Keynote・PowerPoint・PDFを画質を保って軽くする"
+  default_prompt: "$zzzmisa-slide-compress を使って、このフォルダのKeynote・PowerPoint・PDFファイルの容量を削減する。"

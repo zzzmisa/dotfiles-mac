@@ -1,4 +1,4 @@
 interface:
-  display_name: "Misa: Merge Cleanup"
-  short_description: "Clean up merged branches and stale worktrees"
-  default_prompt: "Use $misa-merge-cleanup to remove only confirmed merged branches and their clean worktrees."
+  display_name: "Misa: マージ後の後片付け"
+  short_description: "マージ済みブランチと古いworktreeを掃除する"
+  default_prompt: "$misa-merge-cleanup を使って、マージ済みだと確認できたブランチと、変更のないworktreeだけを削除する。"

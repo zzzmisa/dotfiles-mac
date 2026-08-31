@@ -1,4 +1,4 @@
 interface:
-  display_name: "Misa: GitHub Issue"
-  short_description: "Draft issues using repository rules or Misa's template"
-  default_prompt: "Use $misa-gh-issue to follow repository-specific rules, investigate when needed, and draft or create a GitHub issue."
+  display_name: "Misa: GitHub Issue作成"
+  short_description: "リポジトリのルールかMisaの既定テンプレートでIssueを書く"
+  default_prompt: "$misa-gh-issue を使って、リポジトリ固有のルールに従い、必要なら調査したうえでGitHub Issueを下書き・起票する。"

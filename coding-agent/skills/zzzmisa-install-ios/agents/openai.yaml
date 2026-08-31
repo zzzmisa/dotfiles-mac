@@ -1,4 +1,4 @@
 interface:
-  display_name: "Misa: Install iOS App"
-  short_description: "Run apps on physical devices or simulators"
-  default_prompt: "Use $zzzmisa-install-ios to build, install, and verify the current iOS app on the appropriate device."
+  display_name: "Misa: iOSアプリのインストール"
+  short_description: "実機かシミュレータでアプリを動かして確認する"
+  default_prompt: "$zzzmisa-install-ios を使って、いまのiOSアプリを適切なターゲットにビルド・インストールして動作を確認する。"
