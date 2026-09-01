@@ -1,4 +1,0 @@
-interface:
-  display_name: "Misa: Shorts動画制作"
-  short_description: "再現可能なYouTube Shorts動画を作る"
-  default_prompt: "$zzzmisa-shorts-video を使って、再現可能なYouTube Shorts販促動画を作る・直す。"

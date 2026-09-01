@@ -26,6 +26,8 @@
    zsh vim/installer.sh
    ```
    各インストーラはスクリプト自身の位置を基準にパスを解決するため、どのディレクトリから実行してもよい。
+4. Private環境では、続けて非公開リポジトリ `zzzmisa/dotfiles-mac-private` を並置でcloneし、
+   そのインストーラを実行する（Private用エージェントプロファイル・`zzzmisa-` スキル・メモリはそちらにある）。
 
 ## 開発ツールと依存関係の管理方針
 
@@ -67,9 +69,11 @@ iOSアプリ、Hugo、YouTubeチャンネル、個人データに関する設定
 | zsh | mise、共通コマンド | Antigravity、App Store Connect、App Preview変換 |
 | エージェント | GitHub Issue・PR、マージ後の掃除 | iOS・App Store・SNS・写真整理・個人開発メモリ |
 
-エージェントプロファイルは、Privateでは個人アプリの収益化・App Store・実機方針を含む
-`coding-agent/profile/AGENTS.md`、Officeでは汎用的なコーディング方針だけを含む
+エージェントプロファイルは、Officeでは汎用的なコーディング方針だけを含む
 `coding-agent/profile/AGENTS.office.md` を使用する。
+Private用のプロファイル（AGENTS.md）、Private専用の `zzzmisa-` スキル、エージェントメモリは、
+エージェントが公開審査なしで自由に書き込めるよう、非公開リポジトリ
+`zzzmisa/dotfiles-mac-private` で管理する（`zzzmisa-slide-compress` は両環境共通のためこのリポジトリ）。
 
 ## 読み上げ音声の生成環境（tts/）
 
@@ -89,7 +93,7 @@ zsh tts/installer.sh
 （新しいMacでは `import` で復元する）。
 
 この環境を使うエージェントスキル: `zzzmisa-shorts-video`
-（`coding-agent/skills/zzzmisa-shorts-video`、YouTube Shorts販促動画の制作）。
+（YouTube Shorts販促動画の制作。dotfiles-mac-private の `coding-agent/skills/zzzmisa-shorts-video`）。
 
 ## オリジナルシェル関数
 

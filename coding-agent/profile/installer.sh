@@ -5,11 +5,13 @@ script_dir="${0:A:h}"
 source "$script_dir/../../lib/environment.zsh"
 resolve_dotfiles_environment "${1:-}" || exit 1
 
-if [[ "$DOTFILES_ENV" = "office" ]]; then
-  profile_source="$script_dir/AGENTS.office.md"
-else
-  profile_source="$script_dir/AGENTS.md"
+# Private用プロファイル（AGENTS.md）とメモリは非公開のdotfiles-mac-privateから入れる
+if [[ "$DOTFILES_ENV" != "office" ]]; then
+  echo "Skipped agent profile: install it from dotfiles-mac-private in the private environment."
+  exit 0
 fi
+
+profile_source="$script_dir/AGENTS.office.md"
 
 # 選択した環境のプロファイルを、各エージェントのグローバル設定としてリンクする
 link_profile() {
