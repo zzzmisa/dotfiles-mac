@@ -1,4 +1,0 @@
-interface:
-  display_name: "Misa: iOS App Storeリリース"
-  short_description: "App Storeリリースの整合・準備・提出"
-  default_prompt: "$zzzmisa-ios-release を使って、ASCの公開済みリリースとGitHubを整合させてから、次のiOSアプリのリリースを準備する。"
