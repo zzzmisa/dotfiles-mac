@@ -1,4 +1,0 @@
-interface:
-  display_name: "Misa: スライド軽量化"
-  short_description: "Keynote・PowerPoint・PDFを画質を保って軽くする"
-  default_prompt: "$zzzmisa-slide-compress を使って、このフォルダのKeynote・PowerPoint・PDFファイルの容量を削減する。"

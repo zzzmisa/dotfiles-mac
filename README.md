@@ -73,7 +73,7 @@ iOSアプリ、Hugo、YouTubeチャンネル、個人データに関する設定
 `coding-agent/profile/AGENTS.office.md` を使用する。
 Private用のプロファイル（AGENTS.md）、Private専用の `zzzmisa-` スキル、エージェントメモリは、
 エージェントが公開審査なしで自由に書き込めるよう、非公開リポジトリ
-`zzzmisa/dotfiles-mac-private` で管理する（`zzzmisa-slide-compress` は両環境共通のためこのリポジトリ）。
+`zzzmisa/dotfiles-mac-private` で管理する（`misa-slide-compress` は両環境共通のためこのリポジトリ）。
 
 ## 読み上げ音声の生成環境（tts/）
 
