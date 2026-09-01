@@ -8,7 +8,7 @@ skill_names=(
   misa-gh-issue
   misa-gh-pr
   misa-merge-cleanup
-  zzzmisa-slide-compress
+  misa-slide-compress
 )
 link_skill() {
   local skill_source="$1"
