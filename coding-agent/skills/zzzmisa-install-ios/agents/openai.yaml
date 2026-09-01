@@ -1,4 +1,0 @@
-interface:
-  display_name: "Misa: iOSアプリのインストール"
-  short_description: "実機かシミュレータでアプリを動かして確認する"
-  default_prompt: "$zzzmisa-install-ios を使って、いまのiOSアプリを適切なターゲットにビルド・インストールして動作を確認する。"

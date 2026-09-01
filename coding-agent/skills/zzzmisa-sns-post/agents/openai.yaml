@@ -1,4 +1,0 @@
-interface:
-  display_name: "Misa: SNS投稿"
-  short_description: "MisaのトーンでSNS投稿文を書く・直す"
-  default_prompt: "$zzzmisa-sns-post を使って、指定されたプラットフォーム向けのSNS投稿文を作成・添削する。"

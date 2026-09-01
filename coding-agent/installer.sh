@@ -15,9 +15,6 @@ source "$script_dir/../lib/environment.zsh"
 resolve_dotfiles_environment "${1:-}" || exit 1
 
 components=(claude profile skills)
-if [[ "$DOTFILES_ENV" = "private" ]]; then
-  components+=(memory)
-fi
 
 for component in "${components[@]}"; do
   dir="$script_dir/$component"

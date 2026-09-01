@@ -2,22 +2,13 @@
 set -e
 
 script_dir="${0:A:h}"
-source "$script_dir/../../lib/environment.zsh"
-resolve_dotfiles_environment "${1:-}" || exit 1
 
-common_skill_names=(
+# Private専用の zzzmisa- スキルは非公開のdotfiles-mac-privateから入れる
+skill_names=(
   misa-gh-issue
   misa-gh-pr
   misa-merge-cleanup
   zzzmisa-slide-compress
-)
-private_skill_names=(
-  zzzmisa-install-ios
-  zzzmisa-ios-release
-  zzzmisa-new-app
-  zzzmisa-shorts-video
-  zzzmisa-sns-post
-  zzzmisa-store-assets
 )
 link_skill() {
   local skill_source="$1"
@@ -42,11 +33,6 @@ link_skill() {
 }
 
 linked_count=0
-
-skill_names=("${common_skill_names[@]}")
-if [[ "$DOTFILES_ENV" = "private" ]]; then
-  skill_names+=("${private_skill_names[@]}")
-fi
 
 for skill_name in "${skill_names[@]}"; do
   skill_source="$script_dir/$skill_name"
