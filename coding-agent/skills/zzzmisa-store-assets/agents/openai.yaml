@@ -1,4 +1,0 @@
-interface:
-  display_name: "Misa: ストア素材の置き場"
-  short_description: "App Store素材と販促素材を規約どおりに配置する"
-  default_prompt: "$zzzmisa-store-assets を使って、このリポジトリのストア素材・販促素材を配置または移行する。"
