@@ -16,12 +16,21 @@ resolve_dotfiles_environment "${1:-}" || exit 1
 
 components=(claude profile skills)
 
+# 途中で失敗しても残りのコンポーネントは実行し、最後にまとめて報告する
+failed_components=()
 for component in "${components[@]}"; do
   dir="$script_dir/$component"
 
   installer="$dir/installer.sh"
   if [[ -f "$installer" ]]; then
     echo 📁 "$dir"
-    (set +e; zsh "$installer" "$DOTFILES_ENV")
+    if ! zsh "$installer" "$DOTFILES_ENV"; then
+      failed_components+=("$component")
+    fi
   fi
 done
+
+if (( ${#failed_components[@]} > 0 )); then
+  echo "❌ Failed coding-agent components: ${failed_components[*]}"
+  exit 1
+fi
