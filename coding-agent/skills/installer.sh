@@ -8,6 +8,7 @@ skill_names=(
   misa-gh-issue
   misa-gh-pr
   misa-merge-cleanup
+  misa-orchestration
   misa-slide-compress
 )
 link_skill() {
