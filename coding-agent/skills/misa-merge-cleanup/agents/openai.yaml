@@ -1,4 +1,4 @@
 interface:
   display_name: "Misa: マージ後の後片付け"
   short_description: "マージ済みブランチと古いworktreeを掃除する"
-  default_prompt: "$misa-merge-cleanup を使って、マージ済みだと確認できたブランチと、変更のないworktreeだけを削除する。"
+  default_prompt: "$misa-merge-cleanup を使って、PRがマージ済みだと確認できたローカルブランチとworktreeだけを削除する。"
