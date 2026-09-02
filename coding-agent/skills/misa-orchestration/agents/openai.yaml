@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: モデル分担"
+  short_description: "複数フェーズの実装タスクを指揮役と作業役に分担する"
+  default_prompt: "$misa-orchestration の分担方針に従って、複数フェーズの実装タスクを指揮役と作業役に分けて進める。"
