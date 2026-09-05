@@ -26,7 +26,7 @@
    zsh vim/installer.sh
    ```
    各インストーラはスクリプト自身の位置を基準にパスを解決するため、どのディレクトリから実行してもよい。
-4. Private環境では、続けて非公開リポジトリ `private-repository` を並置でcloneし、
+4. Private環境では、続けてPrivate用の非公開リポジトリを並置でcloneし、
    そのインストーラを実行する（Private用エージェントプロファイル・`zzzmisa-` スキル・メモリはそちらにある）。
 
 ## 開発ツールと依存関係の管理方針
@@ -73,7 +73,7 @@ iOSアプリ、Hugo、YouTubeチャンネル、個人データに関する設定
 `coding-agent/profile/AGENTS.office.md` を使用する。
 Private用のプロファイル（AGENTS.md）、Private専用の `zzzmisa-` スキル、エージェントメモリは、
 エージェントが公開審査なしで自由に書き込めるよう、非公開リポジトリ
-`private-repository` で管理する（`misa-slide-compress` は両環境共通のためこのリポジトリ）。
+Private用の非公開リポジトリで管理する（`misa-slide-compress` は両環境共通のためこのリポジトリ）。
 
 ## 読み上げ音声の生成環境（tts/）
 
@@ -88,12 +88,13 @@ zsh tts/installer.sh
 
 セットアップの詳細と使い方は [tts/README.md](tts/README.md)。
 読み方・アクセント辞書はAivisSpeech側に保存されdotfilesの管理外なので、
-`tts/aivisspeech-dict.sh export` で `tts/user-dict.private.json` または
+`tts/aivisspeech-dict.sh export` で、Privateは並置した非公開リポジトリの
+`tts/user-dict.private.json`、Officeはこのリポジトリの
 `tts/user-dict.office.json` に書き出してコミットしておく
 （新しいMacでは `import` で復元する）。
 
 この環境を使うエージェントスキル: `zzzmisa-shorts-video`
-（YouTube Shorts販促動画の制作。private-repository の `coding-agent/skills/zzzmisa-shorts-video`）。
+（YouTube Shorts販促動画の制作。Private用の非公開リポジトリで管理）。
 
 ## オリジナルシェル関数
 

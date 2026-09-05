@@ -53,9 +53,11 @@ open("out.wav", "wb").write(wav)
 #### 読み方・アクセント辞書
 
 辞書の実体は **`~/Library/Application Support/AivisSpeech-Engine/user_dict.json`** にあり、
-**dotfilesの管理外**。放置するとPC買い替えで失われるので、Privateでは
-`user-dict.private.json`、Officeでは `user-dict.office.json` に書き出してコミットしておく。
-環境は `~/.config/dotfiles-mac/environment` の値から選ばれる。
+**dotfilesの管理外**。放置するとPC買い替えで失われるので、Privateでは並置した非公開
+リポジトリの `tts/user-dict.private.json`、Officeではこのリポジトリの
+`tts/user-dict.office.json` に書き出してコミットしておく。環境は
+`~/.config/dotfiles-mac/environment` の値から選ばれる。非公開リポジトリを別の場所に
+置く場合や自動検出の候補が複数ある場合は、`DOTFILES_PRIVATE_REPO` にそのパスを指定する。
 
 ```sh
 ./aivisspeech-dict.sh list                        # 登録内容の確認

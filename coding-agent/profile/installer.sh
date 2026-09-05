@@ -5,9 +5,9 @@ script_dir="${0:A:h}"
 source "$script_dir/../../lib/environment.zsh"
 resolve_dotfiles_environment "${1:-}" || exit 1
 
-# Private用プロファイル（AGENTS.md）とメモリは非公開のprivate-repositoryから入れる
+# Private用プロファイル（AGENTS.md）とメモリはPrivate用の非公開リポジトリから入れる
 if [[ "$DOTFILES_ENV" != "office" ]]; then
-  echo "Skipped agent profile: install it from private-repository in the private environment."
+  echo "Skipped agent profile: install it from the private repository in the private environment."
   exit 0
 fi
 

@@ -3,7 +3,7 @@ set -e
 
 script_dir="${0:A:h}"
 
-# Private専用の zzzmisa- スキルは非公開のprivate-repositoryから入れる
+# Private専用の zzzmisa- スキルはPrivate用の非公開リポジトリから入れる
 skill_names=(
   misa-gh-issue
   misa-gh-pr

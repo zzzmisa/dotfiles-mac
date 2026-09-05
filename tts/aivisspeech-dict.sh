@@ -19,7 +19,17 @@ script_dir="${0:A:h}"
 source "$script_dir/../lib/environment.zsh"
 resolve_dotfiles_environment || exit 1
 
-backup="$script_dir/user-dict.$DOTFILES_ENV.json"
+if [[ "$DOTFILES_ENV" = "private" ]]; then
+  private_repo="${DOTFILES_PRIVATE_REPO:-}"
+  if [[ -n "$private_repo" ]]; then
+    backup="$private_repo/tts/user-dict.private.json"
+  else
+    private_backups=("${script_dir:h:h}"/*/tts/user-dict.private.json(N))
+    [[ ${#private_backups} -eq 1 ]] && backup="$private_backups[1]"
+  fi
+else
+  backup="$script_dir/user-dict.office.json"
+fi
 base="http://127.0.0.1:10101"
 
 if ! curl -s -m 3 -o /dev/null "$base/version"; then
@@ -66,6 +76,11 @@ for v in json.load(sys.stdin).values():
     ;;
 
   export)
+    [[ "$DOTFILES_ENV" != "private" || ( -n "$backup" && -d "${backup:h}" ) ]] || {
+      echo "Private辞書の保存先を特定できません" >&2
+      echo "非公開リポジトリを公開側と並置するか、DOTFILES_PRIVATE_REPOを指定してください" >&2
+      exit 1
+    }
     curl -s "$base/user_dict" | python3 -c '
 import json, sys
 words = [{"surface": v["surface"], "pronunciation": v["pronunciation"],
@@ -79,7 +94,11 @@ print(f"exported {len(words)} word(s) -> {sys.argv[1]}")
     ;;
 
   import)
-    [[ -f "$backup" ]] || { echo "$backup がありません" >&2; exit 1; }
+    [[ -n "$backup" && -f "$backup" ]] || {
+      echo "環境に対応する辞書ファイルがありません" >&2
+      [[ "$DOTFILES_ENV" = "private" ]] && echo "必要に応じてDOTFILES_PRIVATE_REPOを指定してください" >&2
+      exit 1
+    }
     python3 -c '
 import json, sys
 for w in json.load(open(sys.argv[1])):
