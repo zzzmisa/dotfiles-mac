@@ -29,20 +29,24 @@ fi
 
 # 同じ内容が既にあればスキップする。APIは重複チェックをしないため、
 # そのまま登録すると同じ語が何件でも増える
+# priority(0-10, 既定5): 一般語との競合に負けて分割されるときに上げる
+# （例: ラインヤフー は既定5だと「ライン」に負けて分割読みされる → 9で一体化）
 register() {
-  python3 - "$base" "$1" "$2" "$3" <<'PY'
+  python3 - "$base" "$1" "$2" "$3" "${4:-5}" <<'PY'
 import json, sys, urllib.parse, urllib.request
-base, surface, pronunciation, accent = sys.argv[1:5]
+base, surface, pronunciation, accent, priority = sys.argv[1:6]
 current = json.loads(urllib.request.urlopen(f"{base}/user_dict", timeout=30).read())
 if any(v["surface"] == surface and v["pronunciation"] == pronunciation
-       and str(v["accent_type"]) == accent for v in current.values()):
+       and str(v["accent_type"]) == accent
+       and str(v.get("priority", 5)) == priority for v in current.values()):
     print(f"skipped (登録済み): {surface}")
     sys.exit()
 url = (f"{base}/user_dict_word?surface={urllib.parse.quote(surface)}"
        f"&pronunciation={urllib.parse.quote(pronunciation)}"
-       f"&accent_type={accent}&word_type={urllib.parse.quote('PROPER_NOUN')}")
+       f"&accent_type={accent}&priority={priority}"
+       f"&word_type={urllib.parse.quote('PROPER_NOUN')}")
 urllib.request.urlopen(urllib.request.Request(url, method="POST"), timeout=60).read()
-print(f"registered: {surface} / {pronunciation} / accent={accent}")
+print(f"registered: {surface} / {pronunciation} / accent={accent} / priority={priority}")
 PY
 }
 
@@ -51,20 +55,22 @@ case "${1:-list}" in
     curl -s "$base/user_dict" | python3 -c '
 import json, sys
 for v in json.load(sys.stdin).values():
-    print(v["surface"], v["pronunciation"], "accent=" + str(v["accent_type"]), sep="\t")
+    print(v["surface"], v["pronunciation"], "accent=" + str(v["accent_type"]),
+          "priority=" + str(v.get("priority", 5)), sep="\t")
 '
     ;;
 
   add)
-    [[ -n "$2" && -n "$3" ]] || { echo "usage: $0 add <表記> <カタカナ読み> <アクセント型>" >&2; exit 1; }
-    register "$2" "$3" "${4:-0}"
+    [[ -n "$2" && -n "$3" ]] || { echo "usage: $0 add <表記> <カタカナ読み> <アクセント型> [priority(0-10, 既定5)]" >&2; exit 1; }
+    register "$2" "$3" "${4:-0}" "${5:-5}"
     ;;
 
   export)
     curl -s "$base/user_dict" | python3 -c '
 import json, sys
 words = [{"surface": v["surface"], "pronunciation": v["pronunciation"],
-          "accent_type": v["accent_type"]} for v in json.load(sys.stdin).values()]
+          "accent_type": v["accent_type"], "priority": v.get("priority", 5)}
+         for v in json.load(sys.stdin).values()]
 words.sort(key=lambda w: w["surface"])
 json.dump(words, open(sys.argv[1], "w"), ensure_ascii=False, indent=2)
 open(sys.argv[1], "a").write("\n")
@@ -77,9 +83,9 @@ print(f"exported {len(words)} word(s) -> {sys.argv[1]}")
     python3 -c '
 import json, sys
 for w in json.load(open(sys.argv[1])):
-    print(w["surface"], w["pronunciation"], w["accent_type"], sep="\t")
-' "$backup" | while IFS=$'\t' read -r surface pronunciation accent; do
-      register "$surface" "$pronunciation" "$accent"
+    print(w["surface"], w["pronunciation"], w["accent_type"], w.get("priority", 5), sep="\t")
+' "$backup" | while IFS=$'\t' read -r surface pronunciation accent priority; do
+      register "$surface" "$pronunciation" "$accent" "$priority"
     done
     ;;
 
