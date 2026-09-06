@@ -31,6 +31,9 @@ cask "chatgpt"
 cask "claude" # デスクトップアプリ
 cask "claude-code" # ターミナル用CLI
 cask "antigravity" # Privateのみ
+cask "antigravity-cli" # Privateのみ（ターミナル用CLI）
+cask "copilot-cli" # ターミナル用CLI
+cask "github-copilot-app" # デスクトップアプリ
 cask "google-chrome"
 cask "logi-options+"
 cask "okta-verify"

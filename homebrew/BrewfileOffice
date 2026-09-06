@@ -24,6 +24,8 @@ cask "capcut" # 汎用的な動画作成
 cask "claude" # デスクトップアプリ
 cask "claude-code" # ターミナル用CLI
 cask "firefox"
+cask "copilot-cli" # ターミナル用CLI
+cask "github-copilot-app" # デスクトップアプリ
 cask "google-chrome"
 cask "gas-mask" # Officeのみ
 cask "imageoptim" # Officeのみ
