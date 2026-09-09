@@ -4,6 +4,10 @@ set -e
 script_dir="${0:A:h}"
 source "$script_dir/../lib/environment.zsh"
 resolve_dotfiles_environment "${1:-}" || exit 1
+source "$script_dir/../lib/homebrew.zsh"
+
+# Homebrew経由で入れたコマンドをPATHに通す（親installerからの shellenv は引き継がれないため）
+ensure_homebrew_shellenv || true
 
 # codeコマンドがなければ
 # Homebrew経由でVSCodeをインストール

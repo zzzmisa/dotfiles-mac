@@ -4,6 +4,10 @@ set -e
 script_dir="${0:A:h}"
 source "$script_dir/../lib/environment.zsh"
 resolve_dotfiles_environment "${1:-}" || exit 1
+source "$script_dir/../lib/homebrew.zsh"
+
+# Homebrew経由で入れたコマンドをPATHに通す（親installerからの shellenv は引き継がれないため）
+ensure_homebrew_shellenv || true
 
 config_dir="$HOME/.config/mise"
 conf_dir="$config_dir/conf.d"
@@ -12,7 +16,7 @@ environment_config_file="$conf_dir/environment.toml"
 legacy_mise_toml_file="$config_dir/mise.toml"
 
 if ! type mise > /dev/null 2>&1; then
-  echo "mise is not installed. Run homebrew/installer.sh first."
+  echo "❌ mise is not installed. Run homebrew/installer.sh first."
   exit 1
 fi
 
