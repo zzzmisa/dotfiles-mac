@@ -8,10 +8,23 @@ set -e
 
 script_dir="${0:A:h}"
 venv_dir="$HOME/.venvs/qwen-tts"
+aivisspeech_app="${AIVISSPEECH_APP:-/Applications/AivisSpeech.app}"
+
+# 手動対応が必要な項目を溜めておく配列。最後にまとめて報告する
+manual_items=()
 
 setup_qwen_tts() {
   if ! command -v uv >/dev/null 2>&1; then
+    # uvはmiseでインストールされるが、ルートのinstaller.shのプロセスでは
+    # miseが有効化されておらずPATHに乗っていないことがあるため、shimsを試す
+    if command -v mise >/dev/null 2>&1; then
+      eval "$(mise activate zsh --shims)"
+    fi
+  fi
+
+  if ! command -v uv >/dev/null 2>&1; then
     echo "uv が見つかりません（mise/installer.sh を先に実行してください）。Qwen3-TTSの設定をスキップします"
+    manual_items+=("Qwen3-TTS: uv が見つからないためスキップ。mise/installer.sh を実行後に tts/installer.sh を再実行")
     return
   fi
 
@@ -33,7 +46,9 @@ setup_qwen_tts() {
 prefetch_qwen_model() {
   printf "Qwen3-TTSのモデル（約2GB）を今ダウンロードしますか? (y/n) :  "
   IFS= read -r answer
-  [[ "$answer" = "y" ]] || return
+  # bare returnだと直前の[[ ]]の非0終了ステータスがそのまま伝播し、
+  # 呼び出し元の `[[ ... ]] && prefetch_qwen_model` がset -eで落ちるため0を明示する
+  [[ "$answer" = "y" ]] || return 0
   "$venv_dir/bin/python" - <<'PY'
 from huggingface_hub import snapshot_download
 snapshot_download("Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice")
@@ -42,7 +57,7 @@ PY
 }
 
 check_aivisspeech() {
-  if [[ -d /Applications/AivisSpeech.app ]]; then
+  if [[ -d "$aivisspeech_app" ]]; then
     echo "AivisSpeech: インストール済み"
     if curl -s -m 3 -o /dev/null http://127.0.0.1:10101/version; then
       echo "AivisSpeech: エンジン稼働中（http://127.0.0.1:10101）"
@@ -64,10 +79,21 @@ AivisSpeech（日本語ナレーション用）が未インストールです。
   4. 読み方・アクセント辞書を復元する（アプリ起動後）: ./aivisspeech-dict.sh import
 
 MSG
+
+  manual_items+=("AivisSpeech: 未インストール。上記の手順で手動インストールし、辞書を import する")
 }
 
 setup_qwen_tts
 [[ -d "$venv_dir" ]] && prefetch_qwen_model
 check_aivisspeech
 
-echo 👍 TTS setting is done!
+if (( ${#manual_items[@]} == 0 )); then
+  echo 👍 TTS setting is done!
+  exit 0
+else
+  echo "⚠️ TTS setting is incomplete. 以下は手動対応が必要です:"
+  for item in "${manual_items[@]}"; do
+    echo "  - $item"
+  done
+  exit 1
+fi
