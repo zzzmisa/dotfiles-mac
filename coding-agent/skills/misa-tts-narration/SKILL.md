@@ -1,6 +1,6 @@
 ---
 name: misa-tts-narration
-description: AivisSpeech（VOICEVOX 互換 API）で日本語ナレーションを作るときの手順とコツ。読み・アクセントを audio_query で実測してから直す、読点と半角スペースの役割の違い、複合語の分割を辞書登録で結合する、聴き比べクリップの作り方、動画に載せるための整音チェーン、TTS の非再現性への備え、他言語は Qwen3-TTS。ナレーション・読み上げ音声・TTS の生成、誤読・アクセントの修正、辞書登録、音量の調整で使う。環境構築は dotfiles-mac の tts/README.md。
+description: AivisSpeech（VOICEVOX 互換 API）で日本語ナレーションを作るときの手順とコツ。原稿の作り方（漢字で書く・行の長さ・開始オフセット）、読み・アクセントを audio_query で実測してから直す、読点と半角スペースの役割の違い、複合語の分割を辞書登録で結合する、聴き比べクリップの作り方、動画に載せるための整音チェーン、TTS の非再現性への備え、他言語は Qwen3-TTS。ナレーション・読み上げ音声・TTS の生成、誤読・アクセントの修正、辞書登録、音量の調整で使う。環境構築は dotfiles-mac の tts/README.md。
 ---
 
 # TTS ナレーション制作（AivisSpeech）
