@@ -1,0 +1,4 @@
+interface:
+  display_name: "Misa: TTSナレーション制作"
+  short_description: "AivisSpeechで読み・アクセントを実測しながらナレーションを作る・直す"
+  default_prompt: "$misa-tts-narration を使って、原稿からナレーション音声を作り、読みとアクセントを実測して直す。"

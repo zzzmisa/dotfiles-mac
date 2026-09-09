@@ -10,6 +10,7 @@ skill_names=(
   misa-merge-cleanup
   misa-orchestration
   misa-slide-compress
+  misa-tts-narration
 )
 link_skill() {
   local skill_source="$1"
