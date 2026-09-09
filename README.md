@@ -93,6 +93,9 @@ zsh tts/installer.sh
 `tts/user-dict.office.json` に書き出してコミットしておく
 （新しいMacでは `import` で復元する）。
 
+この環境を使うエージェントスキル: `misa-tts-narration`（`coding-agent/skills/`。原稿の作り方、
+読み・アクセントの実測と修正、聴き比べ、整音の手順）。
+
 ## オリジナルシェル関数
 
 ### App Preview動画の変換
