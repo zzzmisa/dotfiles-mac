@@ -27,6 +27,7 @@ cask "firefox"
 cask "copilot-cli" # ターミナル用CLI
 cask "github-copilot-app" # デスクトップアプリ
 cask "google-chrome"
+cask "google-drive" # Officeのみ
 cask "google-gemini" # Officeのみ（デスクトップアプリ）
 cask "switchhosts" # Officeのみ（hostsファイル編集。Gas MaskはGatekeeper未対応でcaskが無効化されたため置き換え）
 cask "imageoptim" # Officeのみ
