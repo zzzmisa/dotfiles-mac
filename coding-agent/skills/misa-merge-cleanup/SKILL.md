@@ -1,52 +1,41 @@
 ---
 name: misa-merge-cleanup
-description: PRがマージ済みだと確認できたローカルブランチとworktreeだけを安全に削除する。PRがマージされたと伝えられたとき、掃除・後片付けを頼まれたとき、新しい作業を始める前に古いworktreeが残っていそうなときに使う。
+description: マージ後の片付け依頼や新しい作業前の点検で、ローカルブランチとworktreeの削除可否を調べる。マージ済みPRとローカルの状態を確認し、削除が許可された対象だけを片付ける。
 ---
 
 # マージ後の後片付け
 
-PRが既にマージされたローカルブランチとworktreeを削除する。未マージの作業は絶対に
-消さない。判断がつかないものは、削除せず報告する。
+削除するのは、PRがマージ済みで、その後の作業が残っていないローカルブランチと
+worktreeだけ。片付け依頼に含まれる対象は確認後に処理する。単にマージを知らされた場合や
+新しい作業前の自動点検では、既存の削除許可がなければ候補の調査まで進める。
 
-## Workflow
+## 削除前の確認
 
-1. **デフォルトブランチに戻して更新する。**
-   ```
-   git switch main   # main か master か、リポジトリのデフォルトブランチを確認する
-   git pull
-   ```
-2. **機械的な一次処理を流す。**
-   ```
-   "$HOME/dotfiles-mac/bin/common/misa-delete-merged-local-branches"
-   ```
-   `git fetch --prune` を実行したうえで、Gitがマージ済みと判定できるブランチ
-   （`git branch --merged`）を、worktreeを先に削除してからブランチごと削除する。
-   保護ブランチ（`main`、`master`、`develop`、`dev`、現在のブランチ）はスキップし、
-   worktreeの削除に失敗したもの（未コミットの変更がある等）はブランチごとスキップする。
-   リポジトリのデフォルトが `main` でない場合は、ベースブランチを引数で渡す。
-3. **squashマージされたブランチを処理する** — スクリプトはこれを検出できない。
-   保護ブランチを除く残りのブランチそれぞれについて:
-   - 状態を確認する:
-     ```
-     gh pr view <branch> --json state,mergedAt
-     ```
-   - PRの状態が `MERGED` のときだけ処理する。worktreeがある場合は先に `git status` を
-     確認し、未コミットの変更があれば削除しない（報告してスキップ）。無ければ
-     `git worktree remove <path>` してから `git branch -D <branch>` で削除する。
-   - PRが無いブランチ、オープンなPRのブランチ、未pushのコミットがあるブランチは
-     削除しない。報告に一覧として載せる。
-4. **worktreeのメタデータを掃除する。**
-   ```
-   git worktree prune
-   ```
-5. **報告する**: 削除したもの（ブランチ・worktree）と、残したものとその理由
-   （未コミットの変更あり、PRがオープン、PRが見つからない）。
+1. `git status --short` と `git worktree list --porcelain` で作業中の変更・配置を確認する。
+   デフォルトブランチはリポジトリ情報で特定し、`main` と決めつけない。
+2. 対象リポジトリを明示してGitHubのPR情報を取得し、対象ブランチに対応するPRの
+   `MERGED`、headリポジトリ、headブランチ、マージ時のhead SHAを確認する。
+   同名ブランチの古いPRや別リポジトリのPRを根拠にしない。
+3. ローカル先端とマージされたPRのhead SHAが一致することを確認する。
+   squashマージではデフォルトブランチへの祖先判定だけで決めない。
+   SHAを取得できない場合や不一致の場合は、その後のコミットが残っている可能性があるため保留する。
+4. 対象worktreeの未コミット・未追跡ファイル、進行中のmerge/rebase、他タスクの利用を確認する。
+   未保存の作業や利用中のworktreeは残す。ロックされたworktreeも強制解除しない。
 
-## Guardrails
+必要な同期は `git fetch --prune` で行う。片付けのために変更をstashしたり、無条件に
+`git switch` / `git pull` を実行したりしない。現在使用中のworktreeを削除する必要がある場合は、
+安全な作業場所へ移動できることを確認してから行う。
 
-- マージ済みだと確証が取れないブランチ・worktreeは削除しない。ゴミが残るコストより、
-  作業を失うコストのほうが高い。
-- `gh pr view` で `MERGED` を確認せずに `git branch -D` を使わない。
-- リモートブランチには触らない。GitHubの「マージ時にブランチを削除」と
-  `git fetch --prune` が処理する。
-- stashや未コミットの変更は削除しない。報告に載せて可視化する。
+## 削除と報告
+
+- デフォルトブランチ、`main`、`master`、`develop`、`dev`、現在のブランチは保護する。
+- 確認済みのworktreeを `git worktree remove <path>` で削除し、成功後にブランチを
+  `git branch -d <branch>` で削除する。worktree削除に失敗したらブランチも残す。
+- squashマージ等で `-d` が拒否した場合だけ、上記のPR・SHA・作業状態の確認が揃った
+  対象に `git branch -D <branch>` を使う。worktreeの `--force` は使わない。
+- リモートブランチ、stash、未コミットの変更は削除しない。
+- 削除した対象と、残した対象・理由を簡潔に報告する。根拠が不足するものは保留する。
+
+`~/dotfiles-mac/bin/common/misa-delete-merged-local-branches` はGitの祖先関係による
+一括削除であり、PRの有無・マージ後の作業をこの手順と同じようには検証しない。
+このスキルのPR確認を代替するものとして実行しない。

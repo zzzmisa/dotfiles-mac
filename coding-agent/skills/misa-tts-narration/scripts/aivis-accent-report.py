@@ -7,17 +7,18 @@
   環境変数: AIVIS_BASE（既定 http://127.0.0.1:10101）、AIVIS_SPEAKER（既定 888753763）
 
 表示: 各句を「カナ/アクセント核」で並べ、読点で区切られた句には「、」を付ける。
-判定の目安: 製品名・複合語が2句以上に分割されていたら辞書登録で結合する。
+句分割は診断の手掛かり。意図した読みと異なる場合に辞書登録などで修正する。
 """
 import argparse
 import json
 import os
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 
-BASE = os.environ.get("AIVIS_BASE", "http://127.0.0.1:10101")
-SPEAKER = int(os.environ.get("AIVIS_SPEAKER", "888753763"))
+BASE = os.environ.get("AIVIS_BASE", "http://127.0.0.1:10101").rstrip("/")
+SPEAKER = os.environ.get("AIVIS_SPEAKER", "888753763")
 
 
 def phrases(text: str, speaker: int) -> list[str]:
@@ -34,23 +35,30 @@ def phrases(text: str, speaker: int) -> list[str]:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("file", nargs="?")
-    ap.add_argument("-t", "--text")
+    source = ap.add_mutually_exclusive_group(required=True)
+    source.add_argument("file", nargs="?")
+    source.add_argument("-t", "--text")
     ap.add_argument("--speaker", type=int, default=SPEAKER)
     args = ap.parse_args()
-    if args.text:
-        lines = [args.text]
-    elif args.file:
-        lines = [l.strip() for l in open(args.file, encoding="utf-8") if l.strip()]
-    else:
-        ap.print_help()
-        return 2
     try:
+        if args.text is not None:
+            lines = [args.text.strip()] if args.text.strip() else []
+        else:
+            with open(args.file, encoding="utf-8") as f:
+                lines = [line.strip() for line in f if line.strip()]
+        if not lines:
+            ap.error("原稿が空です")
         for line in lines:
             print(line)
             print("   => " + " | ".join(phrases(line, args.speaker)))
+    except urllib.error.HTTPError as e:
+        print(f"NG: audio_query が HTTP {e.code} を返しました。原稿と話者 ID を確認してください", file=sys.stderr)
+        return 1
     except urllib.error.URLError as e:
-        print(f"NG: AivisSpeech に接続できない（{BASE}）。アプリを起動しているか確認: {e}")
+        print(f"NG: AivisSpeech に接続できない（{BASE}）。アプリを起動しているか確認: {e}", file=sys.stderr)
+        return 1
+    except (OSError, ValueError, KeyError, TypeError) as e:
+        print(f"NG: 原稿または API 応答を読み取れません: {e}", file=sys.stderr)
         return 1
     return 0
 

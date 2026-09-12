@@ -12,22 +12,26 @@
 #
 # 終了コード: 0=出力あり / 1=失敗 / 2=どちらの方式でも縮まなかった（出力なし）
 set -u
+set -o pipefail
 
 IN="${1:?usage: pdf-optimize.sh <in.pdf> <out.pdf> [dpi]}"
 OUT="${2:?usage: pdf-optimize.sh <in.pdf> <out.pdf> [dpi]}"
 DPI="${3:-300}"
 
+[[ "$DPI" =~ ^[1-9][0-9]*$ ]] || { echo "dpi は正の整数を指定してください"; exit 1; }
+[ -f "$IN" ] || { echo "入力ファイルがありません"; exit 1; }
+[ ! -e "$OUT" ] || { echo "出力先が既に存在します。新しいパスを指定してください"; exit 1; }
+command -v pdfinfo >/dev/null || { echo "poppler が必要です: brew install poppler"; exit 1; }
 command -v gs   >/dev/null || { echo "ghostscript が必要です: brew install ghostscript"; exit 1; }
 command -v qpdf >/dev/null || { echo "qpdf が必要です: brew install qpdf"; exit 1; }
 
 before=$(stat -f%z "$IN")
-A=$(mktemp -t pdfoptA).pdf
-B=$(mktemp -t pdfoptB).pdf
-A0=$(mktemp -t pdfoptA0).pdf
-trap 'rm -f "$A" "$B" "$A0"' EXIT
+TMP=$(mktemp -d) || exit 1
+A="$TMP/a.pdf"; B="$TMP/b.pdf"; A0="$TMP/a0.pdf"
+trap 'rm -rf "$TMP"' EXIT
 
 # --- 方式A ---------------------------------------------------------------------
-gs -q -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -sOutputFile="$A0" \
+if gs -q -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -sOutputFile="$A0" \
   -dCompatibilityLevel=1.7 \
   -dDetectDuplicateImages=true \
   -dCompressFonts=true -dSubsetFonts=true -dEmbedAllFonts=true \
@@ -39,13 +43,17 @@ gs -q -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -sOutputFile="$A0" \
   -dAutoFilterColorImages=true -dAutoFilterGrayImages=true \
   -dColorConversionStrategy=/LeaveColorUnchanged \
   -c "<</ColorACSImageDict <</QFactor 0.15 /Blend 1 /ColorTransform 1 /HSamples [1 1 1 1] /VSamples [1 1 1 1]>> /GrayACSImageDict <</QFactor 0.15 /Blend 1 /HSamples [1 1 1 1] /VSamples [1 1 1 1]>> >> setdistillerparams" \
-  -f "$IN" >/dev/null 2>&1 \
-  && qpdf --object-streams=generate --recompress-flate --compression-level=9 --linearize "$A0" "$A" >/dev/null 2>&1
-[ -s "$A" ] || cp "$A0" "$A" 2>/dev/null || :
+  -f "$IN" >/dev/null 2>&1; then
+  qpdf --object-streams=generate --recompress-flate --compression-level=9 --linearize "$A0" "$A" >/dev/null 2>&1
+  [ -s "$A" ] || cp "$A0" "$A"
+else
+  rm -f "$A" "$A0"
+fi
+[ ! -s "$A" ] || qpdf --check "$A" >/dev/null 2>&1 || rm -f "$A"
 
 # --- 方式B ---------------------------------------------------------------------
 qpdf --object-streams=generate --recompress-flate --compression-level=9 --linearize "$IN" "$B" >/dev/null 2>&1
-[ -s "$B" ] || rm -f "$B"
+[ -s "$B" ] && qpdf --check "$B" >/dev/null 2>&1 || rm -f "$B"
 
 sa=$([ -s "$A" ] && stat -f%z "$A" || echo 0)
 sb=$([ -s "$B" ] && stat -f%z "$B" || echo 0)
@@ -65,7 +73,7 @@ p2=$(pdfinfo "$pick" 2>/dev/null | awk '/^Pages:/{print $2}')
 
 [ "$size" -lt "$before" ] || { echo "SKIP: 縮小できず ($before→$size)"; exit 2; }
 
-cp "$pick" "$OUT"
+cp "$pick" "$OUT" || exit 1
 pct=$(echo "scale=1; ($size-$before)*100/$before" | bc)
 echo "$before -> $size (${pct}%) $mode"
 exit 0

@@ -10,6 +10,7 @@
 set -u
 
 f="${1:?usage: keynote-reduce.sh <file.key>}"
+f="$(cd "$(dirname "$f")" && pwd)/$(basename "$f")"
 [ -f "$f" ] || { echo "  FAIL: ファイルがありません: $f"; exit 1; }
 
 osa() { osascript -e "$1" 2>&1; }
@@ -79,12 +80,21 @@ if [ "$d" != "0" ] || [ "$(kn 'count of windows')" != "0" ]; then
 fi
 
 # どの経路で抜けても開いた書類を必ず閉じる（閉じ忘れがKeynoteを詰まらせる原因になる）
-close_all() {
-  osascript -e 'with timeout of 60 seconds
-tell application id "com.apple.Keynote" to close every document saving no
-end timeout' >/dev/null 2>&1
+close_target() {
+  osascript - "$f" >/dev/null 2>&1 <<'APPLESCRIPT'
+on run argv
+  set targetFile to POSIX file (item 1 of argv) as alias
+  tell application id "com.apple.Keynote"
+    repeat with doc in documents
+      try
+        if file of doc is targetFile then close doc saving no
+      end try
+    end repeat
+  end tell
+end run
+APPLESCRIPT
 }
-trap 'close_all' EXIT
+trap 'close_target' EXIT
 
 # iCloudから実体をダウンロードさせてから触る（dataless対策）
 cat "$f" > /dev/null 2>&1

@@ -6,8 +6,13 @@
 # バックアップルートは作業ルートと同じディレクトリ構造で原本を持っていること。
 # 「増えたら戻す」ためにバックアップは必須。無い状態では実行しない。
 set -u
+# 相対パス・同じ原本への復元を避ける。
 BASE="${1:?usage: keynote-batch.sh <work_root> <backup_root> <log.tsv> [restart_every]}"
 BAK="${2:?}"; LOG="${3:?}"; EVERY="${4:-8}"
+[[ "$EVERY" =~ ^[1-9][0-9]*$ ]] || { echo "再起動間隔は正の整数を指定してください"; exit 1; }
+BASE=$(cd "$BASE" && pwd -P) || exit 1
+BAK=$(cd "$BAK" && pwd -P) || exit 1
+[ "$BASE" != "$BAK" ] || { echo "作業先とバックアップは別にしてください"; exit 1; }
 RED="$(cd "$(dirname "$0")" && pwd)/keynote-reduce.sh"
 
 locked() { /usr/sbin/ioreg -n Root -d1 -a 2>/dev/null | grep -q CGSSessionScreenIsLocked; }
@@ -30,7 +35,9 @@ dismiss_panels() {
 }
 
 restart_keynote() {
-  pkill -x Keynote 2>/dev/null; sleep 6
+  [ "$(docs)" = "0" ] || { echo "書類数を0件と確認できないため再起動しません"; return 1; }
+  osascript -e 'tell application id "com.apple.Keynote" to quit' >/dev/null 2>&1 || return 1
+  sleep 6
   open -b com.apple.Keynote 2>/dev/null            # -j（隠して起動）は使わない。
   osascript -e 'tell application "System Events" to tell process "Keynote" to set visible to true' >/dev/null 2>&1
   for _ in $(seq 1 30); do
@@ -45,12 +52,8 @@ ensure_clean() {
   [ "$(docs)" = "0" ] && [ "$(wins)" = "0" ] && return 0
   dismiss_panels
   [ "$(docs)" = "0" ] && [ "$(wins)" = "0" ] && return 0
-  osascript -e 'with timeout of 60 seconds
-tell application id "com.apple.Keynote" to close every document saving no
-end timeout' >/dev/null 2>&1
-  sleep 3
-  dismiss_panels
-  [ "$(docs)" = "0" ] && [ "$(wins)" = "0" ] && return 0
+  # 残った書類は利用者の作業かもしれない。全閉じ・強制終了しない。
+  [ "$(docs)" = "0" ] || return 1
   restart_keynote
 }
 
@@ -61,9 +64,8 @@ if locked; then echo "画面がロックされています。解除してから�
 # docs() が空文字を返すのは「無応答」であって「0件」ではない。取り違えない。
 d=$(docs)
 if [ -z "$d" ]; then
-  echo "Keynoteが応答しません。再起動します"
-  restart_keynote || { echo "Keynoteを起動できませんでした"; exit 1; }
-  d=$(docs)
+  echo "Keynoteが応答せず書類数を確認できません。自動再起動は行いません"
+  exit 1
 fi
 if [ "$d" != "0" ]; then
   echo "Keynoteに書類が ${d} 件開かれています。閉じてから実行してください"
@@ -77,19 +79,22 @@ CAFF=$!
 trap 'kill $CAFF 2>/dev/null' EXIT
 
 n=0
+failed=0
 while IFS= read -r rel; do
+  case "$rel" in ""|/*|..|../*|*/../*|*/..) echo "不正な相対パス: $rel" >&2; exit 1 ;; esac
   n=$((n+1))
   work="$BASE/$rel"; src="$BAK/$rel"
-  [ -f "$src" ] || { printf '%s\tFAIL\t0\t0\tバックアップに原本が無い\n' "$rel" >> "$LOG"; continue; }
-  if locked; then printf '%s\tABORT\t0\t0\t画面がロックされたため中断\n' "$rel" >> "$LOG"; break; fi
+  [ -f "$src" ] || { printf '%s\tFAIL\t0\t0\tバックアップに原本が無い\n' "$rel" >> "$LOG"; failed=1; continue; }
+  if locked; then failed=1; printf '%s\tABORT\t0\t0\t画面がロックされたため中断\n' "$rel" >> "$LOG"; break; fi
   before=$(stat -f%z "$src")
 
   # 状態の蓄積を防ぐため一定件数ごとに作り直す
   [ "$n" -gt 1 ] && [ $(( (n-1) % EVERY )) -eq 0 ] && restart_keynote >/dev/null
-  ensure_clean || { printf '%s\tFAIL\t%s\t%s\tKeynoteをクリーンにできず\n' "$rel" "$before" "$before" >> "$LOG"; continue; }
+  ensure_clean || { printf '%s\tFAIL\t%s\t%s\tKeynoteをクリーンにできず\n' "$rel" "$before" "$before" >> "$LOG"; failed=1; break; }
 
   out=$("$RED" "$work" 2>&1); rc=$?
   after=$(stat -f%z "$work")
+  [ "$rc" = "0" ] || [ "$rc" = "2" ] || failed=1
   case $rc in 0) st=OK ;; 2) st=SKIP ;; 3) st=DIALOG ;; 4) st=LOCKED ;; *) st=FAIL ;; esac
 
   # 失敗した / 増えた場合は必ず原本へ戻す（Keynoteの縮小でも増えることがある）
@@ -101,4 +106,5 @@ while IFS= read -r rel; do
   printf '%s\t%s\t%s\t%s\t%s\n' "$rel" "$st" "$before" "$after" "$(echo "$out" | tr '\n' ' ')" >> "$LOG"
   ensure_clean >/dev/null
 done
-echo "__DONE__" >> "$LOG"
+if [ "$failed" = "0" ]; then echo "__DONE__" >> "$LOG"; else echo "__ABORTED__" >> "$LOG"; fi
+exit "$failed"
