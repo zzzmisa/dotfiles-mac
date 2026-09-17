@@ -38,4 +38,5 @@ cask "google-chrome"
 cask "logi-options+"
 cask "okta-verify"
 cask "scratch" # Privateのみ
+cask "sf-symbols" # Privateのみ（Apple公式のSF Symbolsブラウザ。iOSアプリのアイコン名を検索・確認する）
 cask "tailscale-app" # Privateのみ（photo-cleanupレポートをiPhoneで見るためのVPN。インストール時にsudoパスワードが必要）
